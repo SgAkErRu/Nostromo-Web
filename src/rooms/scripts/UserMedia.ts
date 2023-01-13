@@ -187,6 +187,16 @@ export class UserMedia
 
             this.handleMicOutput();
         });
+
+        const btn_toggleMicFilter = this.ui.buttons.get('toggle-mic-filter')!;
+        btn_toggleMicFilter.addEventListener("click", () =>
+        {
+            const isFilterDisabled = (btn_toggleMicFilter.innerText === "Вкл. интеллектуальное шумоподавление");
+            btn_toggleMicFilter.innerText = isFilterDisabled ? "Выкл. интеллектуальное шумоподавление" : "Вкл. интеллектуальное шумоподавление";
+            btn_toggleMicFilter.className = isFilterDisabled ? "background-red" : "background-darkgreen";
+
+            this.handleMicFilter();
+        });
     }
 
     /** Обработка нажатия на кнопку "Захватить микрофон". */
@@ -253,6 +263,7 @@ export class UserMedia
 
             this.handleVolumeMeter();
             this.handleMicOutput();
+            this.handleMicFilter();
         }
         catch (error) // В случае ошибки.
         {
@@ -1127,5 +1138,15 @@ export class UserMedia
         const isOutputDisabled = (btn_toggleMicOutput.innerText === "Вкл. прослушивание микрофона");
 
         isOutputDisabled ? this.micAudioProcessing.stopListenMic() : this.micAudioProcessing.listenMic();
+    }
+
+    private handleMicFilter(): void
+    {
+        const btn_toggleMicFilter = this.ui.buttons.get('toggle-mic-filter')!;
+        const isFilterDisabled = (btn_toggleMicFilter.innerText === "Вкл. интеллектуальное шумоподавление");
+
+        isFilterDisabled ?
+            this.micAudioProcessing.disconnectNoiseGenerator() :
+            this.micAudioProcessing.connectNoiseGenerator();
     }
 }

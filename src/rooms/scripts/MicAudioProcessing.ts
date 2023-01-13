@@ -8,13 +8,49 @@ export class MicAudioProcessing
 
     private micNode?: MediaStreamAudioSourceNode;
 
+    private noiseGeneratorNode: AudioBufferSourceNode;
+
+    private noiseGeneratorGainNode: GainNode;
+
+    private outputNodeDestination: MediaStreamAudioDestinationNode;
+
+    private outputNode: MediaStreamAudioSourceNode;
+
     public isVolumeMeterReady = false;
     private isVolumeMeterConnected = false;
     private isMicListening = false;
+    private isNoiseGenerating = false;
 
     constructor(ctx: AudioContext)
     {
         this.ctx = ctx;
+
+        this.noiseGeneratorGainNode = this.ctx.createGain();
+        this.noiseGeneratorGainNode.gain.value = 0.03;
+
+        this.noiseGeneratorNode = this.initNoiseGenerator();
+        this.noiseGeneratorNode.connect(this.noiseGeneratorGainNode);
+
+        this.outputNodeDestination = this.ctx.createMediaStreamDestination();
+        this.outputNode = this.ctx.createMediaStreamSource(this.outputNodeDestination.stream);
+    }
+
+    private initNoiseGenerator(): AudioBufferSourceNode
+    {
+        const sampleRate = this.ctx.sampleRate;
+        const buffer = this.ctx.createBuffer(1, sampleRate, sampleRate);
+        const channelData = buffer.getChannelData(0);
+        for (let i = 0; i < buffer.length; ++i)
+        {
+            channelData[i] = Math.random() * 2 - 1;
+        }
+
+        const noiseGeneratorNode = this.ctx.createBufferSource();
+        noiseGeneratorNode.buffer = buffer;
+        noiseGeneratorNode.loop = true;
+        noiseGeneratorNode.start(0);
+
+        return noiseGeneratorNode;
     }
 
     public async initVolumeMeter(meter: HTMLMeterElement): Promise<void>
@@ -41,6 +77,7 @@ export class MicAudioProcessing
     public async initMicNode(stream: MediaStream): Promise<void>
     {
         this.micNode = this.ctx.createMediaStreamSource(stream);
+        this.micNode.connect(this.outputNodeDestination);
 
         if (this.ctx.state != "running")
         {
@@ -53,15 +90,18 @@ export class MicAudioProcessing
         this.micNode?.disconnect();
         this.micNode = undefined;
 
+        this.outputNode.disconnect();
+
         this.isVolumeMeterConnected = false;
         this.isMicListening = false;
+        this.isNoiseGenerating = false;
     }
 
     public connectVolumeMeter()
     {
         if (this.micNode && this.volumeMeterNode && !this.isVolumeMeterConnected)
         {
-            this.micNode.connect(this.volumeMeterNode);
+            this.outputNode.connect(this.volumeMeterNode);
             this.isVolumeMeterConnected = true;
         }
     }
@@ -70,7 +110,7 @@ export class MicAudioProcessing
     {
         if (this.micNode && this.volumeMeterNode && this.isVolumeMeterConnected)
         {
-            this.micNode.disconnect(this.volumeMeterNode);
+            this.outputNode.disconnect(this.volumeMeterNode);
             this.isVolumeMeterConnected = false;
         }
     }
@@ -79,7 +119,7 @@ export class MicAudioProcessing
     {
         if (this.micNode && !this.isMicListening)
         {
-            this.micNode.connect(this.ctx.destination);
+            this.outputNode.connect(this.ctx.destination);
             this.isMicListening = true;
         }
     }
@@ -88,8 +128,26 @@ export class MicAudioProcessing
     {
         if (this.micNode && this.isMicListening)
         {
-            this.micNode.disconnect(this.ctx.destination);
+            this.outputNode.disconnect(this.ctx.destination);
             this.isMicListening = false;
+        }
+    }
+
+    public connectNoiseGenerator()
+    {
+        if (this.micNode && !this.isNoiseGenerating)
+        {
+            this.noiseGeneratorGainNode.connect(this.outputNodeDestination);
+            this.isNoiseGenerating = true;
+        }
+    }
+
+    public disconnectNoiseGenerator()
+    {
+        if (this.micNode && this.isNoiseGenerating)
+        {
+            this.noiseGeneratorGainNode.disconnect(this.outputNodeDestination);
+            this.isNoiseGenerating = false;
         }
     }
 }
