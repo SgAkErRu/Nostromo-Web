@@ -1,0 +1,130 @@
+/* Чат */
+
+#chat-container
+{
+    display: flex;
+    flex-direction: column;
+    background-color: #1b282e;
+    border-radius: 7px;
+    border-top: 1px rgb(34, 33, 33, 0.6) solid;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#chat
+{
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+    flex-basis: 0;
+    font-size: 0.8125rem;
+    border-radius: 10px 10px 0px 0px;
+    background-color: #152025;
+    overflow-y: auto;
+    box-shadow: inset 0 2rem 2rem -2rem rgba(0, 0, 0, 0.05), inset 0 -2rem 2rem -2rem rgba(0, 0, 0, 0.05);
+    font-family: Rubik, Arial, Helvetica, sans-serif;
+    font-weight: 400;
+}
+
+/************** Строка ввода сообщения **************/
+
+#chat-message-textarea
+{
+    word-wrap: break-word;
+    resize: none;
+    padding: 12px;
+    cursor: text;
+    white-space: pre-wrap;
+}
+
+#chat-message-textarea:focus
+{
+    outline: none;
+}
+
+#chat-message-textarea-container
+{
+    display: flex;
+    flex: auto;
+    max-height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#chat-message-textarea-wrapper
+{
+    position: relative;
+    background-color: #1b282e;
+    border-radius: inherit;
+    border: 1px solid #5b5b5b;
+    color: #fafafa;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    font-size: 0.8125rem;
+    min-height: 42px;
+    max-height: 200px;
+    flex: auto;
+}
+
+#chat-message-textarea-placeholder
+{
+    position: absolute;
+    top: 0;
+    left: 12px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    color: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+}
+
+/************** Кнопки **************/
+
+.chat-btn-clickable-area
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+.chat-btn-box
+{
+    position: relative;
+}
+
+.chat-btn-box:hover button
+{
+    color: #fff;
+}
+
+.chat-btn-box button
+{
+    max-height: 42px;
+    min-height: 42px;
+    min-width: 56px;
+    max-width: 56px;
+    color: #656565;
+}
+
+.chat-btn-icon
+{
+    width: 25px;
+    height: 25px;
+}
+
+.chat-message-input-area
+{
+    display: flex;
+    align-items: end;
+    border-top: 1px solid #1f2022;
+    max-height: 60%;
+    min-height: 42px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}

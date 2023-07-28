@@ -1,11 +1,3 @@
-#chat-container
-{
-    background-color: #3d4248;
-    border-radius: 7px;
-    border-top: 1px rgb(34, 33, 33, 0.6) solid;
-    flex: auto;
-}
-
 #call-container
 {
     display: flex;

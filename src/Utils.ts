@@ -78,3 +78,17 @@ export function moveFocusToListBoundary(list: Element | null, first: boolean): v
         (focusTarget as HTMLElement).focus();
     }
 }
+
+const BINARY_THOUSAND = 1024;
+
+export const PrefixConstants = {
+    KILO: BINARY_THOUSAND,
+    MEGA: BINARY_THOUSAND * BINARY_THOUSAND,
+    GIGA: BINARY_THOUSAND * BINARY_THOUSAND * BINARY_THOUSAND,
+} as const;
+
+export const ZERO_IDX = 0;
+
+export const FILE_SIZE_PRESCISSION = 3;
+
+export const IDX_STEP = 1;

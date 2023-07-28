@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Header } from "../components/Header";
 
 import "../App.css";
-import { VerticalLayout } from "../components/VerticalLayout";
 import { RoomActionPanel, RoomActionPanelProps } from "../components/Room/ActionPanel/RoomActionPanel";
+import { VerticalLayout } from "../components/VerticalLayout";
 
-import "./RoomPage.css";
-import { RoomHeaderToolbarProps } from "../components/Room/RoomHeaderToolbar";
-import { RoomAlert } from "../components/Room/RoomAlert";
 import { Link } from "@mui/material";
 import { getToggleFunc } from "../Utils";
-import { VideoLayout } from "../components/Room/VideoLayout";
+import { RoomAlert } from "../components/Room/RoomAlert";
+import { Chat } from "../components/Room/Chat/Chat";
+import { LoadFileInfo } from "../components/Room/Chat/UploadingFilesQueue";
+import { RoomHeaderToolbarProps } from "../components/Room/RoomHeaderToolbar";
 import { UserList } from "../components/Room/UserList";
+import { VideoLayout } from "../components/Room/VideoLayout";
+import "./RoomPage.css";
+import { DropArea } from "../components/Room/Chat/DropArea";
+import { DndVisibleContext } from "./MainLayer";
 
 export enum SoundState
 {
@@ -67,6 +71,21 @@ export const RoomPage: React.FC = () =>
         { name: "Веб-камера 3", deviceId: "testCamDeviceId3", groupId: "testCamGroupId3", kind: "video" }]
     );
 
+    const [isFileUploading, setIsFileUploading] = useState<boolean>(false);
+    const [uploadingFilesQueue, setUploadingFilesQueue] = useState<LoadFileInfo[]>([
+        { file: { fileId: "hfg123", name: "Язык программирования C++", size: 16188070 }, progress: 0 },
+        { file: { fileId: "jhg812", name: "C++ лекции и упражнения", size: 150537513 }, progress: 0 },
+        { file: { fileId: "kjh306", name: "Современные операционные системы", size: 14280633 }, progress: 0 },
+        { file: { fileId: "lou785", name: "Т.1. Искусство программирования", size: 83673366 }, progress: 0 },
+        { file: { fileId: "nbo890", name: "Автоматное программирование", size: 1785979 }, progress: 0 },
+        { file: { fileId: "xcv519", name: "Паттерны проектирования", size: 68368155 }, progress: 0 },
+        { file: { fileId: "hfg623", name: "Некрономикон", size: 9999999999 }, progress: 0 },
+        { file: { fileId: "jhg312", name: "QT 5.10 Профессиональное программирование на C++", size: 103919024 }, progress: 0 },
+        { file: { fileId: "kjh366", name: "Т.2. Искусство программирования", size: 7235716 }, progress: 0 },
+        { file: { fileId: "loi785", name: "Т.3. Искусство программирования", size: 8612462 }, progress: 0 },
+        { file: { fileId: "nbv890", name: "Т.4. Искусство программирования", size: 99124812 }, progress: 0 }
+    ]);
+
     const roomActionPanelProps: RoomActionPanelProps =
     {
         soundBtnInfo: { state: soundState, setState: setSoundState },
@@ -105,6 +124,8 @@ export const RoomPage: React.FC = () =>
         toggleChatBtnInfo: { isChatHidden, setIsChatHidden }
     };
 
+    const flagDnd = useContext(DndVisibleContext);
+
     const disabledAudioAlertMessage = <>
         Не слышите собеседников? В данный момент у вас <b>выключен звук</b> в приложении. {"Нажмите "}
         <Link
@@ -127,14 +148,30 @@ export const RoomPage: React.FC = () =>
             />
         </div>;
 
-    const chatContainer = <div id="chat-container">chat-container</div>;
-    const callContainer =
+    const chatContainer = (
+        <Chat
+            uploadingFilesQueue={uploadingFilesQueue}
+            setUploadingFilesQueue={setUploadingFilesQueue}
+            isFileUploading={isFileUploading}
+            setIsFileUploading={setIsFileUploading}
+        />
+    );
+
+    const callContainer = (
         <div id="call-container">
             {roomAlerts}
             <VideoLayout />
             <hr id="call-container-divider" />
             <RoomActionPanel {...roomActionPanelProps} />
-        </div>;
+        </div>
+    );
+
+    const dropAreaElement = (
+        <DropArea
+            uploadingFilesQueue={uploadingFilesQueue}
+            setUploadingFilesQueue={setUploadingFilesQueue}
+        />
+    );
 
     useEffect(() =>
     {
@@ -145,6 +182,7 @@ export const RoomPage: React.FC = () =>
         <>
             <Header title={roomName} roomToolbarProps={roomToolbarProps} />
             <div id="main">
+                {(flagDnd && !isFileUploading) ? dropAreaElement : <></>}
                 {isChatHidden
                     ? <div className="overflow-container">{callContainer}</div>
                     : <VerticalLayout

@@ -2,12 +2,15 @@ import "./Tooltip.css";
 
 import { Tooltip as TooltipMui, TooltipProps } from "@mui/material";
 
+type FallBackPlacement = "bottom" | "left" | "right" | "top";
+
 interface ModTooltipProps extends TooltipProps
 {
     offset?: number;
+    fallbackPlacements?: FallBackPlacement[];
 }
 
-export const Tooltip: React.FC<ModTooltipProps> = (props) =>
+export const Tooltip: React.FC<ModTooltipProps> = ({ offset, fallbackPlacements, ...props }) =>
 {
     const POPPER_OFFSET_SKIDDING = 0;
     const POPPER_OFFSET_DISTANCE = 12;
@@ -21,13 +24,14 @@ export const Tooltip: React.FC<ModTooltipProps> = (props) =>
                         {
                             name: 'offset',
                             options: {
-                                offset: [POPPER_OFFSET_SKIDDING, props.offset ?? POPPER_OFFSET_DISTANCE]
+                                offset: [POPPER_OFFSET_SKIDDING, offset ?? POPPER_OFFSET_DISTANCE]
                             },
                         },
                         {
                             name: "flip",
                             options: {
-                                fallbackPlacements: ["bottom", "top", "left", "right"],
+                                fallbackPlacements: fallbackPlacements
+                                    ?? ["bottom", "top", "left", "right"],
                                 padding: 0,
                             }
                         },

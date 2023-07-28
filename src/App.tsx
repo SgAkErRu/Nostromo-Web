@@ -1,11 +1,8 @@
 import { createTheme, ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import { BrowserRouter } from "react-router-dom";
 import "./App.css";
-
-// Мои компоненты
-import { Navbar } from "./components/Navbar";
-import { PageRouter } from "./components/PageRouter";
 import { useState } from "react";
+import { MainLayer } from "./pages/MainLayer";
 
 const theme = createTheme({
     typography: {
@@ -32,12 +29,7 @@ const App: React.FC = () =>
             <ThemeProvider theme={theme}>
                 <StyledEngineProvider injectFirst>
                     <div id="app">
-                        <div id="layer-main" className="overflow-container">
-                            <Navbar openSettings={() => { setShowSettings(true); }} />
-                            <div id="base">
-                                <PageRouter />
-                            </div>
-                        </div>
+                        <MainLayer setShowSettings={setShowSettings} />
                         {showSettings ? settingsLayer : <></>}
                     </div>
                 </StyledEngineProvider>
