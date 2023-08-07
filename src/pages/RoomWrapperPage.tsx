@@ -9,7 +9,7 @@ export const RoomWrapperPage: React.FC = () =>
     //const [auth, setAuth] = useState(false);
 
     //TODO: убрать обратно на false
-    const [auth, setAuth] = useState(true);
+    const [auth, setAuth] = useState(false);
 
     return (
         auth ? <RoomPage /> : <RoomAuthPage setAuth={setAuth} />
