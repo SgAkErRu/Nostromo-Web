@@ -1,5 +1,7 @@
 import { Dispatch, ReactEventHandler, SetStateAction } from "react";
 
+export type ReactDispatch<T> = Dispatch<SetStateAction<T>>;
+
 export const getToggleFunc = (setState: Dispatch<SetStateAction<boolean>>) =>
 {
     return () => { setState(prevState => !prevState); };
@@ -89,6 +91,39 @@ export const PrefixConstants = {
 
 export const ZERO_IDX = 0;
 
+export const ZERO_TAB_IDX = 0;
+
+export const NEGATIVE_TAB_IDX = -1;
+
 export const FILE_SIZE_PRESCISSION = 3;
 
 export const IDX_STEP = 1;
+
+export function cloneObject<T>(obj: T): T
+{
+    return JSON.parse(JSON.stringify(obj)) as T;
+}
+
+export function isObjectAndNotArray(obj: object): boolean
+{
+    return typeof obj === "object" && !Array.isArray(obj);
+}
+
+export function overrideValues(target: object, override: object): void
+{
+    for (const keyStr in target)
+    {
+        const key = keyStr as keyof object;
+        if (Object.hasOwn(override, key))
+        {
+            if (isObjectAndNotArray(target[key]) && isObjectAndNotArray(override[key]))
+            {
+                overrideValues(target[key], override[key]);
+            }
+            else
+            {
+                target[key] = override[key];
+            }
+        }
+    }
+}

@@ -3,6 +3,8 @@
     --primary-text-color: #e1e3e6;
     --secondary-text-color: #c1c2c3;
 
+    --secondary-bg-color: #777777;
+
     --error-color: #f44336;
     --error-bg-color: #160b0b;
     --error-text-color: #f4c7c7;
@@ -145,6 +147,11 @@
     vertical-align: middle;
 }
 
+.relative
+{
+    position: relative;
+}
+
 .overflow-container
 {
     display: flex;
@@ -165,9 +172,16 @@
     overflow: hidden;
 }
 
-#layer-settings
+.backdrop
 {
-    background-color: #282f39;
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
     justify-content: center;
     align-items: center;
     z-index: 10;

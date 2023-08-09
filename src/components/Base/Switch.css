@@ -1,0 +1,91 @@
+/* Контейнер для свитча. */
+.switch-container
+{
+    display: inline-block;
+    position: relative;
+    width: 45px;
+    height: 26px;
+    border-radius: 15px;
+}
+
+/* Невидимый input (checkbox) внутри switch. */
+.switch-input
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Слайдер в switch. */
+.switch-slider
+{
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+}
+
+/* Стиль для фокуса (небольшое свечение) */
+.switch-input:focus+.switch-slider
+{
+    box-shadow: 0 0 2px white;
+}
+
+.switch-slider-thumb
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: 200ms;
+}
+
+/* Иконки */
+.switch-icon
+{
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    color: white;
+    transition: 200ms;
+}
+
+.switch-on
+{
+    background-color: #10a84a;
+}
+
+.switch-off
+{
+    background-color: #a39e9e;
+}
+
+.switch-on .switch-icon-off
+{
+    opacity: 0;
+}
+
+.switch-off .switch-icon-on
+{
+    opacity: 0;
+}
+
+.switch-on .switch-slider-thumb
+{
+    transform: translateX(21px);
+}
+
+.switch-off .switch-slider-thumb
+{
+    transform: translateX(4px);
+}

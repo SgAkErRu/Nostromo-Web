@@ -1,0 +1,121 @@
+.list-item-separator
+{
+    width: 100%;
+    border: none;
+    border-top: 1px solid #4b4f53;
+    margin-top: 12px;
+}
+
+.list-item-description
+{
+    font-size: 12px;
+    text-align: justify;
+    color: rgb(163, 163, 163);
+    word-wrap: break-word;
+}
+
+.list-item-label
+{
+    display: inline-flex;
+    flex: auto;
+    padding: 0;
+    margin: 0;
+}
+
+.select-label
+{
+    text-transform: uppercase;
+    color: #b1bdbc;
+    font-size: 0.85rem;
+}
+
+.list-item
+{
+    user-select: none;
+    padding-top: 12px;
+    margin-bottom: 12px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.list-item-switch-label-row
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.list-item-button-label-row
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.list-item-slider-label-row
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.list-item-slider-container
+{
+    display: inline-flex;
+    padding-right: 8px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.list-item:hover
+{
+    box-shadow: 0 0 2px white;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.list-item:focus-within
+{
+    box-shadow: 0 0 2px white;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.08);
+    outline: none;
+}
+
+.list-item-input-label-row
+{
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.list-item-button
+{
+    border-radius: 5px;
+    color: var(--primary-text-color);
+    background-color: #c73335;
+    height: 30px;
+    width: 170px;
+    font-size: 0.75rem;
+}
+
+.list-item-button:hover
+{
+    background-color: #e6595b;
+    box-shadow: 0 0 2px white;
+    outline: none;
+}
+
+.list-section-label
+{
+    display: inline-flex;
+    padding: 10px 15px;
+    font-size: 0.7em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03rem;
+    color: var(--secondary-text-color);
+}
