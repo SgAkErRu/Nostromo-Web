@@ -127,3 +127,34 @@ export function overrideValues(target: object, override: object): void
         }
     }
 }
+
+export type AbstractListener = () => void;
+
+export abstract class AbstractExternalStorage
+{
+    private listeners: AbstractListener[] = [];
+
+    public addListener(listener: AbstractListener): void
+    {
+        this.listeners = [...this.listeners, listener];
+    }
+
+    public removeListener(listener: AbstractListener): void
+    {
+        this.listeners = this.listeners.filter(l => l !== listener);
+    }
+
+    public subscribe(listener: AbstractListener): () => void
+    {
+        this.addListener(listener);
+        return () => { this.removeListener(listener); };
+    }
+
+    protected notifyListeners(): void
+    {
+        for (const listener of this.listeners)
+        {
+            listener();
+        }
+    }
+}
