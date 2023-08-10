@@ -1,11 +1,7 @@
 import { FC, useRef, useState } from "react";
 import { ListItemButton, ListItemInput, ListItemSelect, ListItemSwitch } from "../Base/List/ListItems";
 
-interface CreateRoomProps
-{
-    name?: string;
-}
-export const CreateRoom: FC<CreateRoomProps> = ({ name }) =>
+export const CreateRoom: FC = () =>
 {
     // Название новой комнаты
     const [roomName, setRoomName] = useState<string>("");

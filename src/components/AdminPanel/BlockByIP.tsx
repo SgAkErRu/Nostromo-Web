@@ -1,11 +1,7 @@
 import { FC, useRef, useState } from "react";
 import { ListItemButton, ListItemInput } from "../Base/List/ListItems";
 
-interface BlockByIPProps
-{
-    name?: string;
-}
-export const BlockByIP: FC<BlockByIPProps> = ({ name }) =>
+export const BlockByIP: FC = () =>
 {
     const blockRef = useRef<HTMLButtonElement>(null);
     const unlockRef = useRef<HTMLButtonElement>(null);
