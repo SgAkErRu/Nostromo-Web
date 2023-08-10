@@ -4,18 +4,14 @@ import { FocusTrap } from "../components/Base/FocusTrap";
 import { SidebarView } from "../components/Base/SidebarView";
 import { AdminPanelCategoryList } from "../components/AdminPanel/AdminPanelCategoryList";
 import { AdminPanelActionList } from "../components/AdminPanel/AdminPanelActionList";
-import { AdminContext } from "../AppWrapper";
-import { useAdminActions } from "../services/AdminService";
-import { ZERO_IDX } from "../Utils";
 
 export const AdminPanelLayer: React.FC = () =>
 {
-    const adminService = useContext(AdminContext);
-    const adminActions = useAdminActions(adminService);
-    const categories = Object.keys(adminActions);
+    const categories: Map<string, string> = new Map();
+    categories.set("createRoom", "Создание комнаты").set("controlRooms", "Управление комнатами").set("blockByIP", "Блокировка по IP");
     const setShowAdminPanel = useContext(SetShowAdminPanelContext);
     const [selectedCategory, setSelectedCategory] = useState<string>(
-        categories.length ? categories[ZERO_IDX]: ""
+        categories.size ? categories.keys().next().value as string: ""
     );
 
     const handleCloseSettings = (): void =>
@@ -30,6 +26,7 @@ export const AdminPanelLayer: React.FC = () =>
         <AdminPanelCategoryList
             setSelectedCategory={setSelectedCategory}
             selectedCategory={selectedCategory}
+            categories={categories}
         />
     );
     const actionList = (

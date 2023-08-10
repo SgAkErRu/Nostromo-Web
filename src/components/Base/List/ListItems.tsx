@@ -347,7 +347,7 @@ export const ListItemSlider: FC<ListItemSliderProps> = ({
 
 interface ListItemButtonProps extends ListItemProps
 {
-    label: string;
+    label?: string;
     btnLabel: string;
     onBtnClick: React.MouseEventHandler<HTMLButtonElement>;
     btnRef?: React.RefObject<HTMLButtonElement>;
