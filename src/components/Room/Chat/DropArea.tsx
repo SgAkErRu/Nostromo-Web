@@ -69,7 +69,7 @@ export const DropArea: React.FC<DropAreaProps> = ({ uploadingFilesQueue, setUplo
     };
 
     return (
-        <div className="backdrop"
+        <div className="backdrop absolute"
             onDrop={handleDrop}
             onDragOver={handleDragOver}
         >
