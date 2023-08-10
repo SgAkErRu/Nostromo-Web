@@ -1,11 +1,22 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { SetShowAdminPanelContext } from "../App";
 import { FocusTrap } from "../components/Base/FocusTrap";
 import { SidebarView } from "../components/Base/SidebarView";
+import { AdminPanelCategoryList } from "../components/AdminPanel/AdminPanelCategoryList";
+import { AdminPanelActionList } from "../components/AdminPanel/AdminPanelActionList";
+import { AdminContext } from "../AppWrapper";
+import { useAdminActions } from "../services/AdminService";
+import { ZERO_IDX } from "../Utils";
 
 export const AdminPanelLayer: React.FC = () =>
 {
+    const adminService = useContext(AdminContext);
+    const adminActions = useAdminActions(adminService);
+    const categories = Object.keys(adminActions);
     const setShowAdminPanel = useContext(SetShowAdminPanelContext);
+    const [selectedCategory, setSelectedCategory] = useState<string>(
+        categories.length ? categories[ZERO_IDX]: ""
+    );
 
     const handleCloseSettings = (): void =>
     {
@@ -15,6 +26,18 @@ export const AdminPanelLayer: React.FC = () =>
         }
     };
 
+    const categoryList = (
+        <AdminPanelCategoryList
+            setSelectedCategory={setSelectedCategory}
+            selectedCategory={selectedCategory}
+        />
+    );
+    const actionList = (
+        <AdminPanelActionList
+            selectedCategory={selectedCategory}
+        />
+    );
+
     return (
         <div id="layer-settings"
             className="layer"
@@ -22,8 +45,8 @@ export const AdminPanelLayer: React.FC = () =>
         >
             <FocusTrap>
                 <SidebarView
-                    sidebar={<div>side</div>}
-                    main={<div>main</div>}
+                    sidebar={categoryList}
+                    main={actionList}
                     onClickBtnClose={handleCloseSettings}
                 />
             </FocusTrap>
