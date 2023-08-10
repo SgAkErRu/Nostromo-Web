@@ -6,6 +6,7 @@ import { SettingsLayer } from "./pages/SettingsLayer";
 import { FocusTrap } from "./components/Base/FocusTrap";
 import { MainLayer } from "./pages/MainLayer";
 import { ReactDispatch } from "./Utils";
+import { AdminPanelLayer } from "./pages/AdminPanelLayer";
 
 const theme = createTheme({
     typography: {
@@ -17,10 +18,12 @@ const theme = createTheme({
 });
 
 export const SetShowSettingsContext = createContext<ReactDispatch<boolean> | null>(null);
+export const SetShowAdminPanelContext = createContext<ReactDispatch<boolean> | null>(null);
 
 const App: React.FC = () =>
 {
     const [showSettings, setShowSettings] = useState<boolean>(false);
+    const [showAdminPanel, setShowAdminPanel] = useState<boolean>(false);
 
     return (
         <BrowserRouter>
@@ -29,8 +32,10 @@ const App: React.FC = () =>
                     <div id="app">
                         <FocusTrap>
                             <SetShowSettingsContext.Provider value={setShowSettings}>
-                                <MainLayer />
-                                {showSettings ? <SettingsLayer /> : <></>}
+                                <SetShowAdminPanelContext.Provider value={setShowAdminPanel}>
+                                    <MainLayer />
+                                    {showSettings ? <SettingsLayer /> : showAdminPanel ? <AdminPanelLayer /> : <></>}
+                                </SetShowAdminPanelContext.Provider>
                             </SetShowSettingsContext.Provider>
                         </FocusTrap>
                     </div>
