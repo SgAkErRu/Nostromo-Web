@@ -50,7 +50,6 @@ export const Menu: React.FC<MenuProps> = ({
     const handleClose = (): void =>
     {
         onClose();
-        initialFocusRef.current?.focus();
     };
 
     const handleCloseByMouse = (ev: Event | React.SyntheticEvent): void =>
@@ -96,6 +95,10 @@ export const Menu: React.FC<MenuProps> = ({
         if (open)
         {
             initialFocusRef.current = document.activeElement as HTMLElement | null;
+        }
+        else
+        {
+            initialFocusRef.current?.focus();
         }
     }, [open]);
 
