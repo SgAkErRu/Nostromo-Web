@@ -1,13 +1,12 @@
 import { FC, useRef, useState } from "react";
-import { ListItemButton, ListItemInput } from "../Base/List/ListItems";
+import "./BlockByIP.css";
+import { Button } from "@mui/material";
 
 export const BlockByIP: FC = () =>
 {
-    const blockRef = useRef<HTMLButtonElement>(null);
-    const unlockRef = useRef<HTMLButtonElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
     // IP
     const [ip, setIP] = useState<string>("");
-    const elements: JSX.Element[] = [];
 
     const handleBlock = () : void =>
     {
@@ -16,34 +15,26 @@ export const BlockByIP: FC = () =>
     const handleUnlock = () : void =>
     {
         console.log("Разблокировать пользователя с IP: ", ip);
-    } 
-
-    elements.push(<p className="settings-category-label" key="labelBlockByIP">Блокировка по IP</p>);
-    elements.push(<ListItemInput
-                    key="ip"
-                    label="IP - адрес"
-                    description="Введите IP адрес пользователя"
-                    value={ip}
-                    onValueChange={(val) =>
-                    {
-                        setIP(val);
-                    }}
-                />);
-    elements.push(<ListItemButton
-                    key="block"
-                    label="Нажмите, чтобы заблокировать выбранного пользователя"
-                    btnRef={blockRef}
-                    btnLabel="Заблокировать"
-                    onBtnClick={handleBlock}
-                />);
-    elements.push(<ListItemButton
-                    key="unlock"
-                    label="Нажмите, чтобы разблокировать выбранного пользователя"
-                    btnRef={unlockRef}
-                    btnLabel="Разблокировать"
-                    onBtnClick={handleUnlock}
-                />);
+    }
+    const handleFocus = () : void =>
+    {
+        inputRef.current?.focus();
+    }
+    const desc = "Введите IP - адрес пользователя, чтобы заблокировать или разблокировать его";
     return (
-        <>{elements}</>
+        <>
+            <p className="settings-category-label" key="labelBlockByIP">Блокировка по IP</p>
+            <div className="lock-area" key="lock-area">
+                <div className="lock-input-area" onClick={handleFocus}>
+                    <p className="lock-input-label text-wrap">IP - адрес</p>
+                    <input className="lock-input" ref={inputRef} onChange={(ev) => { setIP(ev.target.value) }}/>
+                    <p className="list-item-description">{desc}</p>
+                </div>
+                <div className="lock-button-area">
+                    <Button className="lock-button warning" onClick={handleBlock}>Заблокировать</Button>
+                    <Button className="lock-button" onClick={handleUnlock}>Разблокировать</Button>
+                </div>
+            </div>
+        </>
     );
 };

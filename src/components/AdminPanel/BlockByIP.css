@@ -1,0 +1,87 @@
+.lock-area
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.lock-input-area
+{
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    cursor: pointer;
+    height: 110px;
+}
+.lock-input-label
+{
+    display: inline-flex;
+    padding: 0;
+    margin: 0;
+}
+.lock-input
+{
+    display: flex;
+    height: 20px;
+    border-radius: 10px;
+    border: 1px solid #a7a7a7;
+    margin-top: 10px;
+    margin-right: 15px;
+    padding: 10px;
+    background-color: #34363b;
+    color: white;
+}
+
+.lock-input:hover
+{
+    border: 1px solid #dadada;
+}
+
+.lock-input:focus
+{
+    box-shadow: 0 0 2px white;
+    outline: none;
+}
+
+.lock-button-area
+{
+    display: flex;
+    flex-direction: column;
+    height: 110px;
+}
+
+.lock-button
+{
+    border-radius: 5px;
+    height: 33px;
+    width: 150px;
+    background-color: var(--secondary-bg-color);
+    color: var(--primary-text-color);
+    cursor: pointer;
+    font-size: 0.75rem;
+    margin: 5px;
+}
+
+.lock-button:hover
+{
+    background-color: var(--secondary-bg-color);
+    border: 1px solid white;
+    outline: none;
+}
+
+.lock-button:focus
+{
+    border: 1px solid white;
+    outline: none;
+}
+
+.warning
+{
+    background-color: #c73335;
+}
+
+.warning:hover
+{
+    background-color: #e6595b;
+}

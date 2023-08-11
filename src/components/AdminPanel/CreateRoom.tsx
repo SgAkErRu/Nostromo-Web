@@ -1,5 +1,6 @@
 import { FC, useRef, useState } from "react";
 import { ListItemButton, ListItemInput, ListItemSelect, ListItemSwitch } from "../Base/List/ListItems";
+import { List } from "../Base/List/List";
 
 export const CreateRoom: FC = () =>
 {
@@ -26,9 +27,9 @@ export const CreateRoom: FC = () =>
         console.log("Save History ? ", saveHistory);
         console.log("Symmetrical mode ? ", symmetricalMode);
     }
-
+    const videocodecs: string[] = ["VP8", "VP9", "AV1", "Theora", "Daala"];
     elements.push(<p className="settings-category-label" key="labelCreateRoom">Создание комнаты</p>);
-    elements.push(<ListItemInput
+    elements.push(<List key="createRoomList"><ListItemInput
                     key="roomName"
                     label="Название комнаты"
                     description="Введите название новой комнаты"
@@ -37,8 +38,8 @@ export const CreateRoom: FC = () =>
                     {
                         setRoomName(val);
                     }}
-                />);
-    elements.push(<ListItemInput
+                />
+                <ListItemInput
                     key="roomPassword"
                     label="Пароль комнаты"
                     description="Введите пароль от новой комнаты, если он необходим"
@@ -47,9 +48,8 @@ export const CreateRoom: FC = () =>
                     {
                         setRoomPassword(val);
                     }}
-                />);
-    const videocodecs: string[] = ["VP8", "VP9", "AV1", "Theora", "Daala"];
-    elements.push(<ListItemSelect
+                />
+                <ListItemSelect
                     key="roomCodec"
                     label="Видеокодек для комнаты"
                     value={roomCodec}
@@ -59,8 +59,7 @@ export const CreateRoom: FC = () =>
                     }}
                     options={videocodecs}
                 />
-                );
-    elements.push(<ListItemSwitch
+                <ListItemSwitch
                     key="saveHistory"
                     label="Сохранить историю чата ?"
                     value={saveHistory}
@@ -69,8 +68,7 @@ export const CreateRoom: FC = () =>
                         setSaveHistory(val);
                     }}
                 />
-                );
-    elements.push(<ListItemSwitch
+                <ListItemSwitch
                     key="symmetricalMode"
                     label="Симметричный режим ?"
                     value={symmetricalMode}
@@ -79,15 +77,14 @@ export const CreateRoom: FC = () =>
                         setSymmetricalMode(val);
                     }}
                 />
-                );
-    elements.push(<ListItemButton
+                <ListItemButton
                     key="createBtn"
-                    label="Нажмите, чтобы создать комнату"
                     btnRef={createBtnRef}
+                    showSeparator={false}
                     btnLabel="Создать комнату"
                     onBtnClick={handleCreateRoom}
                 />
-                );
+                </List>); 
     return (
         <>{elements}</>
     );

@@ -53,7 +53,7 @@ export const ListItem: FC<ListItemProps> = ({
         >
             {children}
             {isValidDescription ? <p className="list-item-description">{description}</p> : <></>}
-            {showSeparator ? <hr className="list-item-separator"></hr> : <></>}
+            {showSeparator ? <hr className="list-item-separator"></hr> : <div className="list-item-without-separator"></div>}
         </div>
     );
 };
@@ -351,12 +351,14 @@ interface ListItemButtonProps extends ListItemProps
     btnLabel: string;
     onBtnClick: React.MouseEventHandler<HTMLButtonElement>;
     btnRef?: React.RefObject<HTMLButtonElement>;
+    showSeparator?: boolean;
 }
 export const ListItemButton: FC<ListItemButtonProps> = ({
     label,
     btnLabel,
     onBtnClick,
     btnRef,
+    showSeparator = false,
     ...props
 }) =>
 {
@@ -373,6 +375,7 @@ export const ListItemButton: FC<ListItemButtonProps> = ({
         <ListItem
             {...props}
             onKeyDown={handleItemKeyDown}
+            showSeparator={showSeparator}
         >
             <label className="list-item-button-label-row">
                 <p className="list-item-label text-wrap">{label}</p>

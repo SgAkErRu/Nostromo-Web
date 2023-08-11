@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { List } from "../Base/List/List";
 import { CreateRoom } from "./CreateRoom";
 import { BlockByIP } from "./BlockByIP";
 
@@ -19,6 +18,6 @@ export const AdminPanelActionList: FC<AdminPanelActionListProps> = ({ selectedCa
 {
     const activeComponent = actionComponents.get(selectedCategory);
     return (
-        <List key="adminPanelList">{activeComponent !== undefined ? activeComponent : <></>}</List>
+        <>{activeComponent !== undefined ? activeComponent : <></>}</>
     );
 };
