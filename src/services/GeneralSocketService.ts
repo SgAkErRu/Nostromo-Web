@@ -1,6 +1,5 @@
 import { io, Socket } from "socket.io-client";
 
-//TODO: настроить webpack вручную, чтобы не жаловался на импорт enum
 import { SocketEvents as SE } from "nostromo-shared/types/SocketEvents";
 import { PublicRoomInfo } from "nostromo-shared/types/RoomTypes";
 import { RoomNameInfo } from "nostromo-shared/types/AdminTypes";
@@ -9,7 +8,7 @@ import { ReactDispatch } from "../Utils";
 // Класс для работы с сокетами на главной странице
 export default class GeneralSocketService
 {
-    private readonly m_socket: Socket = io("/", {
+    private readonly m_socket: Socket = io(process.env.REACT_APP_BACKEND_PATH ?? "/", {
         'transports': ['websocket']
     });
 

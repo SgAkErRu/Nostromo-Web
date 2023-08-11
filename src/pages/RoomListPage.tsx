@@ -5,7 +5,7 @@ import { Header } from "../components/Header";
 import "../App.css";
 import "./RoomListPage.css";
 import { PublicRoomInfo } from "nostromo-shared/types/RoomTypes";
-import { GeneralSocketServiceContext } from "../App";
+import { GeneralSocketServiceContext } from "../AppWrapper";
 
 export const RoomListPage: React.FC = () =>
 {
@@ -15,7 +15,11 @@ export const RoomListPage: React.FC = () =>
     const roomListToMap = (room: PublicRoomInfo, index: number): JSX.Element =>
     {
         return (
-            <NavLink to={`/r/${room.id}`} id={room.id} className="room-list-item">
+            <NavLink to={`/r/${room.id}`}
+                id={room.id}
+                className="room-list-item"
+                key={room.id}
+            >
                 <span className="room-list-item-label">{room.name}</span>
                 <span className="room-list-item-id">#{room.id}</span>
                 <span className="room-list-item-join">Войти</span>
@@ -42,6 +46,7 @@ export const RoomListPage: React.FC = () =>
         <>
             <Header title="Список комнат" />
             <div id="main">
+                {/** TODO: задействовать компонент List. */}
                 <div id="room-list">
                     {roomList.length ? roomList.map(roomListToMap) : "Комнаты отсутствуют на сервере"}
                 </div>

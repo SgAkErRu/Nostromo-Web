@@ -2,14 +2,8 @@ import { Dispatch, MouseEventHandler, SetStateAction, useRef } from "react";
 import { FcFile } from "react-icons/fc";
 import "./UploadingFilesQueue.css";
 import { FILE_SIZE_PRESCISSION, IDX_STEP, PrefixConstants, ZERO_IDX } from "../../../Utils";
+import { ChatFileInfo } from "nostromo-shared/types/RoomTypes";
 
-// TODO: Не забыть убрать отсюда после наладки работы с NS Shared
-export interface ChatFileInfo
-{
-    fileId: string;
-    name: string;
-    size: number;
-}
 export interface LoadFileInfo
 {
     file: ChatFileInfo;

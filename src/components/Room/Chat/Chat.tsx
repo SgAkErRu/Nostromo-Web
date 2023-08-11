@@ -5,8 +5,9 @@ import "./Chat.css";
 import { Message } from './Message/Message';
 import { Tooltip } from '../../Tooltip';
 import { Button } from '@mui/material';
-import { ChatFileInfo, LoadFileInfo, UploadingFilesQueue } from './UploadingFilesQueue';
+import { LoadFileInfo, UploadingFilesQueue } from './UploadingFilesQueue';
 import { ZERO_IDX, isEmptyString } from "../../../Utils";
+import { ChatFileInfo } from "nostromo-shared/types/RoomTypes";
 
 /** Информация о сообщении в чате. */
 interface ChatMessage

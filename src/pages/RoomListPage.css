@@ -6,6 +6,7 @@
     flex-direction: column;
     font-size: 1.375rem;
     margin: 5px;
+    overflow-y: auto;
 }
 
 .room-list-item
