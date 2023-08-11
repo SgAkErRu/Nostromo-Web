@@ -3,12 +3,13 @@ import React, { useEffect, useState } from "react";
 import "../App.css";
 import { RoomAuthPage } from "./RoomAuthPage";
 import { RoomPage } from "./RoomPage";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 export const RoomWrapperPage: React.FC = () =>
 {
     const { id } = useParams();
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
 
     const [isInitRequestDone, setIsInitRequestDone] = useState(false);
 
@@ -43,12 +44,16 @@ export const RoomWrapperPage: React.FC = () =>
             {
                 setAuth(true);
             }
+            else if (res.status === 404)
+            {
+                navigate("/");
+            }
 
             setIsInitRequestDone(true);
         };
 
         void fetchRequest();
-    }, [id, searchParams]);
+    }, [id, searchParams, navigate]);
 
     const afterInitRequest = (
         auth ? <RoomPage /> : <RoomAuthPage setAuth={setAuth} />
