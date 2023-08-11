@@ -3,7 +3,7 @@ import { FC } from "react";
 import { NEGATIVE_TAB_IDX, ReactDispatch, ZERO_TAB_IDX } from "../../Utils";
 import { List } from "../Base/List/List";
 import { ListSectionLabel } from "../Base/List/ListItems";
-import "../Settings/SettingsCategoryList.css";
+import "./AdminPanelCategoryList.css";
 
 interface AdminPanelCategoryListProps
 {
@@ -15,7 +15,7 @@ interface AdminPanelCategoryListProps
 export const AdminPanelCategoryList: FC<AdminPanelCategoryListProps> = ({ selectedCategory, setSelectedCategory, categories }) =>
 {
     return (
-        <List id="settings-category-list">
+        <List id="admin-panel-category-list">
             <AdminPanelCategoryListSection sectionLabel="Панель Администратора"
                 selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory}
@@ -78,8 +78,8 @@ const AdminPanelCategoryListItem: React.FC<AdminPanelCategoryListItemProps> = ({
     return (
         <div
             className={
-                "category-list-item non-selectable" +
-                (selectedCategory === categoryKey ? " category-list-active" : "")
+                "admin-panel-list-item non-selectable" +
+                (selectedCategory === categoryKey ? " admin-panel-list-active" : "")
             }
             tabIndex={
                 selectedCategory === categoryKey ? ZERO_TAB_IDX : NEGATIVE_TAB_IDX
@@ -87,8 +87,8 @@ const AdminPanelCategoryListItem: React.FC<AdminPanelCategoryListItemProps> = ({
             role="listitem"
             {...props}
         >
-            <div className="category-list-item-info">
-                <span className="category-list-item-info-name">{categories.get(categoryKey)}</span>
+            <div className="admin-panel-list-item-info">
+                <span className="admin-panel-list-item-info-name">{categories.get(categoryKey)}</span>
             </div>
         </div>
     );
