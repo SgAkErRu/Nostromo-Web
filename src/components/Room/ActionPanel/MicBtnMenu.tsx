@@ -61,7 +61,7 @@ export const MicBtnMenu: React.FC<MicBtnMenuProps> = ({
             popperPlacement="top"
         >
             <MenuSectionLabel text="Выбор микрофона" />
-            <MenuList open={open}>
+            <MenuList open={open} variant="selectedMenu">
                 {micList.map(micListToListItems)}
                 {micEnabled ?
                     <div>

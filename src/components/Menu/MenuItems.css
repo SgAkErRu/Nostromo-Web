@@ -78,6 +78,11 @@
     padding-bottom: 8px;
 }
 
+.menu-item-select
+{
+    padding: 4px 8px;
+}
+
 .menu-item-slider.menu-item
 {
     display: flex;

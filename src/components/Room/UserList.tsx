@@ -121,7 +121,7 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, transitionDuration })
             transitionDuration={transitionDuration}
             popperPlacement="left-start"
         >
-            <MenuList open={open} disableAutoFocusItem>
+            <MenuList open={open} variant="menu">
                 <MenuItemCheckbox
                     text="Приглушить звук"
                     isChecked={userMuted}

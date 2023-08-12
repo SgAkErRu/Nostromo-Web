@@ -67,8 +67,9 @@ export const Menu: React.FC<MenuProps> = ({
 
     const handleListKeyDown: DivKeyboardEventHandler = (ev) =>
     {
-        if (ev.key === "Escape")
+        if (ev.key === "Escape" || ev.key === "Tab")
         {
+            ev.preventDefault();
             handleClose();
         }
 
@@ -164,23 +165,23 @@ export const Menu: React.FC<MenuProps> = ({
 interface MenuListProps
 {
     open: boolean;
-    disableAutoFocusItem?: boolean;
+    variant?: "menu" | "selectedMenu";
     children: ReactNode;
 }
 
 export const MenuList: React.FC<MenuListProps> = ({
     open,
-    disableAutoFocusItem = false,
+    variant = "menu",
     children
 }) =>
 {
     return (
         <MuiMenuList
-            autoFocusItem={open && !disableAutoFocusItem}
-            autoFocus={open && disableAutoFocusItem}
+            autoFocus={open && variant === "menu"}
+            autoFocusItem={open && variant === "selectedMenu"}
             className="menu-list small-text"
             onClick={doNotHandleEvent}
-            tabIndex={0}
+            variant={variant}
         >
             {children}
         </MuiMenuList>
