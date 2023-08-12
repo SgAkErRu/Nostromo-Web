@@ -7,6 +7,21 @@ import { NEGATIVE_TAB_IDX } from "../../Utils";
 
 import "./SidebarView.css";
 
+interface SidebarViewMainAreaProps
+{
+    className? : string
+    children?: ReactNode;
+}
+
+export const SidebarViewMainArea : FC<SidebarViewMainAreaProps> = ({children, className}) =>
+{
+    return (
+        <div className={"sidebar-view-main sidebar-view-main-width " + (className !== undefined ? className : "")}>
+            {children}
+        </div>
+    );
+}
+
 interface SidebarViewProps
 {
     sidebar: ReactNode;
@@ -63,9 +78,7 @@ export const SidebarView: FC<SidebarViewProps> = ({ sidebar, main, onClickBtnClo
                     {exitSidebarViewBtn}
                 </div>
                 <div className="sidebar-view-main-scrollable-area" tabIndex={NEGATIVE_TAB_IDX}>
-                    <div className="sidebar-view-main sidebar-view-main-width">
-                        {main}
-                    </div>
+                    {main}
                 </div>
             </div>
         </>

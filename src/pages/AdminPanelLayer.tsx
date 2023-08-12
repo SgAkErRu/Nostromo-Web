@@ -1,9 +1,11 @@
 import { useContext, useState } from "react";
 import { SetShowAdminPanelContext } from "../App";
 import { FocusTrap } from "../components/Base/FocusTrap";
-import { SidebarView } from "../components/Base/SidebarView";
+import { SidebarView, SidebarViewMainArea } from "../components/Base/SidebarView";
 import { AdminPanelCategoryList } from "../components/AdminPanel/AdminPanelCategoryList";
 import { AdminPanelActionList } from "../components/AdminPanel/AdminPanelActionList";
+
+import "./AdminPanelLayer.css"
 
 export const AdminPanelLayer: React.FC = () =>
 {
@@ -30,9 +32,11 @@ export const AdminPanelLayer: React.FC = () =>
         />
     );
     const actionList = (
-        <AdminPanelActionList
-            selectedCategory={selectedCategory}
-        />
+        <SidebarViewMainArea className={selectedCategory === "controlRooms" ? "sidebar-main-without-global-scroll" : ""}>
+            <AdminPanelActionList
+                selectedCategory={selectedCategory}
+            />
+        </SidebarViewMainArea>
     );
 
     return (

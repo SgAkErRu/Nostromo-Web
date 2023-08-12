@@ -6,7 +6,7 @@ import { FocusTrap } from "../components/Base/FocusTrap";
 import { parametersInfoMap, useSettings } from "../services/SettingsService";
 import { SettingsCategoryList } from "../components/Settings/SettingsCategoryList";
 import { SettingsParametersList } from "../components/Settings/SettingsParametersList";
-import { SidebarView } from "../components/Base/SidebarView";
+import { SidebarView, SidebarViewMainArea } from "../components/Base/SidebarView";
 import { SettingsContext } from "../AppWrapper";
 import { ZERO_IDX } from "../Utils";
 import { SetShowSettingsContext } from "../App";
@@ -53,10 +53,12 @@ export const SettingsLayer: React.FC = () =>
     );
 
     const parameterList = (
-        <SettingsParametersList
-            selectedCategory={selectedCategory}
-            parametersInfoMap={parametersInfoMap}
-        />
+        <SidebarViewMainArea>
+            <SettingsParametersList
+                selectedCategory={selectedCategory}
+                parametersInfoMap={parametersInfoMap}
+            />
+        </SidebarViewMainArea>
     );
 
     const handleCloseSettings = (): void =>
