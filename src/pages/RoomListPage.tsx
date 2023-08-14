@@ -9,6 +9,7 @@ import { GeneralSocketServiceContext } from "../AppWrapper";
 
 export const RoomListPage: React.FC = () =>
 {
+    const [isRequestDone, setIsRequestDone] = useState<boolean>(false);
     const [roomList, setRoomList] = useState<PublicRoomInfo[]>([]);
     const generalSocketService = useContext(GeneralSocketServiceContext);
 
@@ -34,7 +35,7 @@ export const RoomListPage: React.FC = () =>
 
     useEffect(() =>
     {
-        generalSocketService.subscribeOnRoomList(setRoomList);
+        generalSocketService.subscribeOnRoomList(setIsRequestDone, setRoomList);
 
         return () =>
         {
@@ -48,7 +49,11 @@ export const RoomListPage: React.FC = () =>
             <div id="main">
                 {/** TODO: задействовать компонент List. */}
                 <div id="room-list">
-                    {roomList.length ? roomList.map(roomListToMap) : "Комнаты отсутствуют на сервере"}
+                    {roomList.length
+                        ? roomList.map(roomListToMap)
+                        : <p className="flex-centered">
+                            {!isRequestDone ? "Ожидание ответа от сервера..." : "Комнаты отсутствуют на сервере"}
+                        </p>}
                 </div>
             </div>
         </>

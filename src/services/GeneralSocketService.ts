@@ -29,28 +29,39 @@ export default class GeneralSocketService
         this.m_socket.on(SE.Disconnect, () => { this.handleDisconnect(); });
     }
 
-    public subscribeOnRoomList(setList: ReactDispatch<PublicRoomInfo[]>): void
+    public subscribeOnRoomList(
+        setIsRequestDone: ReactDispatch<boolean>,
+        setList: ReactDispatch<PublicRoomInfo[]>
+    ): void
     {
+        const afterReceiveList = (): void =>
+        {
+            this.m_socket.on(SE.RoomCreated, (room: PublicRoomInfo) => { setList(prev => [...prev, room]); });
+
+            this.m_socket.on(SE.RoomDeleted, (id: string) =>
+            {
+                setList(prev => prev.filter(r => r.id !== id));
+            });
+
+            this.m_socket.on(SE.RoomNameChanged, (info: RoomNameInfo) =>
+            {
+                setList((prev) =>
+                {
+                    const idx = prev.findIndex(r => r.id === info.id);
+                    prev[idx].name = info.name;
+                    return prev;
+                });
+            });
+        };
+
         // Запросим список комнат.
         this.m_socket.emit(SE.RoomList);
 
-        this.m_socket.once(SE.RoomList, (rooms: PublicRoomInfo[]) => { setList(rooms); });
-
-        this.m_socket.on(SE.RoomCreated, (room: PublicRoomInfo) => { setList(prev => [...prev, room]); });
-
-        this.m_socket.on(SE.RoomDeleted, (id: string) =>
+        this.m_socket.once(SE.RoomList, (rooms: PublicRoomInfo[]) =>
         {
-            setList(prev => prev.filter(r => r.id !== id));
-        });
-
-        this.m_socket.on(SE.RoomNameChanged, (info: RoomNameInfo) =>
-        {
-            setList((prev) =>
-            {
-                const idx = prev.findIndex(r => r.id === info.id);
-                prev[idx].name = info.name;
-                return prev;
-            });
+            setIsRequestDone(true);
+            setList(rooms);
+            afterReceiveList();
         });
     }
 
