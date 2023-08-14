@@ -27,7 +27,6 @@ export const RoomWrapperPage: React.FC = () =>
             return;
         }
 
-        // TODO: нужно получить название комнаты в результате этого запроса
         const fetchRequest = async (): Promise<void> =>
         {
             let fetchPath = `${process.env.REACT_APP_BACKEND_PATH ?? ""}/api/r/${id}`;
