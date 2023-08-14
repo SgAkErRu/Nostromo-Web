@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { CreateRoom } from "./CreateRoom";
 import { BlockByIP } from "./BlockByIP";
+import { EditRoom } from "./EditRoom";
 
 interface AdminPanelActionListProps
 {
@@ -11,6 +12,7 @@ interface AdminPanelActionListProps
 const actionComponents = new Map<string, JSX.Element>
 ([
     [ "createRoom",   <CreateRoom /> ],
+    [ "controlRooms", <EditRoom /> ],
     [ "blockByIP",    <BlockByIP /> ]
 ]);
 
