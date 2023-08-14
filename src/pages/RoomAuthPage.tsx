@@ -6,20 +6,21 @@ import { Header } from "../components/Header";
 import "../App.css";
 import "./RoomAuthPage.css";
 
-import { encode, decode } from "js-base64";
+import { encode } from "js-base64";
+import { isEmptyString } from "../Utils";
 
-interface Params
+interface RoomAuthPageProps
 {
+    ready: boolean;
+    roomName: string;
     setAuth: (isAuth: boolean) => void;
 }
 
-export const RoomAuthPage: React.FC<Params> = ({ setAuth }) =>
+export const RoomAuthPage: React.FC<RoomAuthPageProps> = ({ ready, roomName, setAuth }) =>
 {
     const { id } = useParams();
-    const [status, setStatus] = useState(true);
+    const [status, setStatus] = useState<string>("");
     const [pass, setPass] = useState("");
-
-    const roomName = "Тестовая";
 
     const handleSubmit = (ev: FormEvent<HTMLFormElement>): void =>
     {
@@ -45,14 +46,35 @@ export const RoomAuthPage: React.FC<Params> = ({ setAuth }) =>
             {
                 setAuth(true);
             }
+            else if (res.status === 401 || res.status === 403)
+            {
+                setStatus("Неправильный пароль!");
+            }
             else
             {
-                setStatus(false);
+                setStatus("Непредвиденная ошибка!");
             }
         };
 
         void fetchRequest();
     };
+
+    const authForm = (
+        <form id="auth" onSubmit={handleSubmit}>
+            {isEmptyString(status) ? <></> : <span className="m-a" id="status">{status}</span>}
+            <span className="m-a">Вход в комнату</span>
+            <span className="m-a" id="room-name" title={roomName}>{roomName}</span>
+            <input id="pass"
+                type="password"
+                placeholder="Введите пароль"
+                value={pass}
+                onChange={
+                    (ev) => { setPass(ev.target.value); }
+                }
+            />
+            <input id="btn-join" type="submit" value="Войти" />
+        </form>
+    );
 
     useEffect(() =>
     {
@@ -63,22 +85,7 @@ export const RoomAuthPage: React.FC<Params> = ({ setAuth }) =>
         <>
             <Header title="Авторизация в комнате" />
             <div id="main">
-                <form id="auth" autoComplete="on" onSubmit={handleSubmit}>
-                    {!status ? <span className="m-a" id="status">Неправильный пароль!</span> : <></>}
-                    <span className="m-a">Вход в комнату</span>
-                    <span className="m-a" id="room-name" title={roomName}>{roomName}</span>
-                    <input
-                        id="pass"
-                        type="password"
-                        name="password"
-                        placeholder="Введите пароль"
-                        value={pass}
-                        onChange={
-                            (ev) => { setPass(ev.target.value); }
-                        }
-                    />
-                    <input id="btn-join" type="submit" value="Войти" />
-                </form>
+                {ready ? authForm : <p className="flex-centered">Ожидание ответа от сервера...</p>}
             </div>
         </>
     );

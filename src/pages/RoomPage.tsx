@@ -39,12 +39,15 @@ export interface DeviceListItem
     kind: "audio" | "video";
 }
 
-export const RoomPage: React.FC = () =>
+interface RoomPageProps
+{
+    roomName: string;
+}
+
+export const RoomPage: React.FC<RoomPageProps> = ({ roomName }) =>
 {
     // TODO: наверное стоит поместить это в контекст, так как много где применяется.
     const transitionDuration = 100;
-
-    const roomName = "Тестовая";
 
     const [soundState, setSoundState] = useState<SoundState>(SoundState.DISABLED_WITH_ALERT);
 
