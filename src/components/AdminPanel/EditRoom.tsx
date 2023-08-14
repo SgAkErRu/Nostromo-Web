@@ -1,14 +1,14 @@
 import { MdGroups } from "react-icons/md";
 import { BiDotsHorizontalRounded, BiLink, BiEditAlt, BiLock, BiCommentX, BiTaskX, BiUserX, BiTrash } from "react-icons/bi";
-import { NEGATIVE_TAB_IDX, NOT_FOUND_IDX, ReactDispatch, getToggleFunc } from "../../Utils";
+import { MOUSE_EVENT_NONE_BTN, NEGATIVE_TAB_IDX, NOT_FOUND_IDX, ReactDispatch, getToggleFunc } from "../../Utils";
 import { Input } from "../Base/Input";
 import { List } from "../Base/List/List";
 import { ListItem } from "../Base/List/ListItems";
 import "./EditRoom.css";
-import { ChangeEventHandler, FC,  useEffect, useRef, useState } from "react";
+import { ChangeEventHandler, FC,  MouseEventHandler,  useEffect, useRef, useState } from "react";
 import { Button, Divider, Tooltip } from "@mui/material";
 import { MenuItemCheckbox, MenuItemWithIcon } from "../Menu/MenuItems";
-import { Menu, MenuList } from "../Menu/Menu";
+import { AnchorPosition, Menu, MenuList } from "../Menu/Menu";
 import { TextEditDialog } from "../Menu/TextEditDialog";
 
 // TODO: Удалить после подключения NS Shared
@@ -31,7 +31,9 @@ interface RoomCardProps
 }
 const RoomCard : FC<RoomCardProps> = ({room}) =>
 {
+    const focusBackRef = useRef<HTMLElement | null>(null)
     const btnRef = useRef<HTMLDivElement>(null);
+    const [menuPosition, setMenuPosition] = useState<AnchorPosition | null>(null);
     const [open, setOpen] = useState<boolean>(false);
     const [saveChat, setSaveChat] = useState<boolean>(false);
     const [symmetryMode, setSymmetryMode] = useState<boolean>(false);
@@ -43,6 +45,42 @@ const RoomCard : FC<RoomCardProps> = ({room}) =>
         setOpen(false);
     }
 
+    const handleRoomNameEdit = () : void =>
+    {
+        setEditNameVisible(true);
+        handleClose();
+    }
+
+    const handleNameChangeCancel = () : void =>
+    {
+        focusBackRef.current?.focus();
+        setEditNameVisible(false);
+    }
+
+    const handleNameChangeConfirm = (val : string) : void =>
+    {
+        console.log(val);
+        focusBackRef.current?.focus();
+        setEditNameVisible(false);
+    }
+
+    const handleContextMenuShow : MouseEventHandler = (ev) : void =>
+    {
+        ev.preventDefault();
+        if (ev.button === MOUSE_EVENT_NONE_BTN && btnRef.current)
+        {
+            setMenuPosition(null);
+        }
+        else
+        {
+            setMenuPosition({ left: ev.clientX, top: ev.clientY });
+        }
+        focusBackRef.current = document.activeElement as HTMLElement;
+        setOpen(true);
+    }
+
+    const renameRoomDescription = <>Введите новое имя для комнаты <strong>"{room.name}"</strong>.</>
+
     const usersButton = 
         <Tooltip title="Список участников">
             <Button aria-label="Users list" tabIndex={-1}
@@ -53,19 +91,20 @@ const RoomCard : FC<RoomCardProps> = ({room}) =>
 
     return (
         <>
-            <ListItem showSeparator={false} className="edit-room-list-item">
+            <ListItem onContextMenu={handleContextMenuShow} showSeparator={false} className="edit-room-list-item">
                 {room.name}
                 <div className="horizontal-expander" />
                 {usersButton}
                 <div ref={btnRef}>
                     <Button aria-label="Room settings" tabIndex={-1}
-                        onClick={() => { setOpen(true) }}>
+                        onClick={handleContextMenuShow}>
                         <BiDotsHorizontalRounded className="edit-room-list-item-icon" />
                     </Button>
                 </div>
             </ListItem>
             <Menu
-                anchorRef={btnRef}
+                anchorPosition={menuPosition ?? undefined}
+                anchorRef={!menuPosition && btnRef.current ? btnRef : undefined}
                 open={open}
                 onClose={handleClose}
                 transitionDuration={150}
@@ -73,7 +112,7 @@ const RoomCard : FC<RoomCardProps> = ({room}) =>
             >
                 <MenuList open={open} >
                     <MenuItemWithIcon onClick={handleClose} endIcon={true} icon={<BiLink />} text="Получить ссылку на комнату" />
-                    <MenuItemWithIcon onClick={getToggleFunc(setEditNameVisible)} endIcon={true} icon={<BiEditAlt />} text="Изменить название" />
+                    <MenuItemWithIcon onClick={handleRoomNameEdit} endIcon={true} icon={<BiEditAlt />} text="Изменить название" />
                     <MenuItemWithIcon onClick={handleClose} endIcon={true} icon={<BiLock />} text="Изменить пароль" />
                     <Divider className="menu-divider" />
                     <MenuItemCheckbox text="Сохранение истории чата" onClick={getToggleFunc(setSaveChat)} isChecked={saveChat} />
@@ -87,7 +126,7 @@ const RoomCard : FC<RoomCardProps> = ({room}) =>
                     <MenuItemWithIcon onClick={handleClose} endIcon={true} icon={<BiTrash className="delete-room-btn" />} text="Удалить комнату" />
                 </MenuList>
             </Menu>
-            <TextEditDialog isOpen={editNameVisible} label="Изменить имя комнаты" value={room.name} onClose={getToggleFunc(setEditNameVisible)} onValueConfirm={(val) => {console.log(val); setEditNameVisible(false)}} />
+            <TextEditDialog isOpen={editNameVisible} label="Изменить имя комнаты" description={renameRoomDescription} value={room.name} onClose={handleNameChangeCancel} onValueConfirm={handleNameChangeConfirm} />
         </>
     )
 }

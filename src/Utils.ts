@@ -101,6 +101,8 @@ export const IDX_STEP = 1;
 
 export const NOT_FOUND_IDX = -1;
 
+export const MOUSE_EVENT_NONE_BTN = 0;
+
 export function cloneObject<T>(obj: T): T
 {
     return JSON.parse(JSON.stringify(obj)) as T;
