@@ -1,0 +1,141 @@
+.edit-user-container
+{
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+    max-height: 100%;
+}
+
+.edit-user-list
+{
+    border-radius: 7px;
+    padding: 5px 10px 10px 10px;
+    flex: auto;
+    flex-grow: 1;
+    overflow: scroll;
+}
+
+.edit-user-list-item
+{
+    padding-top: 12px;
+    margin-bottom: 12px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.edit-user-list-item:hover
+{
+    box-shadow: 0 0 2px white;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.edit-user-list-item:focus-within
+{
+    box-shadow: 0 0 2px white;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.08);
+    outline: none;
+}
+
+.edit-user-list-item-icon
+{
+    color: var(--primary-text-color);
+    height: 24px;
+    width: 24px;
+}
+
+.delete-user-btn
+{
+    color: var(--error-color)
+}
+
+.edit-user-exit-button
+{
+    color: #b5bac1;
+    border-radius: 4px;
+    max-height: 36px;
+    min-height: 36px;
+    min-width: 36px;
+    max-width: 36px;
+    font-size: 22.5px;
+    margin-right: 20px;
+}
+
+.edit-user-header-area
+{
+    min-height: 48px;
+    max-height: 48px;
+    border-bottom: 1px solid #2b2e33;
+    box-sizing: border-box;
+    box-shadow: 0px 2px 4px -4px rgba(0, 0, 0, 0.85);
+    padding: 0 8px 0 8px;
+    align-items: center;
+    background-color: #4e535e;
+    display: flex;
+    position: absolute; 
+    left:0; 
+    top: 0; 
+    right:0; 
+    bottom: 0;
+}
+
+.edit-user-info
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-user-info-name
+{
+    font-size: 1.15rem;
+    color: var(--primary-text-color);
+    word-wrap: anywhere;
+}
+
+.edit-user-info-id
+{
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: var(--secondary-text-color);
+    margin-top: 2px;
+}
+
+.edit-user-avatar-container
+{
+    min-width: 56px;
+    flex-shrink: 0;
+    margin-left: 15px;
+}
+
+.edit-user-avatar-container .edit-user-avatar
+{
+    color: var(--primary-text-color);
+}
+
+.edit-user-name-room
+{
+    font-size: 1.2rem;
+    letter-spacing: 0.03rem;
+    white-space: nowrap;
+}
+
+.edit-user-search-panel
+{
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 12px;
+    flex: auto;
+    flex-grow: 0;
+    margin-top: 50px;
+}
+
+.edit-user-area
+{
+    display: flex;
+}
+
+.edit-user-open-context
+{
+    margin-right: 15px;
+}

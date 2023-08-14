@@ -16,14 +16,10 @@
 }
 .lock-input-label
 {
-    display: inline-flex;
-    padding: 0;
     margin: 0;
 }
 .lock-input
 {
-    display: flex;
-    height: 20px;
     border-radius: 10px;
     border: 1px solid #a7a7a7;
     margin-top: 10px;
@@ -67,13 +63,11 @@
 {
     background-color: var(--secondary-bg-color);
     border: 1px solid white;
-    outline: none;
 }
 
 .lock-button:focus
 {
     border: 1px solid white;
-    outline: none;
 }
 
 .warning

@@ -5,11 +5,12 @@ import { Input } from "../Base/Input";
 import { List } from "../Base/List/List";
 import { ListItem } from "../Base/List/ListItems";
 import "./EditRoom.css";
-import { ChangeEventHandler, FC,  MouseEventHandler,  useEffect, useRef, useState } from "react";
+import { ChangeEventHandler, Dispatch, FC,  SetStateAction, MouseEventHandler,  useEffect, useRef, useState } from "react";
 import { Button, Divider, Tooltip } from "@mui/material";
 import { MenuItemCheckbox, MenuItemWithIcon } from "../Menu/MenuItems";
 import { AnchorPosition, Menu, MenuList } from "../Menu/Menu";
 import { TextEditDialog } from "../Menu/TextEditDialog";
+import { EditUser } from "./EditUser";
 
 // TODO: Удалить после подключения NS Shared
 export const enum VideoCodec
@@ -27,11 +28,13 @@ export interface PublicRoomInfo
 
 interface RoomCardProps
 {
-    room : PublicRoomInfo
+    room : PublicRoomInfo;
+    setIdRoom: Dispatch<SetStateAction<string>>;
+    setNameRoom: Dispatch<SetStateAction<string>>;
 }
-const RoomCard : FC<RoomCardProps> = ({room}) =>
+const RoomCard : FC<RoomCardProps> = ({room, setIdRoom, setNameRoom}) =>
 {
-    const focusBackRef = useRef<HTMLElement | null>(null)
+    const focusBackRef = useRef<HTMLElement | null>(null);
     const btnRef = useRef<HTMLDivElement>(null);
     const [menuPosition, setMenuPosition] = useState<AnchorPosition | null>(null);
     const [open, setOpen] = useState<boolean>(false);
@@ -59,7 +62,6 @@ const RoomCard : FC<RoomCardProps> = ({room}) =>
 
     const handleNameChangeConfirm = (val : string) : void =>
     {
-        console.log(val);
         focusBackRef.current?.focus();
         setEditNameVisible(false);
     }
@@ -84,22 +86,35 @@ const RoomCard : FC<RoomCardProps> = ({room}) =>
     const usersButton = 
         <Tooltip title="Список участников">
             <Button aria-label="Users list" tabIndex={-1}
-                onClick={() => {console.log("users") }}>
+                onClick={() => { setIdRoom(room.id); setNameRoom(room.name); }}>
                 <MdGroups className="edit-room-list-item-icon" />
             </Button>
         </Tooltip>;
-
+    const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (ev) =>
+    {
+        if (ev.key === "Enter")
+        {
+            setIdRoom(room.id);
+            setNameRoom(room.name);
+        }
+        else
+        {
+            ev.preventDefault();
+        }
+    }
     return (
         <>
-            <ListItem onContextMenu={handleContextMenuShow} showSeparator={false} className="edit-room-list-item">
-                {room.name}
-                <div className="horizontal-expander" />
-                {usersButton}
-                <div ref={btnRef}>
-                    <Button aria-label="Room settings" tabIndex={-1}
-                        onClick={handleContextMenuShow}>
-                        <BiDotsHorizontalRounded className="edit-room-list-item-icon" />
-                    </Button>
+            <ListItem onKeyDown={(ev) => { onKeyDown(ev) }} onContextMenu={handleContextMenuShow} showSeparator={true} className="edit-room-list-item">
+                <div className="edit-room-area">
+                    <label className="edit-room-name">{room.name}</label>
+                    <div className="horizontal-expander" />
+                    {usersButton}
+                    <div ref={btnRef}>
+                        <Button aria-label="Room settings" tabIndex={-1}
+                            onClick={handleContextMenuShow}>
+                            <BiDotsHorizontalRounded className="edit-room-list-item-icon" />
+                        </Button>
+                    </div>
                 </div>
             </ListItem>
             <Menu
@@ -134,9 +149,11 @@ const RoomCard : FC<RoomCardProps> = ({room}) =>
 interface RoomListProps
 {
     filter? : string;
+    setIdRoom: Dispatch<SetStateAction<string>>;
+    setNameRoom: Dispatch<SetStateAction<string>>;
 }
 
-const RoomList : FC<RoomListProps> = ({filter}) =>
+const RoomList : FC<RoomListProps> = ({ filter, setIdRoom, setNameRoom }) =>
 {
     const [roomsList, setRoomsList] = useState<PublicRoomInfo[]>([]);
 
@@ -175,7 +192,7 @@ const RoomList : FC<RoomListProps> = ({filter}) =>
     const createRoomCard = (room : PublicRoomInfo) : JSX.Element =>
     {
         return (
-            <RoomCard key={room.id} room={room} />
+            <RoomCard setIdRoom={setIdRoom} key={room.id} room={room} setNameRoom={setNameRoom}/>
         )
     }
 
@@ -188,13 +205,13 @@ const RoomList : FC<RoomListProps> = ({filter}) =>
     )
 }
 
-interface SearchPanelProps
+interface SearchPanelProps extends React.HTMLAttributes<HTMLDivElement>
 {
     filter: string;
     setFilter : ReactDispatch<string>;
 }
 
-const SearchPanel : FC<SearchPanelProps> = ({filter, setFilter}) =>
+export const SearchPanel : FC<SearchPanelProps> = ({filter, setFilter, ...props}) =>
 {
     const handleFilterChange : ChangeEventHandler<HTMLInputElement> = (ev) =>
     {
@@ -202,7 +219,7 @@ const SearchPanel : FC<SearchPanelProps> = ({filter, setFilter}) =>
     }
 
     return (
-        <div className="room-search-panel">
+        <div className="room-search-panel" {...props}>
             <span className="room-search-label text-wrap non-selectable">
                 Поиск
             </span>
@@ -214,11 +231,18 @@ const SearchPanel : FC<SearchPanelProps> = ({filter, setFilter}) =>
 export const EditRoom : FC = () =>
 {
     const [filter, setFilter] = useState<string>("");
-
+    const [idRoom, setIdRoom] = useState<string>("");
+    const [nameRoom, setNameRoom] = useState<string>("");
     return (
-        <div className="room-edit-container">
-            <SearchPanel filter={filter} setFilter={setFilter} />
-            <RoomList filter={filter} />
-        </div>
+        <>
+        {idRoom !== ""? 
+            <EditUser roomID={idRoom} setIdRoom={setIdRoom} nameRoom={nameRoom}/>
+        :
+            <div className="room-edit-container">
+                <SearchPanel filter={filter} setFilter={setFilter} />
+                <RoomList setIdRoom={setIdRoom} filter={filter} setNameRoom={setNameRoom}/>
+            </div>
+        }
+        </>
     );
 }
