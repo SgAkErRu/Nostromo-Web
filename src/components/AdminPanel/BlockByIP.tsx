@@ -1,6 +1,7 @@
-import { FC, useRef, useState } from "react";
+import { ChangeEventHandler, FC, useRef, useState } from "react";
 import "./BlockByIP.css";
 import { Button } from "@mui/material";
+import { Input } from "../Base/Input";
 
 export const BlockByIP: FC = () =>
 {
@@ -20,14 +21,19 @@ export const BlockByIP: FC = () =>
     {
         inputRef.current?.focus();
     }
+
+    const handleInputChange : ChangeEventHandler<HTMLInputElement> = (ev) =>
+    {
+        setIP(ev.target.value);
+    }
+
     const desc = "Введите IP - адрес пользователя, чтобы заблокировать или разблокировать его";
     return (
         <>
-            <p className="settings-category-label" key="labelBlockByIP">Блокировка по IP</p>
             <div className="lock-area" key="lock-area">
                 <div className="lock-input-area" onClick={handleFocus}>
                     <p className="lock-input-label text-wrap">IP - адрес</p>
-                    <input className="lock-input" ref={inputRef} onChange={(ev) => { setIP(ev.target.value) }}/>
+                    <Input className="lock-input" ref={inputRef} value={ip} onChange={handleInputChange}/>
                     <p className="list-item-description">{desc}</p>
                 </div>
                 <div className="lock-button-area">

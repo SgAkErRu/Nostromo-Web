@@ -13,6 +13,7 @@
     flex-direction: column;
     cursor: pointer;
     height: 110px;
+    margin-right: 15px;
 }
 .lock-input-label
 {
@@ -23,7 +24,6 @@
     border-radius: 10px;
     border: 1px solid #a7a7a7;
     margin-top: 10px;
-    margin-right: 15px;
     padding: 10px;
     background-color: #34363b;
     color: white;
