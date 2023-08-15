@@ -20,9 +20,13 @@ const AdminPanelCategoryListItem: React.FC<AdminPanelCategoryListItemProps> = ({
     ...props
 }) =>
 {
-    const handleFocus: FocusEventHandler = () =>
+    const handleFocus: FocusEventHandler<HTMLDivElement> = (ev) =>
     {
         setSelectedCategory(category);
+        if (props.onFocus)
+        {
+            props.onFocus(ev);
+        }
     };
 
     return (
