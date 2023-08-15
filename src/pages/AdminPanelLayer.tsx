@@ -6,14 +6,24 @@ import { AdminPanelCategoryList } from "../components/AdminPanel/AdminPanelCateg
 import { AdminPanelActionList } from "../components/AdminPanel/AdminPanelActionList";
 
 import "./AdminPanelLayer.css"
+import { ZERO_IDX } from "../Utils";
+
+export interface AdminPanelCategory
+{
+    id : string;
+    name : string;
+} 
 
 export const AdminPanelLayer: React.FC = () =>
 {
-    const categories: Map<string, string> = new Map();
-    categories.set("createRoom", "Создание комнаты").set("controlRooms", "Управление комнатами").set("blockByIP", "Блокировка по IP");
+    const categories: AdminPanelCategory[] = [
+        {id: "createRoom", name: "Создание комнаты"},
+        {id: "controlRooms", name: "Управление комнатами"},
+        {id: "blockByIP", name: "Блокировка по IP"}
+    ]
     const setShowAdminPanel = useContext(SetShowAdminPanelContext);
-    const [selectedCategory, setSelectedCategory] = useState<string>(
-        categories.size ? categories.keys().next().value as string: ""
+    const [selectedCategory, setSelectedCategory] = useState<AdminPanelCategory>(
+        categories.length ? categories[ZERO_IDX] : {id: "", name: ""}
     );
 
     const handleCloseSettings = (): void =>
@@ -32,9 +42,9 @@ export const AdminPanelLayer: React.FC = () =>
         />
     );
     const actionList = (
-        <SidebarViewMainArea className={selectedCategory === "controlRooms" ? "sidebar-main-without-global-scroll" : ""}>
+        <SidebarViewMainArea className={selectedCategory.id === "controlRooms" ? "sidebar-main-without-global-scroll" : ""}>
             <AdminPanelActionList
-                selectedCategory={selectedCategory}
+                selectedCategory={selectedCategory.id}
             />
         </SidebarViewMainArea>
     );
