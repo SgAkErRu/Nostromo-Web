@@ -37,48 +37,33 @@ export const CreateRoom: FC = () =>
                     label="Название комнаты"
                     description="Введите название новой комнаты"
                     value={roomName}
-                    onValueChange={(val) =>
-                    {
-                        setRoomName(val);
-                    }}
+                    onValueChange={setRoomName}
                 />
                 <ListItemInput
                     key="roomPassword"
                     label="Пароль комнаты"
                     description="Введите пароль от новой комнаты, если он необходим"
                     value={roomPassword}
-                    onValueChange={(val) =>
-                    {
-                        setRoomPassword(val);
-                    }}
+                    onValueChange={setRoomPassword}
                 />
                 <ListItemSelect
                     key="roomCodec"
                     label="Видеокодек для комнаты"
                     value={roomCodec}
-                    onValueChange={(val) =>
-                    {
-                        setRoomCodec(val);
-                    }}
+                    onValueChange={setRoomCodec}
                     options={videocodecs}
                 />
                 <ListItemSwitch
                     key="saveHistory"
                     label="Сохранить историю чата ?"
                     value={saveHistory}
-                    onValueChange={(val) =>
-                    {
-                        setSaveHistory(val);
-                    }}
+                    onValueChange={setSaveHistory}
                 />
                 <ListItemSwitch
                     key="symmetricalMode"
                     label="Симметричный режим ?"
                     value={symmetricalMode}
-                    onValueChange={(val) =>
-                    {
-                        setSymmetricalMode(val);
-                    }}
+                    onValueChange={setSymmetricalMode}
                 />
                 <ListItemButton
                     key="createBtn"
