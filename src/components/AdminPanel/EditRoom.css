@@ -58,6 +58,11 @@
     color: var(--error-color)
 }
 
+.edit-room-open-context-btn
+{
+    margin-right: 15px;
+}
+
 .edit-room-list-item-area
 {
     display: flex;

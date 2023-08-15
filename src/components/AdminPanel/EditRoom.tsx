@@ -130,13 +130,18 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
         setOpen(true);
     }
 
+    const handleRoomSelected : MouseEventHandler = () : void =>
+    {
+        setIdRoom(room.id);
+    }
+
     const renameRoomDescription = <>Введите новое имя для комнаты <strong>"{room.name}"</strong>.</>
     const changePasswordRoomDescription = <>Введите новый пароль для комнаты <strong>"{room.name}"</strong>.</>
 
     const usersButton = 
         <Tooltip title="Список участников">
             <Button aria-label="Users list" tabIndex={-1}
-                onClick={() => { setIdRoom(room.id); }}>
+                onClick={handleRoomSelected}>
                 <MdGroups className="edit-room-list-item-icon" />
             </Button>
         </Tooltip>;
@@ -150,12 +155,12 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
     }
     return (
         <>
-            <ListItem onKeyDown={(ev) => { onKeyDown(ev) }} onContextMenu={handleContextMenuShow} showSeparator={true} className="edit-room-list-item">
+            <ListItem onKeyDown={onKeyDown} onContextMenu={handleContextMenuShow} showSeparator={true} className="edit-room-list-item">
                 <div className="edit-room-list-item-area">
                     <label className="edit-room-list-item-name">{room.name}</label>
                     <div className="horizontal-expander" />
                     {usersButton}
-                    <div ref={btnRef}>
+                    <div ref={btnRef} className="edit-room-open-context-btn">
                         <Button aria-label="Room settings" tabIndex={-1}
                             onClick={handleContextMenuShow}>
                             <BiDotsHorizontalRounded className="edit-room-list-item-icon" />

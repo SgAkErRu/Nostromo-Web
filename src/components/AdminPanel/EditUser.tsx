@@ -13,20 +13,7 @@ import { UserInfo } from "nostromo-shared/types/RoomTypes";
 import { Tooltip } from "../Tooltip";
 import {RiArrowGoBackLine} from "react-icons/ri";
 import { SearchPanel } from "../Base/List/SearchPanel";
-
-// TODO: Удалить после подключения NS Shared
-export const enum VideoCodec
-{
-    VP9 = 'VP9',
-    VP8 = 'VP8',
-    H264 = 'H264'
-}
-export interface PublicRoomInfo
-{
-    id: string;
-    name: string;
-    videoCodec: VideoCodec;
-}
+import { LoadedRoomList, PublicRoomInfo } from "../../services/RoomService";
 
 interface UserCardProps
 {
@@ -47,25 +34,25 @@ const UserCard : FC<UserCardProps> = ({user}) =>
         setOpen(false);
     }
     // TODO: Реализовать обработчики
-    const handleKickUser = (id: string) : void =>
+    const handleKickUser : MouseEventHandler = () : void =>
     {
-        console.log("Пользователь ", id, " кикнут");
+        console.log("Пользователь ", user.id, " кикнут");
     }
-    const handleBanUser = (id: string) : void =>
+    const handleBanUser : MouseEventHandler = () : void =>
     {
-        console.log("Пользователь ", id, " забанен");
+        console.log("Пользователь ", user.id, " забанен");
     }
-    const handleStopDemo = (id: string) : void =>
+    const handleStopDemo : MouseEventHandler = () : void =>
     {
-        console.log("Запретить демонстрацию экрана пользователю ", id);
+        console.log("Запретить демонстрацию экрана пользователю ", user.id);
     }
-    const handleOffVideo = (id: string) : void =>
+    const handleOffVideo : MouseEventHandler = () : void =>
     {
-        console.log("Отключить видео пользователя ", id);
+        console.log("Отключить видео пользователя ", user.id);
     }
-    const handleOffAudio = (id: string) : void =>
+    const handleOffAudio : MouseEventHandler = () : void =>
     {
-        console.log("Отключить аудио пользователя ", id);
+        console.log("Отключить аудио пользователя ", user.id);
     }
 
     const handleContextMenuShow : MouseEventHandler = (ev) : void =>
@@ -107,10 +94,10 @@ const UserCard : FC<UserCardProps> = ({user}) =>
                 <Avatar className="edit-user-avatar" children={user.name[ZERO_IDX]} />
             </div>
             <div className="edit-user-info">
-                <Tooltip title="Ваше имя" placement="left">
+                <Tooltip title="Имя пользователя" placement="left">
                     <span className="edit-user-info-name">{user.name}</span>
                 </Tooltip>
-                <Tooltip title="Ваш идентификатор в системе" placement="left">
+                <Tooltip title="Идентификатор пользователя в системе" placement="left">
                     <span className="edit-user-info-id">#{user.id}</span>
                 </Tooltip>
             </div>
@@ -138,14 +125,14 @@ const UserCard : FC<UserCardProps> = ({user}) =>
                 popperPlacement="bottom"
             >
                 <MenuList open={open} >
-                    <MenuItemWithIcon onClick={() => { handleKickUser(user.id) }} endIcon={true} icon={<BiUserX />} text="Кикнуть пользователя" />
-                    <MenuItemWithIcon onClick={() => { handleBanUser(user.id) }} endIcon={true} icon={<BiBlock />} text="Забанить пользователя" />
+                    <MenuItemWithIcon onClick={handleKickUser} endIcon={true} icon={<BiUserX />} text="Кикнуть пользователя" />
+                    <MenuItemWithIcon onClick={handleBanUser} endIcon={true} icon={<BiBlock />} text="Забанить пользователя" />
                     <Divider className="menu-divider" />
                     <MenuItemCheckbox text="Разрешить выступать" onClick={getToggleFunc(setAllowPerform)} isChecked={allowPerform} />
                     <Divider className="menu-divider" />
-                    <MenuItemWithIcon onClick={() => { handleStopDemo(user.id) }} endIcon={true} icon={<MdOutlineStopScreenShare />} text="Прекратить демонстрацию экрана пользователя" />
-                    <MenuItemWithIcon onClick={() => { handleOffVideo(user.id) }} endIcon={true} icon={<BiVideoOff />} text="Оключить веб-камеры пользователя" />
-                    <MenuItemWithIcon onClick={() => { handleOffAudio(user.id) }} endIcon={true} icon={<BiMicrophoneOff />} text="Оключить аудио пользователя" />
+                    <MenuItemWithIcon onClick={handleStopDemo} endIcon={true} icon={<MdOutlineStopScreenShare />} text="Прекратить демонстрацию экрана пользователя" />
+                    <MenuItemWithIcon onClick={handleOffVideo} endIcon={true} icon={<BiVideoOff />} text="Оключить веб-камеры пользователя" />
+                    <MenuItemWithIcon onClick={handleOffAudio} endIcon={true} icon={<BiMicrophoneOff />} text="Оключить аудио пользователя" />
                     <Divider className="menu-divider" />
                     <MenuItemWithIcon onClick={handleUserNameEdit} endIcon={true} icon={<BiEditAlt />} text="Изменить ник пользователя" />
                 </MenuList>
@@ -222,31 +209,18 @@ export const EditUser : FC<EditUserProps> = ({ roomID, setIdRoom }) =>
 
     useEffect(() =>
     {
-        const loadedRoomList: PublicRoomInfo[] = [
-            { id: "G_OShinfHXD", name: "Главная", videoCodec: VideoCodec.H264 },
-            { id: "NV6oozYIm2T", name: "Netrunners", videoCodec: VideoCodec.H264 },
-            { id: "Jqd0wDUDONo", name: "edu", videoCodec: VideoCodec.H264 },
-            { id: "Y3OG7r9Qh6s", name: "Статус МОС", videoCodec: VideoCodec.H264 },
-            { id: "q61oq10dUu5", name: "g", videoCodec: VideoCodec.H264 },
-            { id: "3tzcDFnVEWz", name: "infedu", videoCodec: VideoCodec.H264 },
-            { id: "9KT5a-wPftO", name: "mos-research", videoCodec: VideoCodec.H264 },
-            { id: "KjWPqLcbHRi", name: "mos-devel", videoCodec: VideoCodec.H264 },
-            { id: "inSdz0nbvA4", name: "vp9", videoCodec: VideoCodec.H264 },
-            { id: "_efhN2j8tp1", name: "Предприятие 3826", videoCodec: VideoCodec.H264 },
-            { id: "meD6afojFJY", name: "fam", videoCodec: VideoCodec.H264 },
-            { id: "zaogu1TOQmu", name: "cco", videoCodec: VideoCodec.H264 },
-            { id: "OkpHvA4_FxH", name: "hh", videoCodec: VideoCodec.H264 },
-            { id: "_N4fIk3RfAe", name: "forall", videoCodec: VideoCodec.H264 },
-            { id: "uMxk3nLNQP5", name: "Clio", videoCodec: VideoCodec.H264 },
-        ];
-
-        setRoomsList(loadedRoomList);
+        setRoomsList(LoadedRoomList);
     }, []);
+
+    const handleBackToRoomListClick : MouseEventHandler = () =>
+    {
+        setIdRoom("");
+    }
 
     const [filter, setFilter] = useState<string>("");
     const nameRoomArea = (
         <div className="edit-user-header-area">
-            <Button className="edit-user-exit-button" onClick={() => { setIdRoom(""); }}><RiArrowGoBackLine /></Button>
+            <Button className="edit-user-exit-button" onClick={handleBackToRoomListClick}><RiArrowGoBackLine /></Button>
             <p className="edit-user-name-room">Управление участниками комнаты - <label className="bold">{roomsList.find(f => f.id === roomID)?.name}</label></p>
         </div>
     );
