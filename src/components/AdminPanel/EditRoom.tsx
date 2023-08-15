@@ -92,21 +92,18 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom, setNameRoom}) =>
         </Tooltip>;
     const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (ev) =>
     {
-        if (ev.key === "Enter")
-        {
-            setIdRoom(room.id);
-            setNameRoom(room.name);
-        }
-        else
+        if (ev.code === "Enter" || ev.code === "Space")
         {
             ev.preventDefault();
+            setIdRoom(room.id);
+            setNameRoom(room.name);
         }
     }
     return (
         <>
             <ListItem onKeyDown={(ev) => { onKeyDown(ev) }} onContextMenu={handleContextMenuShow} showSeparator={true} className="edit-room-list-item">
-                <div className="edit-room-area">
-                    <label className="edit-room-name">{room.name}</label>
+                <div className="edit-room-list-item-area">
+                    <label className="edit-room-list-item-name">{room.name}</label>
                     <div className="horizontal-expander" />
                     {usersButton}
                     <div ref={btnRef}>
@@ -119,7 +116,7 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom, setNameRoom}) =>
             </ListItem>
             <Menu
                 anchorPosition={menuPosition ?? undefined}
-                anchorRef={!menuPosition && btnRef.current ? btnRef : undefined}
+                anchorRef={btnRef}
                 open={open}
                 onClose={handleClose}
                 transitionDuration={150}

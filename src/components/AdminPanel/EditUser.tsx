@@ -111,7 +111,7 @@ const UserCard : FC<UserCardProps> = ({user}) =>
                     <span className="edit-user-info-name">{user.name}</span>
                 </Tooltip>
                 <Tooltip title="Ваш идентификатор в системе" placement="left">
-                    <span className="edit-user-info-id">&nbsp;#{user.id}</span>
+                    <span className="edit-user-info-id">#{user.id}</span>
                 </Tooltip>
             </div>
         </>;
@@ -131,7 +131,7 @@ const UserCard : FC<UserCardProps> = ({user}) =>
             </ListItem>
             <Menu
                 anchorPosition={menuPosition ?? undefined}
-                anchorRef={!menuPosition && btnRef.current ? btnRef : undefined}
+                anchorRef={btnRef}
                 open={open}
                 onClose={handleClose}
                 transitionDuration={150}
