@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import React, { Dispatch, SetStateAction, useRef } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useRef } from 'react';
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { MdMic, MdMicOff, MdScreenShare, MdStopScreenShare, MdVideocam, MdVideocamOff, MdVolumeOff, MdVolumeUp } from "react-icons/md";
 import { Tooltip } from "../../Tooltip";
@@ -10,6 +10,8 @@ import { MicBtnMenu } from "./MicBtnMenu";
 import "./RoomActionPanel.css";
 import { CamBtnMenu } from "./CamBtnMenu";
 import { DisplayBtnMenu } from "./DisplayBtnMenu";
+import { UserMediaServiceContext } from "../../../AppWrapper";
+import { ResolutionObject } from "../../../services/UserMediaService";
 
 export interface ActionBtnInfo<S>
 {
@@ -28,12 +30,6 @@ export interface ActionDeviceBtn<S> extends ActionBtnWithMenuInfo<S>
     deviceList: DeviceListItem[];
 }
 
-export type ResolutionObject = {
-    width: number;
-    height: number;
-    name: string;
-};
-
 export interface RoomActionPanelProps
 {
     soundBtnInfo: ActionBtnInfo<SoundState>;
@@ -51,6 +47,8 @@ export const RoomActionPanel: React.FC<RoomActionPanelProps> = ({
     transitionDuration
 }) =>
 {
+    const userMediaService = useContext(UserMediaServiceContext);
+
     /// Sound button ----------------------------- ///
 
     const isSoundEnabled = (soundBtnInfo.state === SoundState.ENABLED);
@@ -92,19 +90,40 @@ export const RoomActionPanel: React.FC<RoomActionPanelProps> = ({
     const micBtnBoxRef = useRef<HTMLDivElement>(null);
     const micBtnMsg = isMicWorking ? "Выключить микрофон" : "Включить микрофон";
 
-    const micBtnOnClick = (): void =>
+    const micBtnOnClick = async (): Promise<void> =>
     {
-        micBtnInfo.setState((prevState) =>
+        //TODO: 1. block button before result
+        // 2. setSelectedMic -> if true
+
+        const state = micBtnInfo.state;
+
+        if (state === MicState.DISABLED)
         {
-            if (prevState === MicState.WORKING)
+            const result = await userMediaService.getMic("testMicDeviceId2");
+
+            if (!result)
             {
-                return MicState.PAUSED;
+                return;
             }
-            else
-            {
-                return MicState.WORKING;
-            }
-        });
+
+            micBtnInfo.setState(MicState.WORKING);
+        }
+        else if (state === MicState.PAUSED)
+        {
+            userMediaService.unpauseMic();
+            micBtnInfo.setState(MicState.WORKING);
+        }
+        else
+        {
+            userMediaService.pauseMic();
+            micBtnInfo.setState(MicState.PAUSED);
+        }
+    };
+
+    const handleDisableMic = (): void =>
+    {
+        userMediaService.stopMic();
+        micBtnInfo.setState(MicState.DISABLED);
     };
 
     const micBtn = (<>
@@ -133,7 +152,7 @@ export const RoomActionPanel: React.FC<RoomActionPanelProps> = ({
             open={micBtnInfo.menuOpen}
             setOpen={micBtnInfo.toggleMenu}
             micEnabled={micBtnInfo.state !== MicState.DISABLED}
-            disableMic={() => { micBtnInfo.setState(MicState.DISABLED); }}
+            disableMic={handleDisableMic}
             micList={micBtnInfo.deviceList}
             transitionDuration={transitionDuration}
         />
@@ -144,7 +163,40 @@ export const RoomActionPanel: React.FC<RoomActionPanelProps> = ({
     const camBtnBoxRef = useRef<HTMLDivElement>(null);
     const camBtnMsg = camBtnInfo.state ? "Выключить веб-камеру" : "Включить веб-камеру";
 
-    const camBtnOnClick = getToggleFunc(camBtnInfo.setState);
+    const camBtnOnClick = async (): Promise<void> =>
+    {
+        //TODO: 1. block button before result
+        // 2. setSelectedCam -> if true
+        // 3. get selectedResolution and fps
+
+        const selectedResolution: ResolutionObject = { width: 1920, height: 1080 };
+        const selectedFps = 30;
+
+        if (!camBtnInfo.state)
+        {
+            const result = await userMediaService.getCam(
+                "testCamDeviceId2",
+                selectedResolution,
+                selectedFps
+            );
+
+            if (!result)
+            {
+                return;
+            }
+
+            camBtnInfo.setState(true);
+        }
+        else
+        {
+            userMediaService.stopCam("testCamDeviceId2");
+            camBtnInfo.setState(false);
+        }
+    };
+
+    //TODO: надо сделать так, что
+    // если выбранная вебка захвачена - тогда будет кнопка выключения.
+    // Если не захвачена, то включения.
 
     const camBtn = (<>
         <div className="action-btn-box non-selectable" ref={camBtnBoxRef}>

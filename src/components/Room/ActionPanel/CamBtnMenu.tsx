@@ -2,13 +2,13 @@ import { Divider, MenuItem, SelectChangeEvent } from "@mui/material";
 import React, { useState } from "react";
 
 import { DeviceListItem } from "../../../pages/RoomPage";
+import { Select } from "../../Base/Select";
 import { Menu, MenuList } from "../../Menu/Menu";
 import { MenuItemRadio, MenuSectionLabel } from "../../Menu/MenuItems";
-import { Select } from "../../Base/Select";
 import { Tooltip } from "../../Tooltip";
 
+import { ResolutionObject } from "../../../services/UserMediaService";
 import "./CamBtnMenu.css";
-import { ResolutionObject } from "./RoomActionPanel";
 
 interface CamBtnMenuProps
 {
