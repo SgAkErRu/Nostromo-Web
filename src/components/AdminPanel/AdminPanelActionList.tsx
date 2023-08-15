@@ -3,23 +3,23 @@ import { CreateRoom } from "./CreateRoom";
 import { BlockByIP } from "./BlockByIP";
 import { EditRoom } from "./EditRoom";
 
-interface AdminPanelActionListProps
-{
-    // Выбранная категория
-    selectedCategory: string;
-}
+export const CREATE_ROOM_CATEGORY_ID = "createRoom";
+export const CONTROL_ROOMS_CATEGORY_ID = "controlRooms";
+export const BLOCK_BY_IP_CATEGORY_ID = "blockByIP";
 
 const actionComponents = new Map<string, JSX.Element>
-([
-    [ "createRoom",   <CreateRoom /> ],
-    [ "controlRooms", <EditRoom /> ],
-    [ "blockByIP",    <BlockByIP /> ]
-]);
+    ([
+        [CREATE_ROOM_CATEGORY_ID, <CreateRoom />],
+        [CONTROL_ROOMS_CATEGORY_ID, <EditRoom />],
+        [BLOCK_BY_IP_CATEGORY_ID, <BlockByIP />]
+    ]);
 
-export const AdminPanelActionList: FC<AdminPanelActionListProps> = ({ selectedCategory }) =>
+interface AdminPanelActionListProps
 {
-    const activeComponent = actionComponents.get(selectedCategory);
-    return (
-        <>{activeComponent !== undefined ? activeComponent : <></>}</>
-    );
+    selectedCategoryID: string;
+}
+
+export const AdminPanelActionList: FC<AdminPanelActionListProps> = ({ selectedCategoryID }) =>
+{
+    return actionComponents.get(selectedCategoryID) ?? <></>;
 };

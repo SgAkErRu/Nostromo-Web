@@ -3,7 +3,7 @@ import { SetShowAdminPanelContext } from "../App";
 import { FocusTrap } from "../components/Base/FocusTrap";
 import { SidebarView, SidebarViewMainArea } from "../components/Base/SidebarView";
 import { AdminPanelCategoryList } from "../components/AdminPanel/AdminPanelCategoryList";
-import { AdminPanelActionList } from "../components/AdminPanel/AdminPanelActionList";
+import { AdminPanelActionList, BLOCK_BY_IP_CATEGORY_ID, CONTROL_ROOMS_CATEGORY_ID, CREATE_ROOM_CATEGORY_ID } from "../components/AdminPanel/AdminPanelActionList";
 
 import "./AdminPanelLayer.css"
 import { ZERO_IDX } from "../Utils";
@@ -17,9 +17,9 @@ export interface AdminPanelCategory
 export const AdminPanelLayer: React.FC = () =>
 {
     const categories: AdminPanelCategory[] = [
-        {id: "createRoom", name: "Создание комнаты"},
-        {id: "controlRooms", name: "Управление комнатами"},
-        {id: "blockByIP", name: "Блокировка по IP"}
+        {id: CREATE_ROOM_CATEGORY_ID, name: "Создание комнаты"},
+        {id: CONTROL_ROOMS_CATEGORY_ID, name: "Управление комнатами"},
+        {id: BLOCK_BY_IP_CATEGORY_ID, name: "Блокировка по IP"}
     ]
     const setShowAdminPanel = useContext(SetShowAdminPanelContext);
     const [selectedCategory, setSelectedCategory] = useState<AdminPanelCategory>(
@@ -44,7 +44,7 @@ export const AdminPanelLayer: React.FC = () =>
     const actionList = (
         <SidebarViewMainArea className={selectedCategory.id === "controlRooms" ? "sidebar-main-without-global-scroll" : ""}>
             <AdminPanelActionList
-                selectedCategory={selectedCategory.id}
+                selectedCategoryID={selectedCategory.id}
             />
         </SidebarViewMainArea>
     );
