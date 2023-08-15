@@ -7,7 +7,7 @@ import { Switch } from "../Switch";
 import "./ListItems.css";
 import { MdInfoOutline } from "react-icons/md";
 
-interface ListItemProps extends React.HTMLAttributes<HTMLDivElement>
+export interface ListItemProps extends React.HTMLAttributes<HTMLDivElement>
 {
     children?: ReactNode;
     showSeparator?: boolean;
