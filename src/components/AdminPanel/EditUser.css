@@ -120,13 +120,8 @@
     white-space: nowrap;
 }
 
-.edit-user-search-panel
+.margin-top
 {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 12px;
-    flex: auto;
-    flex-grow: 0;
     margin-top: 50px;
 }
 

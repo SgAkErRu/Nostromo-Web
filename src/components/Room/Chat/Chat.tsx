@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, Dispatch, SetStateAction, ChangeEventHandler } from 'react';
+import React, { useEffect, useRef, useState, ChangeEventHandler } from 'react';
 import { ImAttachment } from 'react-icons/im';
 import { MdSend } from 'react-icons/md';
 import "./Chat.css";
@@ -6,7 +6,7 @@ import { Message } from './Message/Message';
 import { Tooltip } from '../../Tooltip';
 import { Button } from '@mui/material';
 import { ChatFileInfo, LoadFileInfo, UploadingFilesQueue } from './UploadingFilesQueue';
-import { ZERO_IDX, isEmptyString } from "../../../Utils";
+import { ReactDispatch, ZERO_IDX, isEmptyString } from "../../../Utils";
 
 /** Информация о сообщении в чате. */
 interface ChatMessage
@@ -20,9 +20,9 @@ interface ChatMessage
 interface ChatProps
 {
     uploadingFilesQueue: LoadFileInfo[];
-    setUploadingFilesQueue: Dispatch<SetStateAction<LoadFileInfo[]>>;
+    setUploadingFilesQueue: ReactDispatch<LoadFileInfo[]>;
     isFileUploading: boolean;
-    setIsFileUploading: Dispatch<SetStateAction<boolean>>;
+    setIsFileUploading: ReactDispatch<boolean>;
 }
 
 export const Chat: React.FC<ChatProps> = ({

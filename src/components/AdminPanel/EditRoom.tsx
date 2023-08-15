@@ -1,16 +1,16 @@
 import { MdGroups } from "react-icons/md";
 import { BiDotsHorizontalRounded, BiLink, BiEditAlt, BiLock, BiCommentX, BiTaskX, BiUserX, BiTrash } from "react-icons/bi";
 import { MOUSE_EVENT_NONE_BTN, NEGATIVE_TAB_IDX, NOT_FOUND_IDX, ReactDispatch, getToggleFunc } from "../../Utils";
-import { Input } from "../Base/Input";
 import { List } from "../Base/List/List";
 import { ListItem } from "../Base/List/ListItems";
 import "./EditRoom.css";
-import { ChangeEventHandler, Dispatch, FC,  SetStateAction, MouseEventHandler,  useEffect, useRef, useState } from "react";
+import { FC, MouseEventHandler,  useEffect, useRef, useState } from "react";
 import { Button, Divider, Tooltip } from "@mui/material";
 import { MenuItemCheckbox, MenuItemWithIcon } from "../Menu/MenuItems";
 import { AnchorPosition, Menu, MenuList } from "../Menu/Menu";
 import { TextEditDialog } from "../Menu/TextEditDialog";
 import { EditUser } from "./EditUser";
+import { SearchPanel } from "../Base/List/SearchPanel";
 
 // TODO: Удалить после подключения NS Shared
 export const enum VideoCodec
@@ -29,10 +29,9 @@ export interface PublicRoomInfo
 interface RoomCardProps
 {
     room : PublicRoomInfo;
-    setIdRoom: Dispatch<SetStateAction<string>>;
-    setNameRoom: Dispatch<SetStateAction<string>>;
+    setIdRoom: ReactDispatch<string>;
 }
-const RoomCard : FC<RoomCardProps> = ({room, setIdRoom, setNameRoom}) =>
+const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
 {
     const focusBackRef = useRef<HTMLElement | null>(null);
     const btnRef = useRef<HTMLDivElement>(null);
@@ -86,7 +85,7 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom, setNameRoom}) =>
     const usersButton = 
         <Tooltip title="Список участников">
             <Button aria-label="Users list" tabIndex={-1}
-                onClick={() => { setIdRoom(room.id); setNameRoom(room.name); }}>
+                onClick={() => { setIdRoom(room.id); }}>
                 <MdGroups className="edit-room-list-item-icon" />
             </Button>
         </Tooltip>;
@@ -96,7 +95,6 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom, setNameRoom}) =>
         {
             ev.preventDefault();
             setIdRoom(room.id);
-            setNameRoom(room.name);
         }
     }
     return (
@@ -146,11 +144,10 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom, setNameRoom}) =>
 interface RoomListProps
 {
     filter? : string;
-    setIdRoom: Dispatch<SetStateAction<string>>;
-    setNameRoom: Dispatch<SetStateAction<string>>;
+    setIdRoom: ReactDispatch<string>;
 }
 
-const RoomList : FC<RoomListProps> = ({ filter, setIdRoom, setNameRoom }) =>
+const RoomList : FC<RoomListProps> = ({ filter, setIdRoom }) =>
 {
     const [roomsList, setRoomsList] = useState<PublicRoomInfo[]>([]);
 
@@ -189,7 +186,7 @@ const RoomList : FC<RoomListProps> = ({ filter, setIdRoom, setNameRoom }) =>
     const createRoomCard = (room : PublicRoomInfo) : JSX.Element =>
     {
         return (
-            <RoomCard setIdRoom={setIdRoom} key={room.id} room={room} setNameRoom={setNameRoom}/>
+            <RoomCard setIdRoom={setIdRoom} key={room.id} room={room} />
         )
     }
 
@@ -202,42 +199,18 @@ const RoomList : FC<RoomListProps> = ({ filter, setIdRoom, setNameRoom }) =>
     )
 }
 
-interface SearchPanelProps extends React.HTMLAttributes<HTMLDivElement>
-{
-    filter: string;
-    setFilter : ReactDispatch<string>;
-}
-
-export const SearchPanel : FC<SearchPanelProps> = ({filter, setFilter, ...props}) =>
-{
-    const handleFilterChange : ChangeEventHandler<HTMLInputElement> = (ev) =>
-    {
-        setFilter(ev.target.value);
-    }
-
-    return (
-        <div className="room-search-panel" {...props}>
-            <span className="room-search-label text-wrap non-selectable">
-                Поиск
-            </span>
-            <Input value={filter} onChange={handleFilterChange}/>
-        </div>
-    );
-}
-
 export const EditRoom : FC = () =>
 {
     const [filter, setFilter] = useState<string>("");
     const [idRoom, setIdRoom] = useState<string>("");
-    const [nameRoom, setNameRoom] = useState<string>("");
     return (
         <>
         {idRoom !== ""? 
-            <EditUser roomID={idRoom} setIdRoom={setIdRoom} nameRoom={nameRoom}/>
+            <EditUser roomID={idRoom} setIdRoom={setIdRoom} />
         :
             <div className="room-edit-container">
                 <SearchPanel filter={filter} setFilter={setFilter} />
-                <RoomList setIdRoom={setIdRoom} filter={filter} setNameRoom={setNameRoom}/>
+                <RoomList setIdRoom={setIdRoom} filter={filter} />
             </div>
         }
         </>

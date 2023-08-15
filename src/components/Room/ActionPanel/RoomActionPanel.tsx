@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import React, { Dispatch, SetStateAction, useRef } from 'react';
+import React, { useRef } from 'react';
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { MdMic, MdMicOff, MdScreenShare, MdStopScreenShare, MdVideocam, MdVideocamOff, MdVolumeOff, MdVolumeUp } from "react-icons/md";
 import { Tooltip } from "../../Tooltip";
@@ -11,10 +11,12 @@ import "./RoomActionPanel.css";
 import { CamBtnMenu } from "./CamBtnMenu";
 import { DisplayBtnMenu } from "./DisplayBtnMenu";
 
+import { ReactDispatch } from "../../../Utils";
+
 export interface ActionBtnInfo<S>
 {
     state: S;
-    setState: Dispatch<SetStateAction<S>>;
+    setState: ReactDispatch<S>;
 }
 
 export interface ActionBtnWithMenuInfo<S> extends ActionBtnInfo<S>

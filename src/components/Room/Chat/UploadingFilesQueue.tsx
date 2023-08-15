@@ -1,7 +1,7 @@
-import { Dispatch, MouseEventHandler, SetStateAction, useRef } from "react";
+import { MouseEventHandler, useRef } from "react";
 import { FcFile } from "react-icons/fc";
 import "./UploadingFilesQueue.css";
-import { FILE_SIZE_PRESCISSION, IDX_STEP, PrefixConstants, ZERO_IDX } from "../../../Utils";
+import { FILE_SIZE_PRESCISSION, IDX_STEP, PrefixConstants, ReactDispatch, ZERO_IDX } from "../../../Utils";
 
 // TODO: Не забыть убрать отсюда после наладки работы с NS Shared
 export interface ChatFileInfo
@@ -21,7 +21,7 @@ const ZERO_PROGRESS = 0;
 interface UploadingFilesQueueProps
 {
     uploadingFilesQueue: LoadFileInfo[];
-    setUploadingFilesQueue: Dispatch<SetStateAction<LoadFileInfo[]>>;
+    setUploadingFilesQueue: ReactDispatch<LoadFileInfo[]>;
 }
 
 export const UploadingFilesQueue: React.FC<UploadingFilesQueueProps> = ({ uploadingFilesQueue, setUploadingFilesQueue }) =>

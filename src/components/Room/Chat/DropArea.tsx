@@ -1,8 +1,9 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { GiFiles } from "react-icons/gi";
 
 import "./DropArea.css";
 import { LoadFileInfo } from "./UploadingFilesQueue";
+import { ReactDispatch } from "../../../Utils";
 
 type DivDragEventHandler = React.DragEventHandler<HTMLDivElement>;
 
@@ -17,7 +18,7 @@ declare global
 interface DropAreaProps
 {
     uploadingFilesQueue: LoadFileInfo[];
-    setUploadingFilesQueue: Dispatch<SetStateAction<LoadFileInfo[]>>;
+    setUploadingFilesQueue: ReactDispatch<LoadFileInfo[]>;
 }
 
 export const DropArea: React.FC<DropAreaProps> = ({ uploadingFilesQueue, setUploadingFilesQueue }) =>

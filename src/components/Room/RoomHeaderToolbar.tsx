@@ -1,18 +1,19 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 
 import "./RoomHeaderToolbar.css";
 
 import { Button } from "@mui/material";
 import { BsChatTextFill, BsPeopleFill } from "react-icons/bs";
 import { Tooltip } from "../Tooltip";
+import { ReactDispatch } from "../../Utils";
 
 export type ToggleUserListBtnInfo = {
     isUserListHidden: boolean,
-    setIsUserListHidden: Dispatch<SetStateAction<boolean>>;
+    setIsUserListHidden: ReactDispatch<boolean>;
 };
 export type ToggleChatBtnInfo = {
     isChatHidden: boolean,
-    setIsChatHidden: Dispatch<SetStateAction<boolean>>;
+    setIsChatHidden: ReactDispatch<boolean>;
 };
 export interface RoomHeaderToolbarProps
 {

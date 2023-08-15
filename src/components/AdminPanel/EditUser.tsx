@@ -1,10 +1,10 @@
 import { BiDotsHorizontalRounded, BiEditAlt, BiMicrophoneOff, BiBlock, BiVideoOff, BiUserX } from "react-icons/bi";
 import { MdOutlineStopScreenShare } from "react-icons/md";
-import { MOUSE_EVENT_NONE_BTN, NEGATIVE_TAB_IDX, NOT_FOUND_IDX, ZERO_IDX, getToggleFunc } from "../../Utils";
+import { MOUSE_EVENT_NONE_BTN, NEGATIVE_TAB_IDX, NOT_FOUND_IDX, ReactDispatch, ZERO_IDX, getToggleFunc } from "../../Utils";
 import { List } from "../Base/List/List";
 import { ListItem } from "../Base/List/ListItems";
 import "./EditUser.css";
-import { Dispatch, FC,  MouseEventHandler,  SetStateAction,  useEffect, useRef, useState } from "react";
+import { FC,  MouseEventHandler,  useEffect, useRef, useState } from "react";
 import { Avatar, Button, Divider } from "@mui/material";
 import { MenuItemCheckbox, MenuItemWithIcon } from "../Menu/MenuItems";
 import { AnchorPosition, Menu, MenuList } from "../Menu/Menu";
@@ -12,7 +12,7 @@ import { TextEditDialog } from "../Menu/TextEditDialog";
 import { UserInfo } from "nostromo-shared/types/RoomTypes";
 import { Tooltip } from "../Tooltip";
 import {RiArrowGoBackLine} from "react-icons/ri";
-import { SearchPanel } from "./EditRoom";
+import { SearchPanel } from "../Base/List/SearchPanel";
 
 // TODO: Удалить после подключения NS Shared
 export const enum VideoCodec
@@ -213,22 +213,47 @@ const UserList : FC<UserListProps> = ({filter, roomID}) =>
 interface EditUserProps
 {
     roomID: string;
-    nameRoom: string;
-    setIdRoom: Dispatch<SetStateAction<string>>;
+    setIdRoom: ReactDispatch<string>;
 }
-export const EditUser : FC<EditUserProps> = ({ roomID, setIdRoom, nameRoom }) =>
+export const EditUser : FC<EditUserProps> = ({ roomID, setIdRoom }) =>
 {
+    // Тестовые данные о комнатах
+    const [roomsList, setRoomsList] = useState<PublicRoomInfo[]>([]);
+
+    useEffect(() =>
+    {
+        const loadedRoomList: PublicRoomInfo[] = [
+            { id: "G_OShinfHXD", name: "Главная", videoCodec: VideoCodec.H264 },
+            { id: "NV6oozYIm2T", name: "Netrunners", videoCodec: VideoCodec.H264 },
+            { id: "Jqd0wDUDONo", name: "edu", videoCodec: VideoCodec.H264 },
+            { id: "Y3OG7r9Qh6s", name: "Статус МОС", videoCodec: VideoCodec.H264 },
+            { id: "q61oq10dUu5", name: "g", videoCodec: VideoCodec.H264 },
+            { id: "3tzcDFnVEWz", name: "infedu", videoCodec: VideoCodec.H264 },
+            { id: "9KT5a-wPftO", name: "mos-research", videoCodec: VideoCodec.H264 },
+            { id: "KjWPqLcbHRi", name: "mos-devel", videoCodec: VideoCodec.H264 },
+            { id: "inSdz0nbvA4", name: "vp9", videoCodec: VideoCodec.H264 },
+            { id: "_efhN2j8tp1", name: "Предприятие 3826", videoCodec: VideoCodec.H264 },
+            { id: "meD6afojFJY", name: "fam", videoCodec: VideoCodec.H264 },
+            { id: "zaogu1TOQmu", name: "cco", videoCodec: VideoCodec.H264 },
+            { id: "OkpHvA4_FxH", name: "hh", videoCodec: VideoCodec.H264 },
+            { id: "_N4fIk3RfAe", name: "forall", videoCodec: VideoCodec.H264 },
+            { id: "uMxk3nLNQP5", name: "Clio", videoCodec: VideoCodec.H264 },
+        ];
+
+        setRoomsList(loadedRoomList);
+    }, []);
+
     const [filter, setFilter] = useState<string>("");
     const nameRoomArea = (
         <div className="edit-user-header-area">
             <Button className="edit-user-exit-button" onClick={() => { setIdRoom(""); }}><RiArrowGoBackLine /></Button>
-            <p className="edit-user-name-room">Управление участниками комнаты - <label className="bold">{nameRoom}</label></p>
+            <p className="edit-user-name-room">Управление участниками комнаты - <label className="bold">{roomsList.find(f => f.id === roomID)?.name}</label></p>
         </div>
     );
     return (
         <div className="edit-user-container">
             {nameRoomArea}
-            <SearchPanel className="edit-user-search-panel" filter={filter} setFilter={setFilter}/>
+            <SearchPanel className="margin-top" filter={filter} setFilter={setFilter}/>
             <UserList roomID={roomID} filter={filter}/>
         </div>
     );
