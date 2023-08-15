@@ -41,12 +41,14 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
     const [symmetryMode, setSymmetryMode] = useState<boolean>(false);
     const [speakerMode, setSpeakerMode] = useState<boolean>(false);
     const [editNameVisible, setEditNameVisible] = useState<boolean>(false);
+    const [editPasswordVisible, setEditPasswordVisible] = useState<boolean>(false);
 
     const handleClose = () : void =>
     {
         setOpen(false);
     }
 
+    /* Обработчики для смены названия комнаты */
     const handleRoomNameEdit = () : void =>
     {
         setEditNameVisible(true);
@@ -65,6 +67,54 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
         setEditNameVisible(false);
     }
 
+    /* Обработчики для смены пароля комнаты */
+    // TODO: в TextDialog по смене пароля, пароль принимает значения ID, так как
+    //       пока что пароль нигде не хранится
+    const handleRoomPasswordEdit = () : void =>
+    {
+        setEditPasswordVisible(true);
+        handleClose();
+    }
+
+    const handlePasswordChangeCancel = () : void =>
+    {
+        focusBackRef.current?.focus();
+        setEditPasswordVisible(false);
+    }
+
+    const handlePasswordChangeConfirm = (val : string) : void =>
+    {
+        focusBackRef.current?.focus();
+        setEditPasswordVisible(false);
+    }
+
+    /* TODO: Реализовать тестовые обработчики для контекстного меню */
+    const handleCopyRoomLink = () : void =>
+    {
+        console.log("Ссылка комнаты: ", room.id);
+    }
+
+    const handleClearHistoryChat = () : void =>
+    {
+        console.log("Очистить историю комнаты: ", room.id);
+    }
+
+    const handleKickAllUsers = () : void =>
+    {
+        console.log("Кикнуть всех пользователей из комнаты ", room.id);
+    }
+
+    const handleRemoveFiles = () : void =>
+    {
+        console.log("Удалить все файлы из комнаты ", room.id);
+    }
+
+    const handleDeleteRoom = () : void =>
+    {
+        console.log("Удалить комнату ", room.id);
+    }
+    /*---------------*/
+
     const handleContextMenuShow : MouseEventHandler = (ev) : void =>
     {
         ev.preventDefault();
@@ -81,6 +131,7 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
     }
 
     const renameRoomDescription = <>Введите новое имя для комнаты <strong>"{room.name}"</strong>.</>
+    const changePasswordRoomDescription = <>Введите новый пароль для комнаты <strong>"{room.name}"</strong>.</>
 
     const usersButton = 
         <Tooltip title="Список участников">
@@ -121,22 +172,23 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
                 popperPlacement="bottom"
             >
                 <MenuList open={open} >
-                    <MenuItemWithIcon onClick={handleClose} endIcon={true} icon={<BiLink />} text="Получить ссылку на комнату" />
+                    <MenuItemWithIcon onClick={handleCopyRoomLink} endIcon={true} icon={<BiLink />} text="Получить ссылку на комнату" />
                     <MenuItemWithIcon onClick={handleRoomNameEdit} endIcon={true} icon={<BiEditAlt />} text="Изменить название" />
-                    <MenuItemWithIcon onClick={handleClose} endIcon={true} icon={<BiLock />} text="Изменить пароль" />
+                    <MenuItemWithIcon onClick={handleRoomPasswordEdit} endIcon={true} icon={<BiLock />} text="Изменить пароль" />
                     <Divider className="menu-divider" />
                     <MenuItemCheckbox text="Сохранение истории чата" onClick={getToggleFunc(setSaveChat)} isChecked={saveChat} />
                     <MenuItemCheckbox text="Симметричный режим" onClick={getToggleFunc(setSymmetryMode)} isChecked={symmetryMode} />
                     <MenuItemCheckbox text="Режим докладчика" onClick={getToggleFunc(setSpeakerMode)} isChecked={speakerMode} />
                     <Divider className="menu-divider" />
-                    <MenuItemWithIcon onClick={handleClose} endIcon={true} icon={<BiCommentX />} text="Очистить историю чата" />
-                    <MenuItemWithIcon onClick={handleClose} endIcon={true} icon={<BiTaskX />} text="Удалить все файлы комнаты" />
-                    <MenuItemWithIcon onClick={handleClose} endIcon={true} icon={<BiUserX />} text="Кикнуть всех пользователей" />
+                    <MenuItemWithIcon onClick={handleClearHistoryChat} endIcon={true} icon={<BiCommentX />} text="Очистить историю чата" />
+                    <MenuItemWithIcon onClick={handleRemoveFiles} endIcon={true} icon={<BiTaskX />} text="Удалить все файлы комнаты" />
+                    <MenuItemWithIcon onClick={handleKickAllUsers} endIcon={true} icon={<BiUserX />} text="Кикнуть всех пользователей" />
                     <Divider className="menu-divider" />
-                    <MenuItemWithIcon onClick={handleClose} endIcon={true} icon={<BiTrash className="delete-room-btn" />} text="Удалить комнату" />
+                    <MenuItemWithIcon onClick={handleDeleteRoom} endIcon={true} icon={<BiTrash className="delete-room-btn" />} text="Удалить комнату" />
                 </MenuList>
             </Menu>
             <TextEditDialog isOpen={editNameVisible} label="Изменить имя комнаты" description={renameRoomDescription} value={room.name} onClose={handleNameChangeCancel} onValueConfirm={handleNameChangeConfirm} />
+            <TextEditDialog isOpen={editPasswordVisible} label="Изменить пароль от комнаты" description={changePasswordRoomDescription} value={room.id} onClose={handlePasswordChangeCancel} onValueConfirm={handlePasswordChangeConfirm} />
         </>
     )
 }
