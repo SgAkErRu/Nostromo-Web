@@ -28,9 +28,16 @@
 
 .room-list-item-name
 {
-    display: flex;
-    align-items: center;
-    margin-left: 15px;
+    font-size: 1.15rem;
+    color: var(--primary-text-color);
+    word-wrap: anywhere;
+}
+.room-list-item-id
+{
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: var(--secondary-text-color);
+    margin-top: 2px;
 }
 
 .room-list-item-link
@@ -43,4 +50,20 @@
     z-index: 2;
     color: inherit;
     text-decoration: none;
+}
+.room-list-item-avatar-container
+{
+    min-width: 56px;
+    flex-shrink: 0;
+    margin-left: 15px;
+}
+
+.room-list-item-avatar-container .room-list-item-avatar
+{
+    color: var(--primary-text-color);
+}
+.room-list-item-info-area
+{
+    display: flex;
+    flex-direction: column;
 }

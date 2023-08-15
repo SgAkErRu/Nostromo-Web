@@ -7,6 +7,7 @@ import "./RoomListPage.css";
 import { List } from "../components/Base/List/List";
 import { LoadedRoomList, PublicRoomInfo } from "../services/RoomService";
 import { RoomListItem } from "../components/Base/Room/RoomListItem";
+import { NEGATIVE_TAB_IDX } from "../Utils";
 
 export const RoomListPage: React.FC = () =>
 {
@@ -39,9 +40,11 @@ export const RoomListPage: React.FC = () =>
         <>
             <Header title="Список комнат" />
             <div id="main">
-                <List id="room-list">
-                    {roomsList.map(createRoomItem)}
-                </List>
+                <div id="room-list" tabIndex={NEGATIVE_TAB_IDX}>
+                    <List>
+                        {roomsList.map(createRoomItem)}
+                    </List>
+                </div>
             </div>
         </>
     );

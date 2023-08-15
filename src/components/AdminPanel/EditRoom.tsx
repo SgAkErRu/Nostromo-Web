@@ -117,7 +117,7 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
         setOpen(true);
     }
 
-    const handleRoomSelected : MouseEventHandler = () : void =>
+    const handleRoomSelected = () : void =>
     {
         setIdRoom(room.id);
     }
@@ -147,6 +147,7 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
                 room={room}
                 contextMenuHandler={handleContextMenuShow}
                 actions={[usersButton, contextMenuButton]}
+                activateHandler={handleRoomSelected}
             />
             <Menu
                 anchorPosition={menuPosition ?? undefined}
