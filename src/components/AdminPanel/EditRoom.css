@@ -15,14 +15,6 @@
     overflow: scroll;
 }
 
-.edit-room-list-item
-{
-    padding-top: 12px;
-    margin-bottom: 12px;
-    padding-left: 0px;
-    padding-right: 0px;
-}
-
 .edit-room-list-item:hover
 {
     box-shadow: 0 0 2px white;
@@ -61,16 +53,4 @@
 .edit-room-open-context-btn
 {
     margin-right: 15px;
-}
-
-.edit-room-list-item-area
-{
-    display: flex;
-}
-
-.edit-room-list-item-name
-{
-    display: flex;
-    align-items: center;
-    margin-left: 15px;
 }

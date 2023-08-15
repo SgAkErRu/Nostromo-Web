@@ -2,7 +2,6 @@ import { MdGroups } from "react-icons/md";
 import { BiDotsHorizontalRounded, BiLink, BiEditAlt, BiLock, BiCommentX, BiTaskX, BiUserX, BiTrash } from "react-icons/bi";
 import { MOUSE_EVENT_NONE_BTN, NEGATIVE_TAB_IDX, NOT_FOUND_IDX, ReactDispatch, getToggleFunc } from "../../Utils";
 import { List } from "../Base/List/List";
-import { ListItem } from "../Base/List/ListItems";
 import "./EditRoom.css";
 import { FC, MouseEventHandler,  useEffect, useRef, useState } from "react";
 import { Button, Divider, Tooltip } from "@mui/material";
@@ -11,20 +10,8 @@ import { AnchorPosition, Menu, MenuList } from "../Menu/Menu";
 import { TextEditDialog } from "../Menu/TextEditDialog";
 import { EditUser } from "./EditUser";
 import { SearchPanel } from "../Base/List/SearchPanel";
-
-// TODO: Удалить после подключения NS Shared
-export const enum VideoCodec
-{
-    VP9 = 'VP9',
-    VP8 = 'VP8',
-    H264 = 'H264'
-}
-export interface PublicRoomInfo
-{
-    id: string;
-    name: string;
-    videoCodec: VideoCodec;
-}
+import { RoomListItem } from "../Base/Room/RoomListItem";
+import { LoadedRoomList, PublicRoomInfo } from "../../services/RoomService";
 
 interface RoomCardProps
 {
@@ -145,29 +132,22 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
                 <MdGroups className="edit-room-list-item-icon" />
             </Button>
         </Tooltip>;
-    const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (ev) =>
-    {
-        if (ev.code === "Enter" || ev.code === "Space")
-        {
-            ev.preventDefault();
-            setIdRoom(room.id);
-        }
-    }
+
+    const contextMenuButton =
+        <Tooltip ref={btnRef} className="edit-room-open-context-btn" title="Список участников">
+            <Button aria-label="Room settings" tabIndex={-1}
+                onClick={handleContextMenuShow}>
+                <BiDotsHorizontalRounded className="edit-room-list-item-icon" />
+            </Button>
+        </Tooltip>
+    
     return (
         <>
-            <ListItem onKeyDown={onKeyDown} onContextMenu={handleContextMenuShow} showSeparator={true} className="edit-room-list-item">
-                <div className="edit-room-list-item-area">
-                    <label className="edit-room-list-item-name">{room.name}</label>
-                    <div className="horizontal-expander" />
-                    {usersButton}
-                    <div ref={btnRef} className="edit-room-open-context-btn">
-                        <Button aria-label="Room settings" tabIndex={-1}
-                            onClick={handleContextMenuShow}>
-                            <BiDotsHorizontalRounded className="edit-room-list-item-icon" />
-                        </Button>
-                    </div>
-                </div>
-            </ListItem>
+            <RoomListItem
+                room={room}
+                contextMenuHandler={handleContextMenuShow}
+                actions={[usersButton, contextMenuButton]}
+            />
             <Menu
                 anchorPosition={menuPosition ?? undefined}
                 anchorRef={btnRef}
@@ -210,25 +190,7 @@ const RoomList : FC<RoomListProps> = ({ filter, setIdRoom }) =>
 
     useEffect(() =>
     {
-        const loadedRoomList: PublicRoomInfo[] = [
-            { id: "G_OShinfHXD", name: "Главная", videoCodec: VideoCodec.H264 },
-            { id: "NV6oozYIm2T", name: "Netrunners", videoCodec: VideoCodec.H264 },
-            { id: "Jqd0wDUDONo", name: "edu", videoCodec: VideoCodec.H264 },
-            { id: "Y3OG7r9Qh6s", name: "Статус МОС", videoCodec: VideoCodec.H264 },
-            { id: "q61oq10dUu5", name: "g", videoCodec: VideoCodec.H264 },
-            { id: "3tzcDFnVEWz", name: "infedu", videoCodec: VideoCodec.H264 },
-            { id: "9KT5a-wPftO", name: "mos-research", videoCodec: VideoCodec.H264 },
-            { id: "KjWPqLcbHRi", name: "mos-devel", videoCodec: VideoCodec.H264 },
-            { id: "inSdz0nbvA4", name: "vp9", videoCodec: VideoCodec.H264 },
-            { id: "_efhN2j8tp1", name: "Предприятие 3826", videoCodec: VideoCodec.H264 },
-            { id: "meD6afojFJY", name: "fam", videoCodec: VideoCodec.H264 },
-            { id: "zaogu1TOQmu", name: "cco", videoCodec: VideoCodec.H264 },
-            { id: "OkpHvA4_FxH", name: "hh", videoCodec: VideoCodec.H264 },
-            { id: "_N4fIk3RfAe", name: "forall", videoCodec: VideoCodec.H264 },
-            { id: "uMxk3nLNQP5", name: "Clio", videoCodec: VideoCodec.H264 },
-        ];
-
-        setRoomsList(loadedRoomList);
+        setRoomsList(LoadedRoomList);
     }, []);
 
     const roomNameFilter = (room : PublicRoomInfo) : boolean =>

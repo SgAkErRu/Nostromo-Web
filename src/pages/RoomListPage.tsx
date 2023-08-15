@@ -1,28 +1,47 @@
-import React, { useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header } from "../components/Header";
 
 import "../App.css";
 import "./RoomListPage.css";
+import { List } from "../components/Base/List/List";
+import { LoadedRoomList, PublicRoomInfo } from "../services/RoomService";
+import { RoomListItem } from "../components/Base/Room/RoomListItem";
 
 export const RoomListPage: React.FC = () =>
 {
+    const navigate = useNavigate();
+
+    const [roomsList, setRoomsList] = useState<PublicRoomInfo[]>([]);
+    useEffect(() =>
+    {
+        setRoomsList(LoadedRoomList);
+    }, []);
+
     useEffect(() =>
     {
         document.title = "Nostromo - Список комнат";
     }, []);
 
+    const createRoomItem = (room : PublicRoomInfo) : JSX.Element =>
+    {
+        const handleRedirect = () : void =>
+        {
+            navigate(`/r/${room.id}`);
+        }
+        
+        return (
+            <RoomListItem onClick={handleRedirect} activateHandler={handleRedirect} room={room} />
+        )
+    } 
+
     return (
         <>
             <Header title="Список комнат" />
             <div id="main">
-                <div id="room-list">
-                    <NavLink to="/r/testId" id="testId" className="room-list-item">
-                        <span className="room-list-item-label">Тестовая</span>
-                        <span className="room-list-item-id">#testId</span>
-                        <span className="room-list-item-join">Войти</span>
-                    </NavLink>
-                </div>
+                <List id="room-list">
+                    {roomsList.map(createRoomItem)}
+                </List>
             </div>
         </>
     );
