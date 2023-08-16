@@ -24,7 +24,6 @@ export const RoomListItem : FC<RoomListItemProps> = ({room, actions, contextMenu
             activateHandler();
         }
     }
-
     return (
         <ListItem onKeyDown={onKeyDown} onContextMenu={contextMenuHandler} className="room-list-item" {...props}>
             <div className="room-list-item-area">

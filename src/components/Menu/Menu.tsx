@@ -22,7 +22,7 @@ function generateGetBoundingClientRect(x = ZERO_COORDINATE_VALUE, y = ZERO_COORD
 interface MenuProps
 {
     id?: string;
-    anchorRef?: React.RefObject<HTMLDivElement>;
+    anchorRef?: React.RefObject<HTMLElement>;
     anchorPosition?: AnchorPosition;
     open: boolean;
     onClose: () => void;

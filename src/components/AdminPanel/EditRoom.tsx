@@ -1,4 +1,4 @@
-import { MdGroups } from "react-icons/md";
+import { HiUser } from "react-icons/hi";
 import { BiDotsHorizontalRounded, BiLink, BiEditAlt, BiLock, BiCommentX, BiTaskX, BiUserX, BiTrash } from "react-icons/bi";
 import { MOUSE_EVENT_NONE_BTN, NEGATIVE_TAB_IDX, NOT_FOUND_IDX, ReactDispatch, getToggleFunc } from "../../Utils";
 import { List } from "../Base/List/List";
@@ -127,15 +127,15 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
 
     const usersButton = 
         <Tooltip title="Список участников">
-            <Button aria-label="Users list" tabIndex={-1}
+            <Button className="edit-room-button" aria-label="Users list" tabIndex={-1}
                 onClick={handleRoomSelected}>
-                <MdGroups className="edit-room-list-item-icon" />
+                <HiUser className="edit-room-list-item-icon" />
             </Button>
         </Tooltip>;
 
     const contextMenuButton =
-        <Tooltip ref={btnRef} className="edit-room-open-context-btn" title="Список участников">
-            <Button aria-label="Room settings" tabIndex={-1}
+        <Tooltip ref={btnRef} title="Контекстное меню">
+            <Button className="edit-room-button" aria-label="Room settings" tabIndex={-1}
                 onClick={handleContextMenuShow}>
                 <BiDotsHorizontalRounded className="edit-room-list-item-icon" />
             </Button>
@@ -144,6 +144,7 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
     return (
         <>
             <RoomListItem
+                onClick={handleRoomSelected}
                 room={room}
                 contextMenuHandler={handleContextMenuShow}
                 actions={[usersButton, contextMenuButton]}

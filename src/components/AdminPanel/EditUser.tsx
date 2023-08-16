@@ -22,7 +22,7 @@ interface UserCardProps
 const UserCard : FC<UserCardProps> = ({user}) =>
 {
     const focusBackRef = useRef<HTMLElement | null>(null)
-    const btnRef = useRef<HTMLDivElement>(null);
+    const btnRef = useRef<HTMLButtonElement>(null);
     
     const [menuPosition, setMenuPosition] = useState<AnchorPosition | null>(null);
     const [open, setOpen] = useState<boolean>(false);
@@ -108,12 +108,10 @@ const UserCard : FC<UserCardProps> = ({user}) =>
                 <div className="edit-user-area">
                     {usersInfo}
                     <div className="horizontal-expander" />
-                    <div className="edit-user-open-context" ref={btnRef}>
-                        <Button aria-label="User settings" tabIndex={-1}
-                            onClick={handleContextMenuShow}>
-                            <BiDotsHorizontalRounded className="edit-user-list-item-icon" />
-                        </Button>
-                    </div>
+                    <Button aria-label="User settings" className="edit-user-button" ref={btnRef} tabIndex={-1}
+                        onClick={handleContextMenuShow}>
+                        <BiDotsHorizontalRounded className="edit-user-list-item-icon" />
+                    </Button>
                 </div>
             </ListItem>
             <Menu
