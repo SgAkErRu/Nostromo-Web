@@ -1,9 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./RegularNotification.css";
-import { Notification, NotificationSeverity } from "../../../services/NotificationsService";
-import { SeverityWarning } from "./SeverityWarning";
-import { SeverityInfo } from "./SeverityInfo";
-import { SeverityError } from "./SeverityError";
+import { Notification } from "../../../services/NotificationsService";
+import { SeverityNotification } from "./SeverityNotification";
 
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 
@@ -22,14 +20,7 @@ export const RegularNotification: React.FC<RegularNotificationProps> = ({ notifi
     }, [cancelRef]);
     return (
         <div id="regular-notification" className="regular-notification-area">
-            {notification.severity === NotificationSeverity.WARNING?
-                <SeverityWarning notification={notification} onCancel={onCancel}/>
-            : notification.severity === NotificationSeverity.INFO?
-                <SeverityInfo notification={notification} onCancel={onCancel} />
-            : notification.severity === NotificationSeverity.ERROR?
-                <SeverityError notification={notification} onCancel={onCancel} />
-            : <></>    
-            }
+            <SeverityNotification notification={notification} onCancel={onCancel}/>
         </div>
     );
 };
