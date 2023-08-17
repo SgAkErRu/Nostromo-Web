@@ -1,0 +1,57 @@
+.warning-notification-panel
+{
+    position: relative;
+    padding: 10px 10px 10px 10px;
+    border-radius: 4px;
+    text-align: center;
+    background-color: #383838;
+    box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+}
+
+.warning-notification-icon
+{
+    min-width: 30px;
+    min-height: 30px;
+    max-width: 30px;
+    max-height: 30px;
+    color: var(--warning-color);
+}
+
+.warning-notification-button
+{
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 5px;
+    height: 25px;
+    max-width: 25px;
+    min-width: 25px;
+    color: var(--primary-text-color);
+    cursor: pointer;
+    font-size: 0.75rem;
+    margin: 5px 5px;
+}
+
+.warning-notification-button:hover
+{
+    border: 1px solid white;
+    outline: none;
+}
+
+.warning-notification-button:focus
+{
+    border: 1px solid white;
+    outline: none;
+}
+
+.warning-notification-label
+{
+    font-size: 1rem;
+    color: var(--primary-text-color);
+}
+
+.warning-notification-description
+{
+    font-size: 0.85rem;
+    color: var(--primary-text-color);
+}

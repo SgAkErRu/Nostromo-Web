@@ -7,6 +7,7 @@ import { FocusTrap } from "./components/Base/FocusTrap";
 import { MainLayer } from "./pages/MainLayer";
 import { ReactDispatch } from "./Utils";
 import { AdminPanelLayer } from "./pages/AdminPanelLayer";
+import { NotificationLayer } from "./pages/NotificationLayer";
 
 const theme = createTheme({
     typography: {
@@ -35,6 +36,7 @@ const App: React.FC = () =>
                                 <SetShowAdminPanelContext.Provider value={setShowAdminPanel}>
                                     <MainLayer />
                                     {showSettings ? <SettingsLayer /> : showAdminPanel ? <AdminPanelLayer /> : <></>}
+                                    <NotificationLayer />
                                 </SetShowAdminPanelContext.Provider>
                             </SetShowSettingsContext.Provider>
                         </FocusTrap>
