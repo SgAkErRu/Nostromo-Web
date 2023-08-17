@@ -1,22 +1,38 @@
 import { useSyncExternalStore } from "react";
 import { AbstractExternalStorage, cloneObject } from "../Utils";
 
-export enum NotificationType
+const ID_START_VALUE = 0;
+
+export enum NotificationSeverity
 {
     INFO = 0,
-    ERROR = 1
+    WARNING = 1,
+    ERROR = 2
 }
 
-export interface Notification
+export enum NotificationType
 {
-    id : number;
+    POPUP = 0,
+    CRITICAL = 1
+}
+
+interface NotificationBase
+{
     label : string;
     description : string;
+    severity : NotificationSeverity;
     type : NotificationType;
+    date : Date;
+}
+
+export interface Notification extends NotificationBase
+{
+    id : number;
 }
 
 export class NotificationsService extends AbstractExternalStorage
 {
+    private m_ID = ID_START_VALUE;
     private m_Notifications : Notification[] = [];
     private m_Snapshot : Notification[] = [];
 
@@ -25,9 +41,9 @@ export class NotificationsService extends AbstractExternalStorage
         super();
     }
 
-    public push(label : string, description : string, type : NotificationType = NotificationType.INFO) : void
+    public add(notification : NotificationBase) : void
     {
-        this.m_Notifications.push({id: new Date().getTime(), label: label, description: description, type: type});
+        this.m_Notifications.push({...notification, id: this.m_ID++ });
         this.saveSnapshot();
         this.notifyListeners();
     }
