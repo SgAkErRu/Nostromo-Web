@@ -2,7 +2,7 @@
 //import { MicAudioProcessing } from "../../legacy/src/rooms/scripts/MicAudioProcessing";
 //import { UnsupportedError } from "../../legacy/src/rooms/scripts/AppError";
 
-import { ZERO_IDX } from "../Utils";
+import { ZERO_IDX } from "../../Utils";
 
 export type ResolutionObject = {
     width: number;
@@ -73,13 +73,13 @@ export class UserMediaService
 
         //this.room = _room;
 
-        this.m_defaultStreamConstraintsDisplay = this.prepareCaptureDisplayConstraints();
-        this.m_defaultStreamConstraintsCam = this.prepareCaptureCamConstraints();
+        //this.m_defaultStreamConstraintsDisplay = this.prepareCaptureDisplayConstraints();
+        //this.m_defaultStreamConstraintsCam = this.prepareCaptureCamConstraints();
 
         //this.micAudioProcessing = new MicAudioProcessing(this.audioContext, this.ui);
 
         this.handleDevicesList();
-        this.handleChoosingCamDevices();
+        //this.handleChoosingCamDevices();
         this.handleButtons();
     }
 
@@ -186,14 +186,6 @@ export class UserMediaService
 
         if (this.m_capturedVideoDevices.has(deviceId))
         {
-            //TODO: вместо alert возможно стоит возвращать bool статус и сообщение
-            //      которое стоит вывести в ошибке
-            //
-            //      Либо передавать сюда метод из UI (или отдельный сервис)
-            //      позволяющий добавлять ошибку в очередь ошибок.
-            //
-            //      Пока неясно как лучше.
-
             //alert("Это видеоустройство уже захвачено.");
             return false;
         }
@@ -267,9 +259,69 @@ export class UserMediaService
         this.m_capturedVideoDevices.delete(deviceId);
     }
 
+    /** Прекратить захват всех веб-камер. */
+    public stopAllCams(): void
+    {
+        for (const deviceId of this.m_capturedVideoDevices)
+        {
+            this.stopCam(deviceId);
+        }
+    }
+
+    /** Захват экрана компьютера. */
+    public async getDisplay(resolution: ResolutionObject, frameRate: number): Promise<boolean>
+    {
+        /*if (!this.room.isAllowedToSpeak)
+        {
+            return;
+        }*/
+
+        try
+        {
+            // Используем spread оператор для копирования объекта constraints.
+            const constraints = { ...this.m_defaultStreamConstraintsDisplay };
+            (constraints.video as MediaTrackConstraints).frameRate = frameRate;
+            (constraints.video as MediaTrackConstraints).width = resolution.width;
+            (constraints.video as MediaTrackConstraints).height = resolution.height;
+
+            // Захват изображения с экрана компьютера.
+            await this.getDisplayMedia(constraints);
+
+            return true;
+        }
+        catch (error)
+        {
+            console.error("[UserMedia] > getDisplayMedia error:", error as DOMException);
+            return false;
+        }
+    }
+
+    /** Прекратить захват экрана. */
+    public stopDisplay(): void
+    {
+        const stream = this.getDisplayStream();
+
+        if (!stream)
+        {
+            return;
+        }
+
+        for (const track of stream.getTracks())
+        {
+            track.stop();
+        }
+
+        this.removeEndedDisplayStream();
+    }
+
     private getMainStreamAudioTrack(): MediaStreamTrack | undefined
     {
         return this.m_streams.get("main")?.getAudioTracks()[ZERO_IDX];
+    }
+
+    private getDisplayStream(): MediaStream | undefined
+    {
+        return this.m_streams.get("display");
     }
 
     /** Создать контекст для Web Audio API. */
@@ -299,127 +351,6 @@ export class UserMediaService
             await this.prepareDevices(true);
             await this.prepareDevices(false);
         });
-    }
-
-    /** Подключить обработчики к кнопкам. */
-    private handleButtons(): void
-    {
-        // Кнопка остановки захвата всех веб-камер.
-        const btn_stopAllCams = this.ui.buttons.get("stop-all-cams")!;
-        btn_stopAllCams.addEventListener("click", () =>
-        {
-            for (const deviceId of this.m_capturedVideoDevices)
-            {
-                this.stopCam(deviceId);
-            }
-        });
-
-        // Кнопка захвата изображения экрана компьютера.
-        const btn_getDisplay = this.ui.buttons.get('get-display')!;
-        btn_getDisplay.addEventListener('click', async () =>
-        {
-            btn_getDisplay.disabled = true;
-            await this.handleGetDisplay();
-            btn_getDisplay.disabled = false;
-        });
-
-        // Кнопка остановки захвата изображения экрана.
-        const btn_stopDisplay = this.ui.buttons.get("stop-display")!;
-        btn_stopDisplay.addEventListener("click", () =>
-        {
-            this.handleStopDisplay();
-        });
-
-        // Кнопка дополнительных настроек микрофона.
-        const btn_showMicOptions = this.ui.buttons.get('show-mic-options')!;
-        btn_showMicOptions.addEventListener('click', () =>
-        {
-            const micOptions = this.ui.micOptions;
-            micOptions.hidden = !micOptions.hidden;
-
-            this.handleVolumeMeter();
-        });
-
-        // Кнопка прослушивания микрофона в панели доп. настрок микрофона.
-        const btn_toggleMicOutput = this.ui.buttons.get('toggle-mic-output')!;
-        btn_toggleMicOutput.addEventListener('click', () =>
-        {
-            const isOutputDisabled = (btn_toggleMicOutput.innerText === "Вкл. прослушивание микрофона");
-            btn_toggleMicOutput.innerText = isOutputDisabled ? "Выкл. прослушивание микрофона" : "Вкл. прослушивание микрофона";
-            btn_toggleMicOutput.className = isOutputDisabled ? "btn-mic background-red" : "btn-mic background-darkgreen";
-
-            this.handleMicOutput();
-        });
-
-        this.ui.checkboxEnableNoiseGate.addEventListener("click", () =>
-        {
-            this.handleMicNoiseGate();
-        });
-
-        this.ui.checkboxEnableManualGainControl.addEventListener("click", () =>
-        {
-            this.handleMicManualGain();
-        });
-
-        const getMicAgain = () =>
-        {
-            // Если микрофон уже захвачен.
-            if (!btn_stopMic.hidden)
-            {
-                btn_stopMic.click();
-                btn_getMic.click();
-            }
-        };
-
-        this.ui.checkboxEnableNoiseSuppression.addEventListener("click", () =>
-        {
-            getMicAgain();
-        });
-
-        this.ui.checkboxEnableEchoCancellation.addEventListener("click", () =>
-        {
-            getMicAgain();
-        });
-
-        this.ui.checkboxEnableAutoGainControl.addEventListener("click", () =>
-        {
-            getMicAgain();
-        });
-    }
-
-    /** Обработка нажатия на кнопку "Демонстрация экрана". */
-    private async handleGetDisplay(): Promise<void>
-    {
-        if (!this.room.isAllowedToSpeak)
-        {
-            return;
-        }
-
-        try
-        {
-            // Захват изображения с экрана компьютера.
-            await this.getDisplayMedia();
-
-            // Переключаем кнопки захвата экрана.
-            this.ui.toggleDisplayButtons();
-        }
-        catch (error)
-        {
-            console.error("[UserMedia] > getDisplayMedia error:", error as DOMException);
-        }
-    }
-
-    /** Обработка нажатия на кнопку "Прекратить захват экрана". */
-    private handleStopDisplay(): void
-    {
-        const stream = this.m_streams.get("display")!;
-
-        for (const track of stream.getTracks())
-        {
-            track.stop();
-        }
-
-        this.removeEndedDisplayStream();
     }
 
     /**
@@ -556,15 +487,12 @@ export class UserMediaService
     }
 
     /** Захват видео с экрана юзера. */
-    private async getDisplayMedia(): Promise<void>
+    private async getDisplayMedia(constraints: MediaStreamConstraints): Promise<void>
     {
-        console.debug("[UserMedia] > getDisplayMedia",
-            this.m_defaultStreamConstraintsDisplay.get(this.ui.currentCaptureSettingDisplay));
+        console.debug("[UserMedia] > getDisplayMedia", constraints);
 
         // Захват экрана.
-        const mediaStream: MediaStream = await navigator.mediaDevices
-            .getDisplayMedia(this.m_defaultStreamConstraintsDisplay
-                .get(this.ui.currentCaptureSettingDisplay));
+        const mediaStream: MediaStream = await navigator.mediaDevices.getDisplayMedia(constraints);
 
         console.debug("[UserMedia] > getDisplayMedia success:", mediaStream);
 
@@ -1174,36 +1102,36 @@ export class UserMediaService
     }
 
     // Если панель скрыта, то отключаем индикатор громкости, иначе подключаем.
-    private handleVolumeMeter(): void
+    /*private handleVolumeMeter(): void
     {
         const micOptionsHidden = this.ui.micOptions.hidden;
         micOptionsHidden ? this.m_micAudioProcessing.disconnectVolumeMeter()
             : this.m_micAudioProcessing.connectVolumeMeter(this.ui.volumeMeterElem);
-    }
+    }*/
 
-    private handleMicOutput(): void
+    /*private handleMicOutput(): void
     {
         const btn_toggleMicOutput = this.ui.buttons.get('toggle-mic-output')!;
         const isOutputDisabled = (btn_toggleMicOutput.innerText === "Вкл. прослушивание микрофона");
 
         isOutputDisabled ? this.m_micAudioProcessing.stopListenOutput() : this.m_micAudioProcessing.listenOutput();
-    }
+    }*/
 
-    private handleMicNoiseGate(): void
+    /*private handleMicNoiseGate(): void
     {
         this.ui.checkboxEnableNoiseGate.checked ?
             this.m_micAudioProcessing.connectNoiseGate() :
             this.m_micAudioProcessing.disconnectNoiseGate();
-    }
+    }*/
 
-    private handleMicManualGain(): void
+    /*private handleMicManualGain(): void
     {
         this.ui.checkboxEnableManualGainControl.checked ?
             this.m_micAudioProcessing.connectGain() :
             this.m_micAudioProcessing.disconnectGain();
-    }
+    }*/
 
-    private async handleMicAudioProcessing(micStream: MediaStream): Promise<MediaStream>
+    /*private async handleMicAudioProcessing(micStream: MediaStream): Promise<MediaStream>
     {
         // Проверяем, готова ли VolumeMeter, и если нет, то инициализируем эту ноду.
         if (!this.m_micAudioProcessing.isVolumeMeterReady)
@@ -1226,5 +1154,5 @@ export class UserMediaService
         this.handleMicManualGain();
 
         return this.m_micAudioProcessing.getOutputStream();
-    }
+    }*/
 }

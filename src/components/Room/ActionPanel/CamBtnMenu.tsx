@@ -7,7 +7,7 @@ import { Menu, MenuList } from "../../Menu/Menu";
 import { MenuItemRadio, MenuSectionLabel } from "../../Menu/MenuItems";
 import { Tooltip } from "../../Tooltip";
 
-import { ResolutionObject } from "../../../services/UserMediaService";
+import { ResolutionObject } from "../../../services/UserMediaService/UserMediaService";
 import "./CamBtnMenu.css";
 
 interface CamBtnMenuProps

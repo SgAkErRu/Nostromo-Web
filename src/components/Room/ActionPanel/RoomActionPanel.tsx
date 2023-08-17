@@ -11,7 +11,7 @@ import "./RoomActionPanel.css";
 import { CamBtnMenu } from "./CamBtnMenu";
 import { DisplayBtnMenu } from "./DisplayBtnMenu";
 import { UserMediaServiceContext } from "../../../AppWrapper";
-import { ResolutionObject } from "../../../services/UserMediaService";
+import { ResolutionObject } from "../../../services/UserMediaService/UserMediaService";
 
 export interface ActionBtnInfo<S>
 {
@@ -54,7 +54,7 @@ export const RoomActionPanel: React.FC<RoomActionPanelProps> = ({
     const isSoundEnabled = (soundBtnInfo.state === SoundState.ENABLED);
     const soundBtnMsg = isSoundEnabled ? "Выключить звуки собеседников" : "Включить звуки собеседников";
 
-    const soundBtnOnClick = (): void =>
+    const handleSoundBtnClick = (): void =>
     {
         soundBtnInfo.setState((prevState) =>
         {
@@ -74,12 +74,12 @@ export const RoomActionPanel: React.FC<RoomActionPanelProps> = ({
             <div className="action-btn-box non-selectable">
                 <Button aria-label="Turn on/off sound"
                     className={"action-btn " + (isSoundEnabled ? "action-btn-on" : "action-btn-off")}
-                    onClick={soundBtnOnClick}>
+                    onClick={handleSoundBtnClick}>
                     <MdVolumeUp className="action-btn-icon action-btn-icon-on" />
                     <MdVolumeOff className="action-btn-icon action-btn-icon-off" />
                 </Button>
                 <span className="action-btn-desc">Звук</span>
-                <div className="action-btn-clickable-area non-selectable" onClick={soundBtnOnClick}></div>
+                <div className="action-btn-clickable-area non-selectable" onClick={handleSoundBtnClick}></div>
             </div>
         </Tooltip>
     );
@@ -90,7 +90,7 @@ export const RoomActionPanel: React.FC<RoomActionPanelProps> = ({
     const micBtnBoxRef = useRef<HTMLDivElement>(null);
     const micBtnMsg = isMicWorking ? "Выключить микрофон" : "Включить микрофон";
 
-    const micBtnOnClick = async (): Promise<void> =>
+    const handleMicBtnClick = async (): Promise<void> =>
     {
         //TODO: 1. block button before result
         // 2. setSelectedMic -> if true
@@ -132,12 +132,12 @@ export const RoomActionPanel: React.FC<RoomActionPanelProps> = ({
                 <div>
                     <Button aria-label="Enable/disable mic"
                         className={"action-btn " + (isMicWorking ? "action-btn-on" : "action-btn-off")}
-                        onClick={micBtnOnClick}
+                        onClick={handleMicBtnClick}
                     >
                         <MdMic className="action-btn-icon action-btn-icon-on" />
                         <MdMicOff className="action-btn-icon action-btn-icon-off" />
                     </Button>
-                    <div className="action-btn-clickable-area non-selectable" onClick={micBtnOnClick}></div>
+                    <div className="action-btn-clickable-area non-selectable" onClick={handleMicBtnClick}></div>
                 </div>
             </Tooltip>
             <Button className="action-list-btn"
@@ -163,7 +163,7 @@ export const RoomActionPanel: React.FC<RoomActionPanelProps> = ({
     const camBtnBoxRef = useRef<HTMLDivElement>(null);
     const camBtnMsg = camBtnInfo.state ? "Выключить веб-камеру" : "Включить веб-камеру";
 
-    const camBtnOnClick = async (): Promise<void> =>
+    const handleCamBtnClick = async (): Promise<void> =>
     {
         //TODO: 1. block button before result
         // 2. setSelectedCam -> if true
@@ -204,11 +204,11 @@ export const RoomActionPanel: React.FC<RoomActionPanelProps> = ({
                 <div>
                     <Button aria-label="Enable/disable webcam"
                         className={"action-btn " + (camBtnInfo.state ? "action-btn-on" : "action-btn-off")}
-                        onClick={camBtnOnClick}>
+                        onClick={handleCamBtnClick}>
                         <MdVideocam className="action-btn-icon action-btn-icon-on" />
                         <MdVideocamOff className="action-btn-icon action-btn-icon-off" />
                     </Button>
-                    <div className="action-btn-clickable-area non-selectable" onClick={camBtnOnClick}></div>
+                    <div className="action-btn-clickable-area non-selectable" onClick={handleCamBtnClick}></div>
                 </div>
             </Tooltip>
             <Button className="action-list-btn"
@@ -233,7 +233,34 @@ export const RoomActionPanel: React.FC<RoomActionPanelProps> = ({
     const displayBtnBoxRef = useRef<HTMLDivElement>(null);
     const displayBtnMsg = displayBtnInfo.state ? "Выключить демонстрацию экрана" : "Включить демонстрацию экрана";
 
-    const displayBtnOnClick = getToggleFunc(displayBtnInfo.setState);
+    const handleDisplayBtnClick = async (): Promise<void> =>
+    {
+        //TODO: 1. block button before result
+        // 2. get selectedResolution and fps
+
+        const selectedResolution: ResolutionObject = { width: 1920, height: 1080 };
+        const selectedFps = 30;
+
+        if (!displayBtnInfo.state)
+        {
+            const result = await userMediaService.getDisplay(
+                selectedResolution,
+                selectedFps
+            );
+
+            if (!result)
+            {
+                return;
+            }
+
+            displayBtnInfo.setState(true);
+        }
+        else
+        {
+            userMediaService.stopDisplay();
+            displayBtnInfo.setState(false);
+        }
+    };
 
     const displayBtn = (<>
         <div className="action-btn-box non-selectable" ref={displayBtnBoxRef}>
@@ -241,11 +268,11 @@ export const RoomActionPanel: React.FC<RoomActionPanelProps> = ({
                 <div>
                     <Button aria-label="Start/stop screensharing"
                         className={"action-btn " + (displayBtnInfo.state ? "action-btn-optional action-btn-on" : "action-btn-optional action-btn-off")}
-                        onClick={displayBtnOnClick}>
+                        onClick={handleDisplayBtnClick}>
                         <MdScreenShare className="action-btn-icon action-btn-icon-on" />
                         <MdStopScreenShare className="action-btn-icon action-btn-icon-off" />
                     </Button>
-                    <div className="action-btn-clickable-area non-selectable" onClick={displayBtnOnClick}></div>
+                    <div className="action-btn-clickable-area non-selectable" onClick={handleDisplayBtnClick}></div>
                 </div>
             </Tooltip>
             <Button className="action-list-btn"

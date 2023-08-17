@@ -2,7 +2,7 @@
 import { createContext } from "react";
 import { SettingService } from "./services/SettingsService";
 import GeneralSocketService from "./services/GeneralSocketService";
-import { UserMediaService } from "./services/UserMediaService";
+import { UserMediaService } from "./services/UserMediaService/UserMediaService";
 import App from "./App";
 
 export const SettingsContext = createContext<SettingService>(new SettingService());
