@@ -17,7 +17,7 @@ export interface Notification
 
 export class NotificationsService extends AbstractExternalStorage
 {
-    private readonly m_Notifications : Notification[] = [];
+    private m_Notifications : Notification[] = [];
     private m_Snapshot : Notification[] = [];
 
     public constructor()
@@ -34,7 +34,7 @@ export class NotificationsService extends AbstractExternalStorage
 
     public remove(id : number) : void
     {
-        this.m_Notifications.filter(p => p.id !== id);
+        this.m_Notifications = this.m_Notifications.filter(p => p.id !== id);
         this.saveSnapshot();
         this.notifyListeners();
     }
