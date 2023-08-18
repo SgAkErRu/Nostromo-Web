@@ -1,18 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
-import "./RegularNotification.css";
+import "./PopupNotification.css";
 import { Notification } from "../../../services/NotificationsService";
-import { SeverityNotification } from "./SeverityNotification";
+import { NotificationCard } from "./NotificationCard";
 
-const COLLAPS_TIME = 210;
-
-interface RegularNotificationProps
+interface PopupNotificationProps
 {
     notification: Notification;
     onCancel: (id: number) => void;
     isAnimated? : boolean;
     autocloseTime? : number;
+    collapseTime? : number;
 }
-export const RegularNotification: React.FC<RegularNotificationProps> = ({ notification, onCancel, isAnimated, autocloseTime }) =>
+export const PopupNotification: React.FC<PopupNotificationProps> = ({ notification, onCancel, isAnimated, autocloseTime, collapseTime }) =>
 {
     const [isClosed, setIsClosed] = useState<boolean>(false);
     
@@ -21,13 +20,13 @@ export const RegularNotification: React.FC<RegularNotificationProps> = ({ notifi
         if(isAnimated === true)
         {
             setIsClosed(true);
-            setTimeout(()=>{onCancel(notification.id);}, COLLAPS_TIME);
+            setTimeout(()=>{onCancel(notification.id);}, collapseTime);
         }
         else
         {
             onCancel(notification.id);
         }
-    }, [isAnimated, notification.id, onCancel])
+    }, [isAnimated, notification.id, onCancel, collapseTime])
 
     useEffect(() => {
         if (autocloseTime !== undefined)
@@ -39,7 +38,7 @@ export const RegularNotification: React.FC<RegularNotificationProps> = ({ notifi
 
     return (
         <div className={"regular-notification-area"} style={isClosed ? {opacity: 0} : {}} >
-            <SeverityNotification notification={notification} onCancel={handleCancelNotification}/>
+            <NotificationCard notification={notification} onCancel={handleCancelNotification}/>
         </div>
     );
 };

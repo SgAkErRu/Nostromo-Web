@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Notification } from "../../../services/NotificationsService";
-import { SeverityNotification } from "./SeverityNotification";
+import { NotificationCard } from "./NotificationCard";
 import { FocusTrap } from "../FocusTrap";
 
 interface ModalNotificationProps
@@ -21,7 +21,7 @@ export const ModalNotification: React.FC<ModalNotificationProps> = ({ notificati
     return (
         <div id="modal-notification" className="backdrop">
             <FocusTrap>
-                <SeverityNotification notification={notification} onCancel={onCancel}/>
+                <NotificationCard notification={notification} onCancel={onCancel}/>
             </FocusTrap>
         </div>
     );

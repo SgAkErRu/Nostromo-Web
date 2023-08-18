@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { RegularNotification } from "../components/Base/Notification/RegularNotification";
+import { PopupNotification } from "../components/Base/Notification/PopupNotification";
 import { ModalNotification } from "../components/Base/Notification/ModalNotification";
 import { NotificationsContext } from "../AppWrapper";
 import { NotificationSeverity, NotificationType, useNotifications } from "../services/NotificationsService";
@@ -7,6 +7,7 @@ import { NOT_FOUND_IDX } from "../Utils";
 import "./NotificationLayer.css"
 
 const INFO_NOTIFICATION_CLOSE_TIMEOUT = 5000;
+const COLLAPSE_TIME = 210;
 
 export const NotificationLayer: React.FC = () =>
 {
@@ -35,12 +36,13 @@ export const NotificationLayer: React.FC = () =>
             <div className="notification-popup-container">
                 {notificationList.filter(p => p.type === NotificationType.POPUP).map(n => {
                     return (
-                        <RegularNotification
+                        <PopupNotification
                             key={n.id}
                             notification={n}
                             isAnimated={true}
                             onCancel={handleCancelNotification}
                             autocloseTime={n.severity === NotificationSeverity.INFO ? INFO_NOTIFICATION_CLOSE_TIMEOUT : undefined}
+                            collapseTime={COLLAPSE_TIME}
                         />
                     );
                 })}
