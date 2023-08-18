@@ -17,7 +17,7 @@ export const PopupNotification: React.FC<PopupNotificationProps> = ({ notificati
     
     const handleCancelNotification = useCallback(() : void =>
     {
-        if(isAnimated === true)
+        if(collapseTime !== undefined && isAnimated === true)
         {
             setIsClosed(true);
             setTimeout(()=>{onCancel(notification.id);}, collapseTime);
@@ -29,15 +29,25 @@ export const PopupNotification: React.FC<PopupNotificationProps> = ({ notificati
     }, [isAnimated, notification.id, onCancel, collapseTime])
 
     useEffect(() => {
+        let timer : NodeJS.Timeout | null = null;
         if (autocloseTime !== undefined)
         {
-            setTimeout(handleCancelNotification, autocloseTime);
+            timer = setTimeout(handleCancelNotification, autocloseTime);
         }
+
+        return () => 
+        {
+            if (timer)
+            {
+                clearTimeout(timer);
+            }
+        };
     }, [autocloseTime, handleCancelNotification]);
 
+    const transitionTime = collapseTime !== undefined ? `all ${collapseTime}ms` : undefined;
 
     return (
-        <div className={"regular-notification-area"} style={isClosed ? {opacity: 0} : {}} >
+        <div className={"regular-notification-area"} style={isClosed ? {opacity: 0, transition: transitionTime } : {transition: transitionTime}} >
             <NotificationCard notification={notification} onCancel={handleCancelNotification}/>
         </div>
     );

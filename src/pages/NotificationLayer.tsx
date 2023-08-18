@@ -7,7 +7,7 @@ import { NOT_FOUND_IDX } from "../Utils";
 import "./NotificationLayer.css"
 
 const INFO_NOTIFICATION_CLOSE_TIMEOUT = 5000;
-const COLLAPSE_TIME = 210;
+const COLLAPSE_TIME = 200;
 
 export const NotificationLayer: React.FC = () =>
 {
