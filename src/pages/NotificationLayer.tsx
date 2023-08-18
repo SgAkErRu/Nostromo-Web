@@ -1,39 +1,51 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { RegularNotification } from "../components/Base/Notification/RegularNotification";
 import { ModalNotification } from "../components/Base/Notification/ModalNotification";
 import { NotificationsContext } from "../AppWrapper";
 import { NotificationSeverity, NotificationType, useNotifications } from "../services/NotificationsService";
+import { NOT_FOUND_IDX } from "../Utils";
+import "./NotificationLayer.css"
+
+const INFO_NOTIFICATION_CLOSE_TIMEOUT = 5000;
 
 export const NotificationLayer: React.FC = () =>
 {
+    const endAnchorRef = useRef<HTMLDivElement>(null);
     const notificationService = useContext(NotificationsContext);
     const notificationList = useNotifications(notificationService);
 
-    // #FIXME: Юз эффект срабатывает 2 раза
     useEffect(() => {
-        notificationService.add({label: "Error", description: "Какое-то модальное оповещение severity ERROR", severity: NotificationSeverity.ERROR, type: NotificationType.CRITICAL, date: new Date()});
-        notificationService.add({label: "Info", description: "Какое-то модальное оповещение severity INFO", severity: NotificationSeverity.INFO, type: NotificationType.CRITICAL, date: new Date()});
-        notificationService.add({label: "Warning", description: "Какое-то модальное оповещение severity WARNING", severity: NotificationSeverity.WARNING, type: NotificationType.CRITICAL, date: new Date()});
-
-        notificationService.add({label: "Warning", description: "Какое-то всплывающее оповещение severity WARNING", severity: NotificationSeverity.WARNING, type: NotificationType.POPUP, date: new Date()});
-        notificationService.add({label: "Info", description: "Какое-то всплывающее оповещение severity INFO", severity: NotificationSeverity.INFO, type: NotificationType.POPUP, date: new Date()});
-        notificationService.add({label: "Error", description: "Какое-то всплывающее оповещение severity ERROR", severity: NotificationSeverity.ERROR, type: NotificationType.POPUP, date: new Date()});
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        if (endAnchorRef.current)
+        {
+            endAnchorRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [notificationList]);
 
     const handleCancelNotification = (id: number): void =>
     {
         notificationService.remove(id);
     }
+
+    const firstCriticalIdx = notificationList.findIndex(n => n.type === NotificationType.CRITICAL);
+    const criticalNotificationComponent = firstCriticalIdx !== NOT_FOUND_IDX ? <ModalNotification notification={notificationList[firstCriticalIdx]} onCancel={handleCancelNotification} /> : <></>;
+
     return (
         <div id="notification-layer">
-            {notificationList.map(n => {
-                return (n.type === NotificationType.POPUP?
-                        <RegularNotification notification={n} onCancel={handleCancelNotification}/>
-                    :
-                        <ModalNotification notification={n} onCancel={handleCancelNotification}/>
-                );
-            })}
+            {criticalNotificationComponent}
+            <div className="notification-popup-container">
+                {notificationList.filter(p => p.type === NotificationType.POPUP).map(n => {
+                    return (
+                        <RegularNotification
+                            key={n.id}
+                            notification={n}
+                            isAnimated={true}
+                            onCancel={handleCancelNotification}
+                            autocloseTime={n.severity === NotificationSeverity.INFO ? INFO_NOTIFICATION_CLOSE_TIMEOUT : undefined}
+                        />
+                    );
+                })}
+                <div ref={endAnchorRef} />
+            </div>
         </div>
     );
 };

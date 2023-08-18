@@ -2,6 +2,17 @@ import { Dispatch, ReactEventHandler, SetStateAction } from "react";
 
 export type ReactDispatch<T> = Dispatch<SetStateAction<T>>;
 
+export interface DateWrapper
+{
+    date : number;
+
+}
+
+export function dateToLocaleString(date : DateWrapper) : string
+{
+    return new Date(date.date).toLocaleString();
+}
+
 export const getToggleFunc = (setState: Dispatch<SetStateAction<boolean>>) =>
 {
     return () => { setState(prevState => !prevState); };

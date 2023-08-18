@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Notification } from "../../../services/NotificationsService";
 import { SeverityNotification } from "./SeverityNotification";
-
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+import { FocusTrap } from "../FocusTrap";
 
 interface ModalNotificationProps
 {
@@ -21,7 +20,9 @@ export const ModalNotification: React.FC<ModalNotificationProps> = ({ notificati
 
     return (
         <div id="modal-notification" className="backdrop">
-            <SeverityNotification notification={notification} onCancel={onCancel}/>
+            <FocusTrap>
+                <SeverityNotification notification={notification} onCancel={onCancel}/>
+            </FocusTrap>
         </div>
     );
 };

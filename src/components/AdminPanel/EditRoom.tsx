@@ -105,6 +105,7 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
     const handleContextMenuShow : MouseEventHandler = (ev) : void =>
     {
         ev.preventDefault();
+        ev.stopPropagation();
         if (ev.button === MOUSE_EVENT_NONE_BTN && btnRef.current)
         {
             setMenuPosition(null);
@@ -126,7 +127,7 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
     const changePasswordRoomDescription = <>Введите новый пароль для комнаты <strong>"{room.name}"</strong>.</>
 
     const usersButton = 
-        <Tooltip title="Список участников">
+        <Tooltip key="users" title="Список участников">
             <Button className="edit-room-button" aria-label="Users list" tabIndex={-1}
                 onClick={handleRoomSelected}>
                 <HiUser className="edit-room-list-item-icon" />
@@ -134,7 +135,7 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
         </Tooltip>;
 
     const contextMenuButton =
-        <Tooltip ref={btnRef} title="Контекстное меню">
+        <Tooltip key="context" ref={btnRef} title="Контекстное меню">
             <Button className="edit-room-button" aria-label="Room settings" tabIndex={-1}
                 onClick={handleContextMenuShow}>
                 <BiDotsHorizontalRounded className="edit-room-list-item-icon" />

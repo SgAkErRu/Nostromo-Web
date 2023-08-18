@@ -1,26 +1,45 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./RegularNotification.css";
 import { Notification } from "../../../services/NotificationsService";
 import { SeverityNotification } from "./SeverityNotification";
 
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+const COLLAPS_TIME = 210;
 
 interface RegularNotificationProps
 {
     notification: Notification;
     onCancel: (id: number) => void;
+    isAnimated? : boolean;
+    autocloseTime? : number;
 }
-export const RegularNotification: React.FC<RegularNotificationProps> = ({ notification, onCancel }) =>
+export const RegularNotification: React.FC<RegularNotificationProps> = ({ notification, onCancel, isAnimated, autocloseTime }) =>
 {
-    const cancelRef = useRef<HTMLButtonElement>(null);
-
-    useEffect(() =>
+    const [isClosed, setIsClosed] = useState<boolean>(false);
+    
+    const handleCancelNotification = useCallback(() : void =>
     {
-        cancelRef.current?.focus();
-    }, [cancelRef]);
+        if(isAnimated === true)
+        {
+            setIsClosed(true);
+            setTimeout(()=>{onCancel(notification.id);}, COLLAPS_TIME);
+        }
+        else
+        {
+            onCancel(notification.id);
+        }
+    }, [isAnimated, notification.id, onCancel])
+
+    useEffect(() => {
+        if (autocloseTime !== undefined)
+        {
+            setTimeout(handleCancelNotification, autocloseTime);
+        }
+    }, [autocloseTime, handleCancelNotification]);
+
+
     return (
-        <div id="regular-notification" className="regular-notification-area">
-            <SeverityNotification notification={notification} onCancel={onCancel}/>
+        <div className={"regular-notification-area"} style={isClosed ? {opacity: 0} : {}} >
+            <SeverityNotification notification={notification} onCancel={handleCancelNotification}/>
         </div>
     );
 };

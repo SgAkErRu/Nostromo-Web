@@ -37,7 +37,7 @@ export const RoomListPage: React.FC = () =>
         }
 
         const openRoom = 
-            <Tooltip title="Зайти в комнату">
+            <Tooltip key="join-btn" title="Зайти в комнату">
                 <Button className="room-list-button" aria-label="Open room" tabIndex={-1}
                     onClick={handleRedirect}>
                     <IoLogInOutline className="room-list-item-icon" />
@@ -45,7 +45,7 @@ export const RoomListPage: React.FC = () =>
             </Tooltip>;
         
         return (
-            <RoomListItem onClick={handleRedirect} activateHandler={handleRedirect} room={room} actions={[openRoom]}/>
+            <RoomListItem key={room.id} onClick={handleRedirect} activateHandler={handleRedirect} room={room} actions={[openRoom]}/>
         )
     } 
     const roomNameFilter = (room : PublicRoomInfo) : boolean =>

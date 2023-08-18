@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FC, KeyboardEventHandler, MouseEventHandler, useEffect, useState } from "react";
+import { ChangeEventHandler, FC, KeyboardEventHandler, MouseEventHandler, useState } from "react";
 import "./TextEditDialog.css"
 import { Input } from "../Base/Input";
 import { FocusTrap } from "../Base/FocusTrap";
@@ -16,16 +16,9 @@ interface TextEditDialogProps
     onClose : () => void;
 }
 
-export const TextEditDialog: FC<TextEditDialogProps> = ({ isOpen, label, description, hint, value, onValueConfirm, onClose}) =>
+const TextEditDialogBase: FC<TextEditDialogProps> = ({ label, description, hint, value, onValueConfirm, onClose}) =>
 {
-    const [editedValue, setEditedValue] = useState<string>("");
-
-    // Сброс редактируемого значения при повторном открытии окна
-    useEffect(() =>
-    {
-        setEditedValue(value !== undefined ? value : "");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isOpen]);
+    const [editedValue, setEditedValue] = useState<string>(value ?? "");
 
     const handleValueChange : ChangeEventHandler<HTMLInputElement> = (ev) =>
     {
@@ -56,28 +49,30 @@ export const TextEditDialog: FC<TextEditDialogProps> = ({ isOpen, label, descrip
     }
 
     return (
-        isOpen ?
-            <div tabIndex={NEGATIVE_TAB_IDX} onKeyDown={handleCloseByEscape}>
-                <FocusTrap>
-                    <div className="backdrop" onClick={handleCancelClick}>
-                        <div onClick={stopEvent} className="text-edit-dialog-container">
-                            <div className="text-edit-dialog-label">{label}</div>
-                            {description !== undefined ? <div className="text-edit-dialog-description">{description}</div> : <></>}
-                            <div className="text-edit-dialog-input-container">
-                                <Input className="text-edit-dialog-input" onChange={handleValueChange} value={editedValue} />
-                                <div className="text-edit-dialog-input-hint">
-                                    {hint}
-                                </div>
-                            </div>
-                            <div className="text-edit-dialog-actions-container">
-                                <Button onClick={handleCancelClick} color="warning">Отмена</Button>
-                                <Button onClick={handleValueSave} color="primary">Сохранить</Button>
+        <div tabIndex={NEGATIVE_TAB_IDX} onKeyDown={handleCloseByEscape}>
+            <FocusTrap>
+                <div className="backdrop" onClick={handleCancelClick}>
+                    <div onClick={stopEvent} className="text-edit-dialog-container">
+                        <div className="text-edit-dialog-label">{label}</div>
+                        {description !== undefined ? <div className="text-edit-dialog-description">{description}</div> : <></>}
+                        <div className="text-edit-dialog-input-container">
+                            <Input className="text-edit-dialog-input" onChange={handleValueChange} value={editedValue} />
+                            <div className="text-edit-dialog-input-hint">
+                                {hint}
                             </div>
                         </div>
+                        <div className="text-edit-dialog-actions-container">
+                            <Button onClick={handleCancelClick} color="warning">Отмена</Button>
+                            <Button onClick={handleValueSave} color="primary">Сохранить</Button>
+                        </div>
                     </div>
-                </FocusTrap>
-            </div>
-        :
-            <></>
+                </div>
+            </FocusTrap>
+        </div>
     );
 };
+
+export const TextEditDialog : FC<TextEditDialogProps> = (props) =>
+{
+    return props.isOpen ? <TextEditDialogBase {...props} /> : <></>;
+}

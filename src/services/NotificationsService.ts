@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import { AbstractExternalStorage, cloneObject } from "../Utils";
+import { AbstractExternalStorage, DateWrapper, cloneObject } from "../Utils";
 
 const ID_START_VALUE = 0;
 
@@ -22,7 +22,7 @@ interface NotificationBase
     description : string;
     severity : NotificationSeverity;
     type : NotificationType;
-    date : Date;
+    date : DateWrapper;
 }
 
 export interface Notification extends NotificationBase
