@@ -45,7 +45,7 @@ export const RoomListPage: React.FC = () =>
             </Tooltip>;
         
         return (
-            <RoomListItem key={room.id} onClick={handleRedirect} activateHandler={handleRedirect} room={room} actions={[openRoom]}/>
+            <RoomListItem key={room.id} onClick={handleRedirect} activateHandler={handleRedirect} room={room} action={openRoom}/>
         )
     } 
     const roomNameFilter = (room : PublicRoomInfo) : boolean =>

@@ -8,7 +8,7 @@ import { FC,  MouseEventHandler,  useEffect, useRef, useState } from "react";
 import { Avatar, Button, Divider } from "@mui/material";
 import { MenuItemCheckbox, MenuItemWithIcon } from "../Menu/MenuItems";
 import { AnchorPosition, Menu, MenuList } from "../Menu/Menu";
-import { TextEditDialog } from "../Menu/TextEditDialog";
+import { TextEditDialog } from "../Dialog/TextEditDialog";
 import { UserInfo } from "nostromo-shared/types/RoomTypes";
 import { Tooltip } from "../Tooltip";
 import {RiArrowGoBackLine} from "react-icons/ri";

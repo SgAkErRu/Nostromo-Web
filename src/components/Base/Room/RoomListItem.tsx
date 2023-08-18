@@ -9,12 +9,12 @@ import { ZERO_IDX } from "../../../Utils";
 interface RoomListItemProps extends ListItemProps
 {
     room : PublicRoomInfo;
-    actions? : JSX.Element[];
+    action? : JSX.Element;
     contextMenuHandler? : MouseEventHandler<HTMLDivElement>;
     activateHandler? : () => void;
 }
 
-export const RoomListItem : FC<RoomListItemProps> = ({room, actions, contextMenuHandler, activateHandler, ...props}) =>
+export const RoomListItem : FC<RoomListItemProps> = ({room, action, contextMenuHandler, activateHandler, ...props}) =>
 {
     const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (ev) =>
     {
@@ -35,7 +35,7 @@ export const RoomListItem : FC<RoomListItemProps> = ({room, actions, contextMenu
                     <span className="room-list-item-id">#{room.id}</span>
                 </div>
                 <div className="horizontal-expander" />
-                {actions}
+                {action}
             </div>
         </ListItem>
     )

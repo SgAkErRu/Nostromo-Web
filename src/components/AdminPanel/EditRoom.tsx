@@ -7,7 +7,7 @@ import { FC, MouseEventHandler,  useEffect, useRef, useState } from "react";
 import { Button, Divider, Tooltip } from "@mui/material";
 import { MenuItemCheckbox, MenuItemWithIcon } from "../Menu/MenuItems";
 import { AnchorPosition, Menu, MenuList } from "../Menu/Menu";
-import { TextEditDialog } from "../Menu/TextEditDialog";
+import { TextEditDialog } from "../Dialog/TextEditDialog";
 import { EditUser } from "./EditUser";
 import { SearchPanel } from "../Base/List/SearchPanel";
 import { RoomListItem } from "../Base/Room/RoomListItem";
@@ -127,7 +127,7 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
     const changePasswordRoomDescription = <>Введите новый пароль для комнаты <strong>"{room.name}"</strong>.</>
 
     const usersButton = 
-        <Tooltip key="users" title="Список участников">
+        <Tooltip title="Список участников">
             <Button className="edit-room-button" aria-label="Users list" tabIndex={-1}
                 onClick={handleRoomSelected}>
                 <HiUser className="edit-room-list-item-icon" />
@@ -135,12 +135,14 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
         </Tooltip>;
 
     const contextMenuButton =
-        <Tooltip key="context" ref={btnRef} title="Контекстное меню">
+        <Tooltip ref={btnRef} title="Контекстное меню">
             <Button className="edit-room-button" aria-label="Room settings" tabIndex={-1}
                 onClick={handleContextMenuShow}>
                 <BiDotsHorizontalRounded className="edit-room-list-item-icon" />
             </Button>
-        </Tooltip>
+        </Tooltip>;
+    
+    const editRoomButtons = <>{usersButton} {contextMenuButton}</>;
     
     return (
         <>
@@ -148,7 +150,7 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
                 onClick={handleRoomSelected}
                 room={room}
                 contextMenuHandler={handleContextMenuShow}
-                actions={[usersButton, contextMenuButton]}
+                action={editRoomButtons}
                 activateHandler={handleRoomSelected}
             />
             <Menu

@@ -19,10 +19,19 @@ interface TextEditDialogProps
 const TextEditDialogBase: FC<TextEditDialogProps> = ({ label, description, hint, value, onValueConfirm, onClose}) =>
 {
     const [editedValue, setEditedValue] = useState<string>(value ?? "");
+    const [disabled, setDisabled] = useState<boolean>(true);
 
     const handleValueChange : ChangeEventHandler<HTMLInputElement> = (ev) =>
     {
         setEditedValue(ev.target.value);
+        if(ev.target.value !== value)
+        {
+            setDisabled(false);
+        }
+        else
+        {
+            setDisabled(true);
+        }
     }
 
     const handleValueSave : MouseEventHandler<HTMLButtonElement> = () : void =>
@@ -63,7 +72,7 @@ const TextEditDialogBase: FC<TextEditDialogProps> = ({ label, description, hint,
                         </div>
                         <div className="text-edit-dialog-actions-container">
                             <Button onClick={handleCancelClick} color="warning">Отмена</Button>
-                            <Button onClick={handleValueSave} color="primary">Сохранить</Button>
+                            <Button disabled={disabled}  onClick={handleValueSave} color="primary">Сохранить</Button>
                         </div>
                     </div>
                 </div>
