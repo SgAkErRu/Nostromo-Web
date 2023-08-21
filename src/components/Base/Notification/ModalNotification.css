@@ -36,7 +36,7 @@
 {
     display: flex;
     justify-content: center;
-    margin: 0px 10px 0px 10px;
+    margin: 0px 10px 15px 10px;
 }
 
 .modal-notification-label-area
@@ -55,7 +55,6 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding-left: 15px;
     padding-right: 15px;
     margin-bottom: 15px;
 }
@@ -102,7 +101,6 @@
 
 .modal-notification-description-area
 {
-    padding-left: 15px;
     padding-right: 15px;
     overflow-y: scroll;
     flex: auto;
