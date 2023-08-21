@@ -50,22 +50,28 @@ export const ModalNotification: React.FC<ModalNotificationProps> = ({ notificati
             <FocusTrap>
                 <div className={panelClass}> 
                     <div className="modal-notification-header-area">
-                        {headerIcon !== undefined ? <div className="modal-notification-header-icon">{headerIcon}</div> : <></>}
-                        <Tooltip title={notification.label} placement="top">
-                            <div className="modal-notification-header">
-                                {notification.label}
-                            </div>
-                        </Tooltip>
                         <div className="modal-notification-header-date">{getTimestamp(notification.date.milliseconds)}</div>
-                        <Button
-                            className="modal-notification-close-button"
-                            onClick={handleCancelNotification}
-                        >
-                            Х
-                        </Button>
+                        <div className="modal-notification-close-button-area">
+                            <Button
+                                className="modal-notification-close-button"
+                                onClick={handleCancelNotification}
+                            >
+                                Х
+                            </Button>
+                        </div>
                     </div>
-                    <div className="modal-notification-description-area">
-                        <div className="modal-notification-description">{notification.description}</div>
+                    <div className="modal-notification-body-area">
+                        {headerIcon !== undefined ? <div className="modal-notification-icon-area">{headerIcon}</div> : <></>}
+                        <div className="modal-notification-label-area">
+                            <div><Tooltip title={notification.label} placement="top">
+                                <div className="modal-notification-label">
+                                    {notification.label}
+                                </div>
+                            </Tooltip></div>
+                            <div className="modal-notification-description-area">
+                                <div className="modal-notification-description">{notification.description}</div>
+                            </div>
+                        </div>
                     </div>
                     <div className="modal-notification-toolbar">
                         <Button

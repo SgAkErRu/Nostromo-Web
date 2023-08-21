@@ -1,7 +1,12 @@
 .modal-notification-area
 {
+    display: flex;
+    flex-direction: column;
     background-color: gray;
-    max-width: 500px;
+    min-width: 30%;
+    max-width: 60%;
+    min-height: 20%;
+    max-height: 60%;
     border-radius: 4px;
 }
 
@@ -22,34 +27,37 @@
 
 .modal-notification-header-area
 {
-    padding: 15px;
+    padding: 15px 15px 10px 15px;
     display: flex;
     align-items: center;
 }
 
-.modal-notification-header-icon
+.modal-notification-icon-area
 {
-    min-height: 1rem;
-    max-height: 1rem;
-    min-width: 1rem;
-    max-width: 1rem;
-    overflow: hidden;
-    margin-right: 5px;
+    display: flex;
+    justify-content: center;
+    margin: 0px 10px 0px 10px;
 }
 
-.modal-notification-header
+.modal-notification-label-area
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-notification-label
 {
     text-align: left;
     font-size: 0.8rem;
     font-weight: 600;
     color: var(--primary-text-color);
-    margin-right: 5px;
     flex-grow: 1;
-    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 15px;
 }
-
 
 .modal-notification-header-date
 {
@@ -57,6 +65,13 @@
     font-size: 0.75rem;
     font-weight: 200;
     flex-grow: 0;
+}
+
+.modal-notification-close-button-area
+{
+    display: flex;
+    justify-content: flex-end;
+    flex: auto;
 }
 
 .modal-notification-close-button
@@ -88,9 +103,8 @@
 {
     padding-left: 15px;
     padding-right: 15px;
-    display: flex;
-    height: 7.5rem;
     overflow-y: scroll;
+    flex: auto;
 }
 
 .modal-notification-description
@@ -99,7 +113,7 @@
     color: var(--primary-text-color);
     word-wrap: break-word;
     text-align: left;
-    line-height: 1.25rem;
+    line-height: 1.2rem;
 }
 
 .modal-notification-toolbar
@@ -116,4 +130,11 @@
     border: 1px solid #00000020;
     margin-left: 10px;
     font-size: 0.85rem;
+}
+
+.modal-notification-body-area
+{
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
 }

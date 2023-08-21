@@ -103,6 +103,10 @@
     line-height: 1rem;
     height: 4rem;
     max-height: 4rem;
+    /* Для обрезки текста многоточием после 4 строк */
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;  
 }
 
 .popup-description-icon
@@ -116,4 +120,25 @@
     max-width: 4rem;
     padding-right: 10px;
 }
+.modal-icon-size
+{
+    min-height: 3rem;
+    max-height: 3rem;
+    min-width: 3rem;
+    max-width: 3rem;
+}
 
+.notification-icon-warning
+{
+    color: var(--warning-color);
+}
+
+.notification-icon-error
+{
+    color: var(--error-color);
+}
+
+.notification-icon-info
+{
+    color: var(--info-color);
+}

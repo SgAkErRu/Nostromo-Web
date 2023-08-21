@@ -4,6 +4,7 @@ import { Notification, NotificationSeverity } from "../../../services/Notificati
 import { Button } from "@mui/material";
 import { getTimestamp } from "../../../Utils";
 import { ModalNotification } from "./ModalNotification";
+import { VscError, VscInfo, VscWarning } from "react-icons/vsc";
 
 interface PopupNotificationProps
 {
@@ -12,7 +13,7 @@ interface PopupNotificationProps
     isAnimated? : boolean;
     autocloseTime? : number;
     collapseTime? : number;
-    headerIcon? : JSX.Element
+    headerIcon? : JSX.Element;
     descriptionIcon? : JSX.Element;
 }
 export const PopupNotification: React.FC<PopupNotificationProps> = ({ notification, onCancel, isAnimated, autocloseTime, collapseTime, headerIcon, descriptionIcon }) =>
@@ -82,7 +83,19 @@ export const PopupNotification: React.FC<PopupNotificationProps> = ({ notificati
         }
         setIsModalOpen(false);
     }
-    
+    let icon : JSX.Element = <></>;
+    switch (notification.severity)
+    {
+        case NotificationSeverity.INFO:
+            icon = <VscInfo className="modal-icon-size notification-icon-info" />;
+            break;
+        case NotificationSeverity.WARNING:
+            icon = <VscWarning className="modal-icon-size notification-icon-warning" />;
+            break;
+        case NotificationSeverity.ERROR:
+            icon = <VscError className="modal-icon-size notification-icon-error" />;
+            break;
+    }
     return (
         <>
             <div className={panelClass} style={style} >
@@ -102,7 +115,7 @@ export const PopupNotification: React.FC<PopupNotificationProps> = ({ notificati
                     <div className="popup-description">{notification.description}</div>
                 </div>
             </div>
-            {isModalOpen ? <ModalNotification notification={notification} onCancel={handleModalClose} /> : <></>}
+            {isModalOpen ? <ModalNotification notification={notification} headerIcon={icon} onCancel={handleModalClose} /> : <></>}
         </>
     );
 };
