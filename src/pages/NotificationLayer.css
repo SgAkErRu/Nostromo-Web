@@ -1,15 +1,33 @@
 .notification-popup-container
 {
+    overflow: scroll;
     display: flex;
-    flex-direction: column-reverse;
-    z-index: 1;
+    flex-direction: column;
+    z-index: 9;
     position: fixed;
-    bottom: 0;
-    right: 0;
-    max-height: 50vh;
-    overflow-y: scroll;
+    bottom: 1rem;
+    right: 1rem;
     margin-right: -10px;
     padding-right: 10px;
-    background-color: #00000050;
-    border-top-left-radius: 4px;
+}
+
+.popup-icon
+{
+    width: 3rem;
+    height: 3rem;
+}
+
+.error-notification-icon
+{
+    color: var(--error-color);
+}
+
+.info-notification-icon
+{
+    color: var(--info-color);
+}
+
+.warning-notification-icon
+{
+    color: var(--warning-color);
 }

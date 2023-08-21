@@ -1,41 +1,33 @@
-.popup-area
+.modal-notification-area
 {
-    display: flex;
-    flex-direction: column;
-    width: 400px;
-    opacity: 1;
-    color: white;
-    box-shadow: 2px 2px 6px 0 black;
-    border: 1px solid #303030;
+    background-color: gray;
+    max-width: 500px;
     border-radius: 4px;
-    margin: 5px;
-    padding: 10px;
-    overflow: hidden;
 }
 
-.error-popup-background
+.error-modal-notification-background
 {
     background-color: #403434f7;
 }
 
-.info-popup-background
+.info-modal-notification-background
 {
     background-color: #343440f7;
 }
 
-.warning-popup-background
+.warning-modal-notification-background
 {
     background-color: #404034f7;
 }
 
-.popup-header-area
+.modal-notification-header-area
 {
-    padding-bottom: 10px;
+    padding: 15px;
     display: flex;
     align-items: center;
 }
 
-.popup-header-icon
+.modal-notification-header-icon
 {
     min-height: 1rem;
     max-height: 1rem;
@@ -45,7 +37,7 @@
     margin-right: 5px;
 }
 
-.popup-header
+.modal-notification-header
 {
     text-align: left;
     font-size: 0.8rem;
@@ -56,11 +48,10 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    cursor: pointer;
 }
 
 
-.popup-header-date
+.modal-notification-header-date
 {
     color: var(--secondary-text-color);
     font-size: 0.75rem;
@@ -68,7 +59,7 @@
     flex-grow: 0;
 }
 
-.popup-close-button
+.modal-notification-close-button
 {
     margin-left: 3px;
     border: 1px solid #00000000;
@@ -81,39 +72,48 @@
     font-size: 0.75rem;
 }
 
-.popup-close-button:hover
+.modal-notification-close-button:hover
 {
     border: 1px solid white;
     outline: none;
 }
 
-.popup-close-button:focus
+.modal-notification-close-button:focus
 {
     border: 1px solid white;
     outline: none;
 }
 
-.popup-description
+.modal-notification-description-area
+{
+    padding-left: 15px;
+    padding-right: 15px;
+    display: flex;
+    height: 7.5rem;
+    overflow-y: scroll;
+}
+
+.modal-notification-description
 {
     font-size: 0.85rem;
     color: var(--primary-text-color);
-    overflow: hidden;
     word-wrap: break-word;
     text-align: left;
-    line-height: 1rem;
-    height: 4rem;
-    max-height: 4rem;
+    line-height: 1.25rem;
 }
 
-.popup-description-icon
+.modal-notification-toolbar
 {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 4rem;
-    max-height: 4rem;
-    width: 4rem;
-    max-width: 4rem;
-    padding-right: 10px;
+    justify-content: flex-end;
+    padding: 15px;
 }
 
+.modal-notification-toolbar-button
+{
+    color: var(--primary-text-color);
+    background-color: #00000015;
+    border: 1px solid #00000020;
+    margin-left: 10px;
+    font-size: 0.85rem;
+}

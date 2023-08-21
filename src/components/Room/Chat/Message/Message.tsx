@@ -2,7 +2,7 @@ import { FC } from "react";
 import "./Message.css";
 import { StyledMessageContent } from "./StyledMessageContent";
 import { FileMessageContent } from "./FileMessageContent";
-import { ZERO_IDX } from "../../../../Utils";
+import { ZERO_IDX, getTimestamp } from "../../../../Utils";
 
 /** Информация о файле в чате. */
 export interface ChatFileInfo
@@ -46,43 +46,6 @@ export const Message: FC<MessageProps> = ({ message }) =>
         return "";
     };
 
-    /** Получить время в формате 00:00:00 (24 часа). */
-    const getTimestamp = (datetime: number): string =>
-    {
-        const date = new Date(datetime);
-        const currentDate = new Date();
-
-        let timestamp = "";
-
-        // Если это тот же день.
-        if (date.getDate() === currentDate.getDate()
-            && date.getMonth() === currentDate.getMonth()
-            && date.getFullYear() === currentDate.getFullYear())
-        {
-            timestamp = date.toLocaleString("en-GB", {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-                hour12: false
-            });
-
-            return timestamp;
-        }
-        else
-        {
-            timestamp = date.toLocaleString("en-GB", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-                hour: '2-digit',
-                minute: "2-digit",
-                second: "numeric",
-                hour12: false
-            });
-        }
-
-        return timestamp;
-    };
     /** FIXME: На тестовой уровне
      *  isSelfMsg: тру - если ты отправляешь сообщение, фолс - если собеседник
      *  userName:  имя отправителя сообщения */

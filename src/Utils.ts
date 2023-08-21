@@ -2,15 +2,47 @@ import { Dispatch, ReactEventHandler, SetStateAction } from "react";
 
 export type ReactDispatch<T> = Dispatch<SetStateAction<T>>;
 
+/** Получить время в формате 00:00:00 (24 часа). */
+export const getTimestamp = (datetime: number): string =>
+{
+    const date = new Date(datetime);
+    const currentDate = new Date();
+
+    let timestamp = "";
+
+    // Если это тот же день.
+    if (date.getDate() === currentDate.getDate()
+        && date.getMonth() === currentDate.getMonth()
+        && date.getFullYear() === currentDate.getFullYear())
+    {
+        timestamp = date.toLocaleString("en-GB", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false
+        });
+
+        return timestamp;
+    }
+    else
+    {
+        timestamp = date.toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: '2-digit',
+            minute: "2-digit",
+            second: "numeric",
+            hour12: false
+        });
+    }
+
+    return timestamp;
+};
+
 export interface DateWrapper
 {
-    date : number;
-
-}
-
-export function dateToLocaleString(date : DateWrapper) : string
-{
-    return new Date(date.date).toLocaleString();
+    milliseconds : number;
 }
 
 export const getToggleFunc = (setState: Dispatch<SetStateAction<boolean>>) =>
