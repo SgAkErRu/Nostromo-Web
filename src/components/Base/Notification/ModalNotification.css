@@ -140,7 +140,7 @@
     overflow: hidden;
 }
 
-@media screen and (min-height: 100vw)
+@media (orientation: portrait)
 {
     .modal-notification-body-area
     {
