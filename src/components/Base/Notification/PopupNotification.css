@@ -13,21 +13,6 @@
     overflow: hidden;
 }
 
-.error-popup-background
-{
-    background-color: #403434f7;
-}
-
-.info-popup-background
-{
-    background-color: #343440f7;
-}
-
-.warning-popup-background
-{
-    background-color: #404034f7;
-}
-
 .popup-header-area
 {
     padding-bottom: 10px;
@@ -58,7 +43,6 @@
     text-overflow: ellipsis;
     cursor: pointer;
 }
-
 
 .popup-header-date
 {
@@ -119,26 +103,4 @@
     width: 4rem;
     max-width: 4rem;
     padding-right: 10px;
-}
-.modal-icon-size
-{
-    min-height: 3rem;
-    max-height: 3rem;
-    min-width: 3rem;
-    max-width: 3rem;
-}
-
-.notification-icon-warning
-{
-    color: var(--warning-color);
-}
-
-.notification-icon-error
-{
-    color: var(--error-color);
-}
-
-.notification-icon-info
-{
-    color: var(--info-color);
 }

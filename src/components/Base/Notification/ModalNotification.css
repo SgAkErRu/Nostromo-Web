@@ -10,26 +10,19 @@
     border-radius: 4px;
 }
 
-.error-modal-notification-background
-{
-    background-color: #403434f7;
-}
-
-.info-modal-notification-background
-{
-    background-color: #343440f7;
-}
-
-.warning-modal-notification-background
-{
-    background-color: #404034f7;
-}
-
 .modal-notification-header-area
 {
     padding: 15px 15px 10px 15px;
     display: flex;
     align-items: center;
+}
+
+.modal-notification-header-date
+{
+    color: var(--secondary-text-color);
+    font-size: 0.75rem;
+    font-weight: 200;
+    flex-grow: 0;
 }
 
 .modal-notification-icon-area
@@ -39,7 +32,14 @@
     margin: 0px 10px 15px 10px;
 }
 
-.modal-notification-label-area
+.modal-notification-body-area
+{
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.modal-notification-body
 {
     display: flex;
     flex-direction: column;
@@ -50,6 +50,7 @@
 {
     text-align: left;
     font-size: 0.95rem;
+    line-height: 1.2rem;
     font-weight: 600;
     color: var(--primary-text-color);
     overflow: hidden;
@@ -57,14 +58,7 @@
     text-overflow: ellipsis;
     padding-right: 15px;
     margin-bottom: 15px;
-}
-
-.modal-notification-header-date
-{
-    color: var(--secondary-text-color);
-    font-size: 0.75rem;
-    font-weight: 200;
-    flex-grow: 0;
+    min-height: 1.2rem;
 }
 
 .modal-notification-close-button-area
@@ -131,13 +125,6 @@
     font-size: 0.85rem;
 }
 
-.modal-notification-body-area
-{
-    display: flex;
-    flex-direction: row;
-    overflow: hidden;
-}
-
 @media (orientation: portrait)
 {
     .modal-notification-body-area
@@ -145,7 +132,7 @@
         flex-direction: column;
     }
 
-    .modal-notification-label-area
+    .modal-notification-body
     {
         margin-left: 15px;
     }

@@ -30,13 +30,13 @@ export const ModalNotification: React.FC<ModalNotificationProps> = ({ notificati
     switch (notification.severity)
     {
         case NotificationSeverity.INFO:
-            panelClass = "modal-notification-area info-modal-notification-background";
+            panelClass = "modal-notification-area info-notification-background";
             break;
         case NotificationSeverity.WARNING:
-            panelClass = "modal-notification-area warning-modal-notification-background";
+            panelClass = "modal-notification-area warning-notification-background";
             break;
         case NotificationSeverity.ERROR:
-            panelClass = "modal-notification-area error-modal-notification-background";
+            panelClass = "modal-notification-area error-notification-background";
             break;
     }
 
@@ -62,12 +62,12 @@ export const ModalNotification: React.FC<ModalNotificationProps> = ({ notificati
                     </div>
                     <div className="modal-notification-body-area">
                         {headerIcon !== undefined ? <div className="modal-notification-icon-area">{headerIcon}</div> : <></>}
-                        <div className="modal-notification-label-area">
-                            <div><Tooltip title={notification.label} placement="top">
+                        <div className="modal-notification-body">
+                            <Tooltip title={notification.label} placement="top">
                                 <div className="modal-notification-label">
                                     {notification.label}
                                 </div>
-                            </Tooltip></div>
+                            </Tooltip>
                             <div className="modal-notification-description-area">
                                 <div className="modal-notification-description">{notification.description}</div>
                             </div>

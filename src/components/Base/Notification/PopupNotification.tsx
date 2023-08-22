@@ -56,13 +56,13 @@ export const PopupNotification: React.FC<PopupNotificationProps> = ({ notificati
     switch (notification.severity)
     {
         case NotificationSeverity.INFO:
-            panelClass = "popup-area info-popup-background";
+            panelClass = "popup-area info-notification-background";
             break;
         case NotificationSeverity.WARNING:
-            panelClass = "popup-area warning-popup-background";
+            panelClass = "popup-area warning-notification-background";
             break;
         case NotificationSeverity.ERROR:
-            panelClass = "popup-area error-popup-background";
+            panelClass = "popup-area error-notification-background";
             break;
     }
 
@@ -83,19 +83,21 @@ export const PopupNotification: React.FC<PopupNotificationProps> = ({ notificati
         }
         setIsModalOpen(false);
     }
+
     let icon : JSX.Element = <></>;
     switch (notification.severity)
     {
         case NotificationSeverity.INFO:
-            icon = <VscInfo className="modal-icon-size notification-icon-info" />;
+            icon = <VscInfo className="icon-size info-notification-icon" />;
             break;
         case NotificationSeverity.WARNING:
-            icon = <VscWarning className="modal-icon-size notification-icon-warning" />;
+            icon = <VscWarning className="icon-size warning-notification-icon" />;
             break;
         case NotificationSeverity.ERROR:
-            icon = <VscError className="modal-icon-size notification-icon-error" />;
+            icon = <VscError className="icon-size error-notification-icon" />;
             break;
     }
+    
     return (
         <>
             <div className={panelClass} style={style} >

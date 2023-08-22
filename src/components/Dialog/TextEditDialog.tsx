@@ -24,7 +24,7 @@ const TextEditDialogBase: FC<TextEditDialogProps> = ({ label, description, hint,
     const handleValueChange : ChangeEventHandler<HTMLInputElement> = (ev) =>
     {
         setEditedValue(ev.target.value);
-        if(ev.target.value !== value)
+        if(ev.target.value !== value && ev.target.value !== "")
         {
             setDisabled(false);
         }

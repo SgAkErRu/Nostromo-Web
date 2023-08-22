@@ -47,13 +47,13 @@ export const NotificationLayer: React.FC = () =>
         switch (notification.severity)
         {
             case NotificationSeverity.INFO:
-                icon = <VscInfo className="info-notification-icon" />;
+                icon = <VscInfo className="icon-size info-notification-icon" />;
                 break;
             case NotificationSeverity.WARNING:
-                icon = <VscWarning className="warning-notification-icon" />;
+                icon = <VscWarning className="icon-size warning-notification-icon" />;
                 break;
             case NotificationSeverity.ERROR:
-                icon = <VscError className="error-notification-icon" />;
+                icon = <VscError className="icon-size error-notification-icon" />;
                 break;
         }
         return <ModalNotification notification={notification} headerIcon={icon} onCancel={handleCancelNotification} />;
@@ -71,13 +71,13 @@ export const NotificationLayer: React.FC = () =>
             switch (notification.severity)
             {
                 case NotificationSeverity.INFO:
-                    icon = <MdInfo className="popup-icon info-notification-icon" />;
+                    icon = <MdInfo className="icon-size info-notification-icon" />;
                     break;
                 case NotificationSeverity.WARNING:
-                    icon = <MdWarning className="popup-icon warning-notification-icon" />;
+                    icon = <MdWarning className="icon-size warning-notification-icon" />;
                     break;
                 case NotificationSeverity.ERROR:
-                    icon = <MdError className="popup-icon error-notification-icon" />;
+                    icon = <MdError className="icon-size error-notification-icon" />;
                     break;
             }
 
