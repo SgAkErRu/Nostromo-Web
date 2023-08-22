@@ -1,4 +1,4 @@
-.video-ribbon-area
+.video-ribbon-layout
 {
     display: flex;
     flex-direction: row-reverse;
@@ -18,11 +18,71 @@
 .video-ribbon
 {
     display: flex;
+    justify-content: center;
     align-items: center;
     overflow-x: hidden;
     overflow-y: scroll;
     flex-direction: column;
-    padding-right: 8px;
+    padding-right: 10px;
+}
+
+.video-ribbon-button-container
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #888888;
+}
+
+.video-ribbon-button-container:hover
+{
+    color: #ffffff;
+}
+
+.video-ribbon-button
+{
+    padding: 0;
+    min-width: 32px;
+    min-height: 32px;
+    background-color: unset;
+    color: inherit;
+}
+
+.video-ribbon-button:hover
+{
+    color: inherit;
+}
+
+.video-ribbon-button-label
+{
+    font-size: 0.8rem;
+    color: inherit;
+    white-space: nowrap;
+    transition: 250ms;
+}
+
+.video-ribbon-prev-button-label
+{
+    padding-bottom: 5px;
+}
+
+.video-ribbon-next-button-label
+{
+    padding-top: 5px;
+}
+
+.video-ribbon-prev-page-icon
+{
+    width: 32px;
+    height: 32px;
+    transform: rotate(270deg);
+}
+
+.video-ribbon-next-page-icon
+{
+    width: 32px;
+    height: 32px;
+    transform: rotate(90deg);
 }
 
 .video-ribbon-card
@@ -31,15 +91,15 @@
     cursor: pointer;
     margin-top: 3px;
     margin-bottom: 3px;
-    min-height: 3.6rem;
-    max-height: 3.6rem;
-    min-width: 6.4rem;
-    max-width: 6.4rem;
+    min-height: 5.4rem;
+    max-height: 5.4rem;
+    min-width: 9.6rem;
+    max-width: 9.6rem;
 }
 
 @media (orientation: portrait)
 {
-    .video-ribbon-area
+    .video-ribbon-layout
     {
         flex-direction: column;
     }
@@ -47,8 +107,39 @@
     .video-ribbon
     {
         flex-direction: row;
-        overflow-y: hidden;
-        overflow-x: scroll;
+    }
+
+    .video-ribbon-button
+    {
+        height: 3.6rem;
+        width: auto;
+    }
+
+    .video-ribbon-button-container
+    {
+        flex-direction: row;
+    }
+
+    .video-ribbon-prev-button-label
+    {
+        padding: 0;
+        padding-right: 5px;
+    }
+    
+    .video-ribbon-next-button-label
+    {
+        padding: 0;
+        padding-left: 5px;
+    }
+
+    .video-ribbon-prev-page-icon
+    {
+        transform: rotate(180deg);
+    }
+
+    .video-ribbon-next-page-icon
+    {
+        transform: rotate(0deg);
     }
 
     .video-ribbon-card
