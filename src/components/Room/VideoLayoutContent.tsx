@@ -1,11 +1,5 @@
 import { memo } from "react";
-
-export type ElementSize = {
-    width: number;
-    height: number;
-};
-
-export type VideoList = string[];
+import { ElementSize, Video, VideoCard, VideoList } from "./VideoCard";
 
 interface VideoLayoutContentProps
 {
@@ -33,21 +27,22 @@ const VideoLayoutContent: React.FC<VideoLayoutContentProps> = ({ videoItemSize, 
         matrix.push(videoList.slice(i, i + col));
     }
 
-    const rowToMap = (val: string, index: number): JSX.Element =>
+    const rowToMap = (val: Video, index: number): JSX.Element =>
     {
         return (
-            <div className="video-layout-item" key={index} style={{
-                width: videoItemSize.width,
-                height: videoItemSize.height
-            }}>
-                <div className="video-container" key={index}>
-                    <span className="v-align-middle">{val}</span>
-                </div>
-            </div>
+            <VideoCard 
+                name={val.name} 
+                className="video-layout-item" 
+                key={index} 
+                style={{ 
+                    width: videoItemSize.width,
+                    height: videoItemSize.height 
+                }}
+            />
         );
     };
 
-    const matrixToMap = (row: string[], index: number): JSX.Element =>
+    const matrixToMap = (row: Video[], index: number): JSX.Element =>
     {
         return (
             <div className="video-layout-row" key={index}>

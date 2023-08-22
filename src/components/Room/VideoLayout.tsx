@@ -3,14 +3,17 @@ import React, { useCallback, useEffect, useState } from 'react';
 import "./VideoLayout.css";
 
 import { useResizeDetector } from 'react-resize-detector';
-import { ElementSize, MemoizedVideoLayoutContent, VideoList } from "./VideoLayoutContent";
+import { MemoizedVideoLayoutContent} from "./VideoLayoutContent";
 import { useMediaQuery } from "@mui/material";
+import { IDX_STEP } from '../../Utils';
+import { ElementSize, Video, VideoList, calculateVideoCardSize } from './VideoCard';
+import { MemoizedVideoRibbonLayoutContent } from './VideoRibbonLayoutContent';
 
 export const VideoLayout: React.FC = () =>
 {
     const [videoItemSize, setVideoItemSize] = useState<ElementSize>({ width: 0, height: 0 });
 
-    const [videoList, setVideoList] = useState<VideoList>(["1"]);
+    const [videoList, setVideoList] = useState<VideoList>([{id: '0', name: '1'}]);
 
     const verticalOrientation = useMediaQuery('(orientation: portrait)');
 
@@ -33,17 +36,17 @@ export const VideoLayout: React.FC = () =>
 
         setVideoList((prev) =>
         {
-            const arr: string[] = [];
+            const arr: Video[] = [];
             for (let i = 0; i < arr.length; ++i)
             {
-                arr[i] = `${i}`;
+                arr.push({id: `${prev.length + i}`, name: `${i+IDX_STEP}`});
             }
             return prev.concat(arr);
         });
 
         return () =>
         {
-            setVideoList(["1"]);
+            setVideoList([{id: '0', name: '1'}]);
         };
 
     }, []);
@@ -76,38 +79,11 @@ export const VideoLayout: React.FC = () =>
         {
             const { rows, col } = calcRowsAndColumns();
 
-            const marginValue = 6;
+            const newSize = calculateVideoCardSize(rows, col, layoutWidth, layoutHeight);
 
-            // Между videoItem получается col-1 промежутков,
-            // к этому количеству добавляем еще 4 отступа (двойной промежуток относительно промежутка между item)
-            // для границ самого VideoLayout, в которых располагаются videoItem'ы
-            // например двойной отступ для левой границы и двойной отступ для правой границы контейнера VideoLayout.
-            // Таким образом получаем: 3.
-            const offsetFactorForGaps = 3;
-
-            const widthOffset = (col + offsetFactorForGaps) * marginValue;
-            const heightOffset = (rows + offsetFactorForGaps) * marginValue;
-
-            //console.debug("widthOffset / heightOffset", widthOffset, heightOffset);
-
-            const aspectRatioForWidth = 16;
-            const aspectRatioForHeight = 9;
-
-            const elemWidthByCol = (layoutWidth - widthOffset) / col;
-            const elemHeightByCol = elemWidthByCol * aspectRatioForHeight / aspectRatioForWidth;
-
-            const elemHeightByRow = (layoutHeight - heightOffset) / rows;
-            const elemWidthByRow = elemHeightByRow * aspectRatioForWidth / aspectRatioForHeight;
-
-            const newWidth = Math.min(elemWidthByCol, elemWidthByRow);
-            const newHeight = Math.min(elemHeightByCol, elemHeightByRow);
-
-            if (newWidth !== videoItemSize.width || newHeight !== videoItemSize.height)
+            if (newSize.width !== videoItemSize.width || newSize.height !== videoItemSize.height)
             {
-                setVideoItemSize({
-                    width: Math.min(elemWidthByCol, elemWidthByRow),
-                    height: Math.min(elemHeightByCol, elemHeightByRow)
-                });
+                setVideoItemSize(newSize);
             }
         }
     }, [layoutWidth, layoutHeight, calcRowsAndColumns, videoItemSize.height, videoItemSize.width]);
@@ -119,23 +95,24 @@ export const VideoLayout: React.FC = () =>
 
     return (
         <div id="video-layout" ref={layoutRef}>
-            <button className="debug-btn" onClick={() => { setVideoList(prev => [...prev, "new"]); }}>+1</button>
+            <button className="debug-btn" onClick={() => { setVideoList(prev => [...prev, {id: `${prev.length + IDX_STEP}`, name: "new"}]); }}>+1</button>
             <button className="debug-btn-2" onClick={() =>
             {
                 setVideoList((prev) =>
                 {
-                    const arr: string[] = [];
+                    const arr: Video[] = [];
                     const TEN = 10;
                     for (let i = 0; i < TEN; ++i)
                     {
-                        arr[i] = `${i}`;
+                        arr.push({id: `${prev.length + i}`, name: `${i+IDX_STEP}`});
                     }
                     return prev.concat(arr);
                 });
             }}>
                 +10
             </button>
-            <MemoizedVideoLayoutContent videoList={videoList} videoItemSize={videoItemSize} calcRowsAndColumns={calcRowsAndColumns} />
+            <MemoizedVideoRibbonLayoutContent videoList={videoList} />
+            {/*<MemoizedVideoLayoutContent videoList={videoList} videoItemSize={videoItemSize} calcRowsAndColumns={calcRowsAndColumns} />*/}
         </div>
     );
 };
