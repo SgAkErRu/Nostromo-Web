@@ -1,17 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { MouseEventHandler, useCallback, useEffect, useState } from 'react';
 
 import "./VideoLayout.css";
 
 import { useResizeDetector } from 'react-resize-detector';
 import { MemoizedVideoLayoutContent} from "./VideoLayoutContent";
-import { useMediaQuery } from "@mui/material";
+import { Button, useMediaQuery } from "@mui/material";
 import { IDX_STEP } from '../../Utils';
 import { ElementSize, Video, VideoList, calculateVideoCardSize } from './VideoCard';
 import { MemoizedVideoRibbonLayoutContent } from './VideoRibbonLayoutContent';
+import { LuLayoutGrid } from "react-icons/lu";
+import { Tooltip } from '../Tooltip';
 
 export const VideoLayout: React.FC = () =>
 {
     const [videoItemSize, setVideoItemSize] = useState<ElementSize>({ width: 0, height: 0 });
+
+    const [viewRibbonLayout, setViewRibbonLayout] = useState<boolean>(false);
 
     const [videoList, setVideoList] = useState<VideoList>([{id: '0', name: '1'}]);
 
@@ -93,8 +97,18 @@ export const VideoLayout: React.FC = () =>
         recalculateVideoItemSize();
     }, [videoList, recalculateVideoItemSize]);
 
+    const handleChangeLayout: MouseEventHandler = () =>
+    {
+        setViewRibbonLayout(!viewRibbonLayout);
+    }
+
     return (
         <div id="video-layout" ref={layoutRef}>
+            <Tooltip title="Сменить раскладку" placement="top">
+                <Button className="change-layout-button" onClick={handleChangeLayout}>
+                    <LuLayoutGrid className="change-layout-icon" />
+                </Button>
+            </Tooltip>
             <button className="debug-btn" onClick={() => { setVideoList(prev => [...prev, {id: `${prev.length + IDX_STEP}`, name: "new"}]); }}>+1</button>
             <button className="debug-btn-2" onClick={() =>
             {
@@ -111,8 +125,10 @@ export const VideoLayout: React.FC = () =>
             }}>
                 +10
             </button>
-            <MemoizedVideoRibbonLayoutContent videoList={videoList} />
-            {/*<MemoizedVideoLayoutContent videoList={videoList} videoItemSize={videoItemSize} calcRowsAndColumns={calcRowsAndColumns} />*/}
+            {viewRibbonLayout?
+                <MemoizedVideoRibbonLayoutContent videoList={videoList} />
+            :   <MemoizedVideoLayoutContent videoList={videoList} videoItemSize={videoItemSize} calcRowsAndColumns={calcRowsAndColumns} />
+            }
         </div>
     );
 };

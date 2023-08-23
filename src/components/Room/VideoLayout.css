@@ -44,3 +44,32 @@
     left: 0;
     top: 20px;
 }
+
+.change-layout-button
+{
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    min-width: 24px;
+    max-width: 24px;
+    min-height: 24px;
+    max-height: 24px;
+    border-radius: 5px;
+    color: #ffffff40;
+}
+
+.change-layout-button:hover
+{
+    color: #ffffff;
+    box-shadow: 0 0 2px white;
+    border-radius: 5px;
+}
+
+.change-layout-icon
+{
+    min-width: 18px;
+    max-width: 18px;
+    min-height: 18px;
+    max-height: 18px;
+    color: inherit;
+}
