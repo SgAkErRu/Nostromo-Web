@@ -41,6 +41,8 @@
     align-items: center;
     color: #888888;
     cursor: pointer;
+    min-width: 9.6rem;
+    max-width: 9.6rem;
 }
 
 .video-ribbon-button-container:hover
@@ -106,6 +108,12 @@
     min-width: 9.6rem;
     max-width: 9.6rem;
 }
+.video-ribbon-card-child
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 .video-ribbon-card-list-item
 {
@@ -143,6 +151,10 @@
     .video-ribbon-button-container
     {
         flex-direction: row;
+        min-height: 5.4rem;
+        max-height: 5.4rem;
+        min-width: unset;
+        max-width: unset;
     }
 
     .video-ribbon-prev-button-label

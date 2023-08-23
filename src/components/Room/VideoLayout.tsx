@@ -43,7 +43,7 @@ export const VideoLayout: React.FC = () =>
             const arr: Video[] = [];
             for (let i = 0; i < arr.length; ++i)
             {
-                arr.push({id: `${prev.length + i}`, name: `${i+IDX_STEP}`});
+                arr.push({id: `${prev.length + i}`, name: `${prev.length + i+IDX_STEP}`});
             }
             return prev.concat(arr);
         });
@@ -118,7 +118,7 @@ export const VideoLayout: React.FC = () =>
                     const TEN = 10;
                     for (let i = 0; i < TEN; ++i)
                     {
-                        arr.push({id: `${prev.length + i}`, name: `${i+IDX_STEP}`});
+                        arr.push({id: `${prev.length + i}`, name: `${prev.length + i+IDX_STEP}`});
                     }
                     return prev.concat(arr);
                 });

@@ -128,7 +128,13 @@ const VideoRibbonLayoutContent: FC<VideoRibbonLayoutContentProps> = ({ videoList
                     onClick={handleClick} 
                     ref={idx === ZERO_IDX ? firstItemRef : idx === videoCardCnt - IDX_STEP ? lastItemRef : undefined}
                 >
-                    {(video.id === activeVideoID) || (isEmptyString(activeVideoID) && idx === ZERO_IDX)? <AiOutlineVideoCamera className="active-ribbon-card-icon"/>: video.name}
+                    {(video.id === activeVideoID) || (isEmptyString(activeVideoID) && idx === ZERO_IDX)? 
+                        <div className="video-ribbon-card-child">
+                            <AiOutlineVideoCamera className="active-ribbon-card-icon"/>
+                            {video.name}
+                        </div>
+                    : video.name
+                    }
                 </VideoCard>
             </ListItem>
         );
