@@ -1,12 +1,13 @@
 import { FC, KeyboardEventHandler, MouseEventHandler, memo, useCallback, useEffect, useRef, useState } from "react";
 import { ElementSize, Video, VideoCard, VideoList, calculateVideoCardSize } from "./VideoCard";
 import "./VideoRibbonLayoutContent.css";
-import { IDX_STEP, NOT_FOUND_IDX, ZERO_IDX } from "../../Utils";
+import { IDX_STEP, NOT_FOUND_IDX, ZERO_IDX, isEmptyString } from "../../Utils";
 import { useResizeDetector } from "react-resize-detector";
 import { MdNavigateNext } from "react-icons/md";
 import { Button } from "@mui/material";
 import { List } from "../Base/List/List";
 import { ListItem } from "../Base/List/ListItems";
+import { AiOutlineVideoCamera } from "react-icons/ai";
 
 interface VideoRibbonLayoutContentProps
 {
@@ -90,15 +91,19 @@ const VideoRibbonLayoutContent: FC<VideoRibbonLayoutContentProps> = ({ videoList
     {
         activeCard = <VideoCard style={{
             width: videoItemSize.width,
-            height: videoItemSize.height
-        }} name={videoList[activeCardIdx].name} />;
+            height: videoItemSize.height}}
+        > 
+            {videoList[activeCardIdx].name} 
+        </VideoCard>;
     }
     else if (videoList.length)
     {
         activeCard = <VideoCard style={{
             width: videoItemSize.width,
-            height: videoItemSize.height
-        }} name={videoList[ZERO_IDX].name} />;
+            height: videoItemSize.height}}
+        >
+            {videoList[ZERO_IDX].name} 
+        </VideoCard>;
     }
 
     const createRibbonCard = (video: Video, idx: number): JSX.Element =>
@@ -121,9 +126,10 @@ const VideoRibbonLayoutContent: FC<VideoRibbonLayoutContentProps> = ({ videoList
                 <VideoCard
                     className="video-ribbon-card"
                     onClick={handleClick} 
-                    name={video.name}
                     ref={idx === ZERO_IDX ? firstItemRef : idx === videoCardCnt - IDX_STEP ? lastItemRef : undefined}
-                />
+                >
+                    {(video.id === activeVideoID) || (isEmptyString(activeVideoID) && idx === ZERO_IDX)? <AiOutlineVideoCamera className="active-ribbon-card-icon"/>: video.name}
+                </VideoCard>
             </ListItem>
         );
     };

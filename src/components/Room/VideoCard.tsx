@@ -1,4 +1,4 @@
-import { HTMLAttributes, forwardRef } from "react";
+import { HTMLAttributes, ReactNode, forwardRef } from "react";
 import "./VideoCard.css";
 
 export interface Video
@@ -50,15 +50,15 @@ export const calculateVideoCardSize = (rows: number, col: number, layoutWidth: n
 
 interface VideoCardProps extends HTMLAttributes<HTMLDivElement>
 {
-    name: string;
+    children?: ReactNode;
 }
 
-export const VideoCard = forwardRef<HTMLDivElement, VideoCardProps>(({ name, ...props }, ref) =>
+export const VideoCard = forwardRef<HTMLDivElement, VideoCardProps>(({ children, ...props }, ref) =>
 {
     return (
         <div {...props} ref={ref}>
             <div className="video-container">
-                <span className="v-align-middle">{name}</span>
+                <span className="v-align-middle">{children}</span>
             </div>
         </div>
     );

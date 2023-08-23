@@ -30,15 +30,16 @@ const VideoLayoutContent: React.FC<VideoLayoutContentProps> = ({ videoItemSize, 
     const rowToMap = (val: Video, index: number): JSX.Element =>
     {
         return (
-            <VideoCard 
-                name={val.name} 
+            <VideoCard
                 className="video-layout-item" 
                 key={index} 
                 style={{ 
                     width: videoItemSize.width,
                     height: videoItemSize.height 
                 }}
-            />
+            >
+                {val.name}
+            </VideoCard>
         );
     };
 
