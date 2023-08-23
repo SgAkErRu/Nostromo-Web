@@ -7,8 +7,11 @@ type DivKeyboardEventHandler = React.KeyboardEventHandler<HTMLDivElement>;
 interface ListProps extends React.HTMLAttributes<HTMLDivElement>
 {
     children?: ReactNode;
+    preFirstSelectedEvent?: () => void;
+    postLastSelectedEvent?: () => void;
+    isHorizontal?: boolean;
 }
-export const List: React.FC<ListProps> = ({ children, ...props }) =>
+export const List: React.FC<ListProps> = ({ children, preFirstSelectedEvent, postLastSelectedEvent, isHorizontal, ...props }) =>
 {
     const listRef = useRef<HTMLDivElement>(null);
 
@@ -62,7 +65,7 @@ export const List: React.FC<ListProps> = ({ children, ...props }) =>
             return;
         }
 
-        if (ev.key === "ArrowDown")
+        if ((ev.key === "ArrowDown" && isHorizontal !== true) || (ev.key === "ArrowRight" && isHorizontal === true))
         {
             ev.preventDefault();
             if (currentFocus === list)
@@ -71,10 +74,17 @@ export const List: React.FC<ListProps> = ({ children, ...props }) =>
             }
             else
             {
-                moveFocus(currentFocus, true);
+                if(currentFocus?.nextElementSibling)
+                {
+                    moveFocus(currentFocus, true);
+                }
+                else if(postLastSelectedEvent !== undefined)
+                {
+                    postLastSelectedEvent();
+                }
             }
         }
-        else if (ev.key === "ArrowUp")
+        else if ((ev.key === "ArrowUp" && isHorizontal !== true) || (ev.key === "ArrowLeft" && isHorizontal === true))
         {
             ev.preventDefault();
             if (currentFocus === list)
@@ -83,7 +93,14 @@ export const List: React.FC<ListProps> = ({ children, ...props }) =>
             }
             else
             {
-                moveFocus(currentFocus, false);
+                if(currentFocus?.previousElementSibling)
+                {
+                    moveFocus(currentFocus, false);
+                }
+                else if(preFirstSelectedEvent !== undefined)
+                {
+                    preFirstSelectedEvent();
+                }
             }
         }
         else if (ev.key === "Home")

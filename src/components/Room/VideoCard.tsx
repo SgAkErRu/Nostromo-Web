@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes } from "react";
+import { HTMLAttributes, forwardRef } from "react";
 import "./VideoCard.css";
 
 export interface Video
@@ -53,13 +53,13 @@ interface VideoCardProps extends HTMLAttributes<HTMLDivElement>
     name: string;
 }
 
-export const VideoCard: FC<VideoCardProps> = ({ name, ...props }) =>
+export const VideoCard = forwardRef<HTMLDivElement, VideoCardProps>(({ name, ...props }, ref) =>
 {
     return (
-        <div {...props} >
+        <div {...props} ref={ref}>
             <div className="video-container">
                 <span className="v-align-middle">{name}</span>
             </div>
         </div>
     );
-};
+});

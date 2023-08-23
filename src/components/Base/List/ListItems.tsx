@@ -24,7 +24,7 @@ export const ListItem: FC<ListItemProps> = ({
     ...props
 }) =>
 {
-    const itemRef = useRef<HTMLDivElement>(null);
+    const itemRef = useRef<HTMLDivElement | null>(null);
     const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (ev) =>
     {
         if (onKeyDown !== undefined)

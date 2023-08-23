@@ -23,7 +23,7 @@
     overflow-x: hidden;
     overflow-y: scroll;
     flex-direction: column;
-    padding-right: 10px;
+    padding: 10px;
 }
 
 .video-ribbon-button-container
@@ -89,12 +89,27 @@
 {
     display: flex;
     cursor: pointer;
+    padding: 0;
     margin-top: 3px;
     margin-bottom: 3px;
     min-height: 5.4rem;
     max-height: 5.4rem;
     min-width: 9.6rem;
     max-width: 9.6rem;
+}
+
+.video-ribbon-card-list-item
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.video-ribbon-list
+{
+    display: flex;
+    flex-direction: column;
 }
 
 @media (orientation: portrait)
@@ -106,6 +121,7 @@
 
     .video-ribbon
     {
+        padding-top: 20px;
         flex-direction: row;
     }
 
@@ -146,5 +162,10 @@
     {
         margin-left: 3px;
         margin-right: 3px;
+    }
+
+    .video-ribbon-list
+    {
+        flex-direction: row;
     }
 }
