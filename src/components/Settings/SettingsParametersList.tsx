@@ -210,7 +210,7 @@ export const SettingsParametersList: FC<SettingsParametersListProps> = ({ parame
     return (
         <>
             {showRestoreSettingsDialog ? restoreSettingsDialog : <></>}
-            <List>{loadSelectedCategory()}</List>
+            <List id="settings-parameters-list">{loadSelectedCategory()}</List>
         </>
     );
 };

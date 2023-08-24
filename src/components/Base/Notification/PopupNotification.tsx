@@ -1,123 +1,127 @@
-import React, { MouseEventHandler, useCallback, useEffect, useRef, useState } from "react";
-import "./PopupNotification.css";
-import { Notification, NotificationSeverity } from "../../../services/NotificationsService";
 import { Button } from "@mui/material";
+import React, { MouseEventHandler, useCallback, useEffect, useRef, useState } from "react";
+import { MdClose } from "react-icons/md";
 import { getTimestamp } from "../../../Utils";
+import { DO_NOT_STOP_AUTOCLOSE_TIMER, StopAutocloseTimerSemaphore } from "../../../pages/NotificationLayer";
+import { Notification, NotificationSeverity } from "../../../services/NotificationsService";
 import { ModalNotification } from "./ModalNotification";
-import { VscError, VscInfo, VscWarning } from "react-icons/vsc";
+import "./PopupNotification.css";
+
+const DISABLE_TIMER = 0;
 
 interface PopupNotificationProps
 {
     notification: Notification;
     onCancel: (id: number) => void;
-    isAnimated? : boolean;
-    autocloseTime? : number;
-    collapseTime? : number;
-    headerIcon? : JSX.Element;
-    descriptionIcon? : JSX.Element;
+    stopAutocloseTimerSemaphore: StopAutocloseTimerSemaphore;
+    autocloseTime?: number;
+    collapseTime?: number;
+    headerIcon?: JSX.Element;
+    descriptionIcon?: JSX.Element;
 }
-export const PopupNotification: React.FC<PopupNotificationProps> = ({ notification, onCancel, isAnimated, autocloseTime, collapseTime, headerIcon, descriptionIcon }) =>
+export const PopupNotification: React.FC<PopupNotificationProps> = ({
+    notification,
+    onCancel,
+    stopAutocloseTimerSemaphore,
+    autocloseTime = DISABLE_TIMER,
+    collapseTime = DISABLE_TIMER,
+    headerIcon,
+    descriptionIcon
+}) =>
 {
-    const timerRef = useRef<NodeJS.Timeout | null>(null)
+    const timerRef = useRef<number | null>(null);
     const [isClosed, setIsClosed] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    
-    const handleCancelNotification = useCallback(() : void =>
+
+    const handleCancelNotification = useCallback((): void =>
     {
-        if(collapseTime !== undefined && isAnimated === true)
+        if (collapseTime !== DISABLE_TIMER)
         {
             setIsClosed(true);
-            setTimeout(()=>{onCancel(notification.id);}, collapseTime);
+            setTimeout(() =>
+            {
+                onCancel(notification.id);
+            }, collapseTime);
         }
         else
         {
             onCancel(notification.id);
         }
-    }, [isAnimated, notification.id, onCancel, collapseTime])
+    }, [notification.id, onCancel, collapseTime]);
 
-    useEffect(() => {
-        if (autocloseTime !== undefined && !isModalOpen)
+    useEffect(() =>
+    {
+        if (autocloseTime !== DISABLE_TIMER
+            && stopAutocloseTimerSemaphore.counter === DO_NOT_STOP_AUTOCLOSE_TIMER)
         {
-            timerRef.current = setTimeout(handleCancelNotification, autocloseTime);
+            timerRef.current = window.setTimeout(handleCancelNotification, autocloseTime);
+        }
+        else if (timerRef.current !== null
+            && stopAutocloseTimerSemaphore.counter !== DO_NOT_STOP_AUTOCLOSE_TIMER)
+        {
+            window.clearTimeout(timerRef.current);
         }
 
-        return () => 
+        return () =>
         {
-            if (timerRef.current)
+            if (timerRef.current !== null)
             {
                 clearTimeout(timerRef.current);
             }
         };
-    }, [autocloseTime, handleCancelNotification, isModalOpen]);
+    }, [autocloseTime, handleCancelNotification, stopAutocloseTimerSemaphore]);
 
-    const transitionTime = collapseTime !== undefined ? `all ${collapseTime}ms` : undefined;
-    const style = isClosed ? {opacity: 0, transition: transitionTime } : {transition: transitionTime};
-    let panelClass = "";
-    switch (notification.severity)
-    {
-        case NotificationSeverity.INFO:
-            panelClass = "popup-area info-notification-background";
-            break;
-        case NotificationSeverity.WARNING:
-            panelClass = "popup-area warning-notification-background";
-            break;
-        case NotificationSeverity.ERROR:
-            panelClass = "popup-area error-notification-background";
-            break;
-    }
+    const transitionTime = collapseTime !== DISABLE_TIMER ? `opacity ${collapseTime}ms` : undefined;
+    const style = isClosed ? { opacity: 0, transition: transitionTime } : { transition: transitionTime };
 
-    const handleModalOpen : MouseEventHandler = () =>
+    const getPanelStyleBySeverity = (severity: NotificationSeverity): string =>
     {
-        if (timerRef.current)
+        switch (severity)
         {
-            clearTimeout(timerRef.current);
+            case NotificationSeverity.INFO:
+                return "notification-popup-card info-notification-background";
+            case NotificationSeverity.WARNING:
+                return "notification-popup-card warning-notification-background";
+            case NotificationSeverity.ERROR:
+                return "notification-popup-card error-notification-background";
         }
+    };
+
+    const handleModalOpen: MouseEventHandler = () =>
+    {
         setIsModalOpen(true);
-    }
+    };
 
-    const handleModalClose = () : void =>
+    const handleModalClose = (): void =>
     {
-        if (autocloseTime !== undefined)
-        {
-            timerRef.current = setTimeout(handleCancelNotification, autocloseTime);
-        }
         setIsModalOpen(false);
-    }
+    };
 
-    let icon : JSX.Element = <></>;
-    switch (notification.severity)
-    {
-        case NotificationSeverity.INFO:
-            icon = <VscInfo className="icon-size info-notification-icon" />;
-            break;
-        case NotificationSeverity.WARNING:
-            icon = <VscWarning className="icon-size warning-notification-icon" />;
-            break;
-        case NotificationSeverity.ERROR:
-            icon = <VscError className="icon-size error-notification-icon" />;
-            break;
-    }
-    
     return (
         <>
-            <div className={panelClass} style={style} >
+            <div className={getPanelStyleBySeverity(notification.severity)} style={style}>
                 <div className="popup-header-area">
                     {headerIcon !== undefined ? <div className="popup-header-icon">{headerIcon}</div> : <></>}
                     <div className="popup-header" onClick={handleModalOpen}>{notification.label}</div>
                     <div className="popup-header-date">{getTimestamp(notification.date.milliseconds)}</div>
                     <Button
-                        className="popup-close-button"
+                        className="notification-close-button"
                         onClick={handleCancelNotification}
                     >
-                        Х
+                        <MdClose />
                     </Button>
                 </div>
                 <div className="flex">
-                    { descriptionIcon !== undefined ? <div className="popup-description-icon">{descriptionIcon}</div> : <></>}
+                    {descriptionIcon !== undefined ? <div className="popup-description-icon">{descriptionIcon}</div> : <></>}
                     <div className="popup-description">{notification.description}</div>
                 </div>
             </div>
-            {isModalOpen ? <ModalNotification notification={notification} headerIcon={icon} onCancel={handleModalClose} /> : <></>}
+            {isModalOpen ? <ModalNotification
+                notification={notification}
+                icon={descriptionIcon}
+                onCancel={handleModalClose}
+                stopAutocloseTimerSemaphore={stopAutocloseTimerSemaphore}
+            /> : <></>}
         </>
     );
 };

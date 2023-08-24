@@ -111,12 +111,16 @@ export const ListItemSwitch: FC<ListItemSwitchProps> = ({
     );
 };
 
-type ListItemInputProps = ListItemWithValueProps<string>;
+interface ListItemInputProps extends ListItemWithValueProps<string>
+{
+    password?: boolean;
+}
 
 export const ListItemInput: FC<ListItemInputProps> = ({
     label,
     value,
     onValueChange,
+    password,
     ...props
 }) =>
 {
@@ -170,6 +174,7 @@ export const ListItemInput: FC<ListItemInputProps> = ({
                     onChange={handleInputChange}
                     value={value}
                     tabIndex={NEGATIVE_TAB_IDX}
+                    password={password}
                 />
             </label>
         </ListItem>

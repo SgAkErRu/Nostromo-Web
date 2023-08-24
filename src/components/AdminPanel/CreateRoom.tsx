@@ -18,7 +18,7 @@ export const CreateRoom: FC = () =>
     // Ссылка на кнопку для фокуса (чтобы можно было нажать клавиатурой)
     const createBtnRef = useRef<HTMLButtonElement>(null);
 
-    const handleCreateRoom = () : void =>
+    const handleCreateRoom = (): void =>
     {
         console.log("Данные новой комнаты: ");
         console.log("Name: ", roomName);
@@ -26,7 +26,7 @@ export const CreateRoom: FC = () =>
         console.log("Codec: ", roomCodec);
         console.log("Save History ? ", saveHistory);
         console.log("Symmetrical mode ? ", symmetricalMode);
-    }
+    };
     const videocodecs: string[] = ["VP8", "VP9", "AV1", "Theora", "Daala"];
     return (
         <>
@@ -45,6 +45,7 @@ export const CreateRoom: FC = () =>
                     description="Введите пароль от новой комнаты, если он необходим"
                     value={roomPassword}
                     onValueChange={setRoomPassword}
+                    password={true}
                 />
                 <ListItemSelect
                     key="roomCodec"

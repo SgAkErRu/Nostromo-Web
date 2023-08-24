@@ -1,22 +1,50 @@
 .notification-popup-container
 {
-    overflow: scroll;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    z-index: 9;
+    z-index: 10;
     position: fixed;
-    bottom: 1rem;
-    right: 1rem;
-    margin-right: -10px;
-    padding-right: 10px;
+    bottom: 15px;
+    right: 10px;
 }
 
-.icon-size
+.notification-icon-size
 {
     min-width: 3rem;
     max-width: 3rem;
     min-height: 3rem;
     max-height: 3rem;
+}
+
+.notification-close-button
+{
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    border-radius: 5px;
+    min-height: 24px;
+    max-height: 24px;
+    max-width: 24px;
+    min-width: 24px;
+    color: var(--secondary-text-color);
+    font-size: 1.1rem;
+    padding: 0;
+    cursor: pointer;
+}
+
+.notification-close-button:hover
+{
+    color: white;
+    background-color: #ffffff30;
+    outline: none;
+}
+
+.notification-close-button:focus
+{
+    color: white;
+    background-color: #ffffff30;
+    outline: none;
 }
 
 .error-notification-icon
@@ -36,7 +64,7 @@
 
 .error-notification-background
 {
-    background-color: #403434f7;
+    background-color: #4c3030f7;
 }
 
 .info-notification-background
@@ -47,4 +75,16 @@
 .warning-notification-background
 {
     background-color: #404034f7;
+}
+
+@media (width < 600px)
+{
+    .notification-close-button
+    {
+        min-height: 28px;
+        max-height: 28px;
+        max-width: 28px;
+        min-width: 28px;
+        font-size: 1.2rem;
+    }
 }
