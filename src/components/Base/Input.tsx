@@ -40,6 +40,12 @@ const InputWithPassword = forwardRef<HTMLInputElement, InputBaseProps>((
 
     const handleKeyDownButton: KeyboardEventHandler<HTMLButtonElement> = (ev) =>
     {
+        if (ev.code === "Escape" || ev.code === "ArrowLeft")
+        {
+            ev.preventDefault();
+            return;
+        }
+
         ev.stopPropagation();
     };
 
