@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from "react";
-import { AbstractExternalStorage, cloneObject, overrideValues } from "../Utils";
+import { cloneObject, overrideValues } from "../utils/Utils";
+import { AbstractExternalStorage } from "../utils/AbstractExternalStorage";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export type ParameterType = "Input" | "Select" | "Slider" | "Switch" | "Unknown";

@@ -1,10 +1,10 @@
 import { Divider, MenuItem, MenuItemProps, SelectChangeEvent, Slider } from "@mui/material";
-import { ReactElement, useEffect, useRef, useState } from "react";
-import { NEGATIVE_TAB_IDX, moveFocus } from "../../Utils";
-
+import { ReactElement, useRef, useState } from "react";
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdInfoOutline, MdRadioButtonChecked, MdRadioButtonUnchecked } from "react-icons/md";
-import "./MenuItems.css";
+import { moveFocus } from "../../utils/FocusUtils";
+import { NumericConstants as NC } from "../../utils/NumericConstants";
 import { Select } from "../Base/Select";
+import "./MenuItems.css";
 
 type LiFocusHandler = React.FocusEventHandler<HTMLLIElement>;
 type LiKeyboardEventHandler = React.KeyboardEventHandler<HTMLLIElement>;
@@ -277,7 +277,7 @@ export const MenuItemSelect: React.FC<MenuItemSelectProps> = ({
                 onClose={handleClose}
                 onOpen={handleOpen}
                 onKeyDown={handleSelectKeyDown}
-                tabIndex={NEGATIVE_TAB_IDX}
+                tabIndex={NC.NEGATIVE_TAB_IDX}
             >
                 {options ? elementsFromOptions : children}
             </Select>

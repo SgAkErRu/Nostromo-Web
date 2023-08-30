@@ -1,30 +1,30 @@
 import { ChangeEventHandler, FC, KeyboardEventHandler, MouseEventHandler, useState } from "react";
-import "./TextEditDialog.css"
+import "./TextEditDialog.css";
 import { Input } from "../Base/Input";
 import { FocusTrap } from "../Base/FocusTrap";
 import { Button } from "@mui/material";
-import { NEGATIVE_TAB_IDX } from "../../Utils";
+import { NumericConstants as NC } from "../../utils/NumericConstants";
 
 interface TextEditDialogProps
 {
     isOpen: boolean;
     label: string;
     description?: JSX.Element | string;
-    hint? : string;
-    value? : string;
-    onValueConfirm : (newValue: string) => void;
-    onClose : () => void;
+    hint?: string;
+    value?: string;
+    onValueConfirm: (newValue: string) => void;
+    onClose: () => void;
 }
 
-const TextEditDialogBase: FC<TextEditDialogProps> = ({ label, description, hint, value, onValueConfirm, onClose}) =>
+const TextEditDialogBase: FC<TextEditDialogProps> = ({ label, description, hint, value, onValueConfirm, onClose }) =>
 {
     const [editedValue, setEditedValue] = useState<string>(value ?? "");
     const [disabled, setDisabled] = useState<boolean>(true);
 
-    const handleValueChange : ChangeEventHandler<HTMLInputElement> = (ev) =>
+    const handleValueChange: ChangeEventHandler<HTMLInputElement> = (ev) =>
     {
         setEditedValue(ev.target.value);
-        if(ev.target.value !== value && ev.target.value !== "")
+        if (ev.target.value !== value && ev.target.value !== "")
         {
             setDisabled(false);
         }
@@ -32,33 +32,33 @@ const TextEditDialogBase: FC<TextEditDialogProps> = ({ label, description, hint,
         {
             setDisabled(true);
         }
-    }
+    };
 
-    const handleValueSave : MouseEventHandler<HTMLButtonElement> = () : void =>
+    const handleValueSave: MouseEventHandler<HTMLButtonElement> = (): void =>
     {
         onValueConfirm(editedValue);
-    }
+    };
 
-    const handleCancelClick : MouseEventHandler<HTMLElement> = () : void =>
+    const handleCancelClick: MouseEventHandler<HTMLElement> = (): void =>
     {
         onClose();
-    }
+    };
 
-    const stopEvent : MouseEventHandler<HTMLDivElement> = (ev) : void =>
+    const stopEvent: MouseEventHandler<HTMLDivElement> = (ev): void =>
     {
         ev.stopPropagation();
-    }
+    };
 
-    const handleCloseByEscape : KeyboardEventHandler<HTMLDivElement> = (ev) : void =>
+    const handleCloseByEscape: KeyboardEventHandler<HTMLDivElement> = (ev): void =>
     {
         if (ev.key === "Escape")
         {
             onClose();
         }
-    }
+    };
 
     return (
-        <div tabIndex={NEGATIVE_TAB_IDX} onKeyDown={handleCloseByEscape}>
+        <div tabIndex={NC.NEGATIVE_TAB_IDX} onKeyDown={handleCloseByEscape}>
             <FocusTrap>
                 <div className="backdrop" onClick={handleCancelClick}>
                     <div onClick={stopEvent} className="text-edit-dialog-container">
@@ -72,7 +72,7 @@ const TextEditDialogBase: FC<TextEditDialogProps> = ({ label, description, hint,
                         </div>
                         <div className="text-edit-dialog-actions-container">
                             <Button onClick={handleCancelClick} color="warning">Отмена</Button>
-                            <Button disabled={disabled}  onClick={handleValueSave} color="primary">Сохранить</Button>
+                            <Button disabled={disabled} onClick={handleValueSave} color="primary">Сохранить</Button>
                         </div>
                     </div>
                 </div>
@@ -81,7 +81,7 @@ const TextEditDialogBase: FC<TextEditDialogProps> = ({ label, description, hint,
     );
 };
 
-export const TextEditDialog : FC<TextEditDialogProps> = (props) =>
+export const TextEditDialog: FC<TextEditDialogProps> = (props) =>
 {
     return props.isOpen ? <TextEditDialogBase {...props} /> : <></>;
-}
+};

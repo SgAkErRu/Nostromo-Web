@@ -1,20 +1,20 @@
 import { FC, MouseEventHandler } from "react";
 import { ListItem, ListItemProps } from "../List/ListItems";
-import "./RoomListItem.css"
+import "./RoomListItem.css";
 import { PublicRoomInfo } from "../../../services/RoomService";
 import { Avatar } from "@mui/material";
-import { ZERO_IDX } from "../../../Utils";
+import { NumericConstants as NC } from "../../../utils/NumericConstants";
 
 
 interface RoomListItemProps extends ListItemProps
 {
-    room : PublicRoomInfo;
-    action? : JSX.Element;
-    contextMenuHandler? : MouseEventHandler<HTMLDivElement>;
-    activateHandler? : () => void;
+    room: PublicRoomInfo;
+    action?: JSX.Element;
+    contextMenuHandler?: MouseEventHandler<HTMLDivElement>;
+    activateHandler?: () => void;
 }
 
-export const RoomListItem : FC<RoomListItemProps> = ({room, action, contextMenuHandler, activateHandler, ...props}) =>
+export const RoomListItem: FC<RoomListItemProps> = ({ room, action, contextMenuHandler, activateHandler, ...props }) =>
 {
     const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (ev) =>
     {
@@ -23,12 +23,12 @@ export const RoomListItem : FC<RoomListItemProps> = ({room, action, contextMenuH
             ev.preventDefault();
             activateHandler();
         }
-    }
+    };
     return (
         <ListItem onKeyDown={onKeyDown} onContextMenu={contextMenuHandler} className="room-list-item" {...props}>
             <div className="room-list-item-area">
                 <div className="room-list-item-avatar-container">
-                    <Avatar className="room-list-item-avatar" children={room.name[ZERO_IDX]} />
+                    <Avatar className="room-list-item-avatar" children={room.name[NC.ZERO_IDX]} />
                 </div>
                 <div className="room-list-item-info-area">
                     <label className="room-list-item-name">{room.name}</label>
@@ -38,5 +38,5 @@ export const RoomListItem : FC<RoomListItemProps> = ({room, action, contextMenuH
                 {action}
             </div>
         </ListItem>
-    )
-}
+    );
+};

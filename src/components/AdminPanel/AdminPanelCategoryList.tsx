@@ -1,6 +1,7 @@
 import { FC, FocusEventHandler } from "react";
 
-import { NEGATIVE_TAB_IDX, ReactDispatch, ZERO_TAB_IDX } from "../../Utils";
+import { ReactDispatch } from "../../utils/Utils";
+import { NumericConstants as NC } from "../../utils/NumericConstants";
 import { List } from "../Base/List/List";
 import { ListSectionLabel } from "../Base/List/ListItems";
 import "./AdminPanelCategoryList.css";
@@ -36,7 +37,7 @@ const AdminPanelCategoryListItem: React.FC<AdminPanelCategoryListItemProps> = ({
                 (isActive ? " admin-panel-list-active" : "")
             }
             tabIndex={
-                isActive ? ZERO_TAB_IDX : NEGATIVE_TAB_IDX
+                isActive ? NC.ZERO_TAB_IDX : NC.NEGATIVE_TAB_IDX
             }
             role="listitem"
             onFocus={handleFocus}

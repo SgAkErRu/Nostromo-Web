@@ -7,7 +7,7 @@ import "./RoomListPage.css";
 import { List } from "../components/Base/List/List";
 import { LoadedRoomList, PublicRoomInfo } from "../services/RoomService";
 import { RoomListItem } from "../components/Base/Room/RoomListItem";
-import { NEGATIVE_TAB_IDX, NOT_FOUND_IDX } from "../Utils";
+import { NumericConstants as NC } from "../utils/NumericConstants";
 import { SearchPanel } from "../components/Base/List/SearchPanel";
 import { Tooltip } from "../components/Tooltip";
 import { Button } from "@mui/material";
@@ -29,36 +29,36 @@ export const RoomListPage: React.FC = () =>
         document.title = "Nostromo - Список комнат";
     }, []);
 
-    const createRoomItem = (room : PublicRoomInfo) : JSX.Element =>
+    const createRoomItem = (room: PublicRoomInfo): JSX.Element =>
     {
-        const handleRedirect = () : void =>
+        const handleRedirect = (): void =>
         {
             navigate(`/r/${room.id}`);
-        }
+        };
 
-        const openRoom = 
+        const openRoom =
             <Tooltip key="join-btn" title="Зайти в комнату">
                 <Button className="room-list-button" aria-label="Open room" tabIndex={-1}
                     onClick={handleRedirect}>
                     <IoLogInOutline className="room-list-item-icon" />
                 </Button>
             </Tooltip>;
-        
+
         return (
-            <RoomListItem key={room.id} onClick={handleRedirect} activateHandler={handleRedirect} room={room} action={openRoom}/>
-        )
-    } 
-    const roomNameFilter = (room : PublicRoomInfo) : boolean =>
+            <RoomListItem key={room.id} onClick={handleRedirect} activateHandler={handleRedirect} room={room} action={openRoom} />
+        );
+    };
+    const roomNameFilter = (room: PublicRoomInfo): boolean =>
     {
-        return room.name.toLowerCase().indexOf(filter.toLowerCase()) > NOT_FOUND_IDX;
-    }
+        return room.name.toLowerCase().indexOf(filter.toLowerCase()) > NC.NOT_FOUND_IDX;
+    };
     return (
         <>
             <Header title="Список комнат" />
             <div id="main">
                 <div className="room-list-area">
                     <SearchPanel className="room-list-search-panel" filter={filter} setFilter={setFilter} />
-                    <div id="room-list" tabIndex={NEGATIVE_TAB_IDX}>
+                    <div id="room-list" tabIndex={NC.NEGATIVE_TAB_IDX}>
                         <List>
                             {roomsList.filter(roomNameFilter).map(createRoomItem)}
                         </List>

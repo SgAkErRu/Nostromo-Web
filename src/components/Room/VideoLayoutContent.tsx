@@ -31,11 +31,11 @@ const VideoLayoutContent: React.FC<VideoLayoutContentProps> = ({ videoItemSize, 
     {
         return (
             <VideoCard
-                className="video-layout-item" 
-                key={index} 
-                style={{ 
+                className="video-layout-item"
+                key={index}
+                style={{
                     width: videoItemSize.width,
-                    height: videoItemSize.height 
+                    height: videoItemSize.height
                 }}
             >
                 {val.name}

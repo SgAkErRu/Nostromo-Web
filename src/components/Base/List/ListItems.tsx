@@ -1,6 +1,7 @@
 import { Button, Divider, MenuItem, SelectChangeEvent, Slider } from "@mui/material";
 import { ChangeEventHandler, FC, FocusEventHandler, KeyboardEventHandler, ReactNode, useRef, useState } from "react";
-import { NEGATIVE_TAB_IDX, isEmptyString } from "../../../Utils";
+import { isEmptyString } from "../../../utils/Utils";
+import { NumericConstants as NC } from "../../../utils/NumericConstants";
 import { Input } from "../Input";
 import { Select } from "../Select";
 import { Switch } from "../Switch";
@@ -46,7 +47,7 @@ export const ListItem: FC<ListItemProps> = ({
     return (
         <div onKeyDown={handleKeyDown}
             ref={itemRef}
-            tabIndex={NEGATIVE_TAB_IDX}
+            tabIndex={NC.NEGATIVE_TAB_IDX}
             role="listitem"
             className={`list-item ${className ?? ""}`}
             {...props}
@@ -173,7 +174,7 @@ export const ListItemInput: FC<ListItemInputProps> = ({
                     onKeyDown={handleInputKeyDown}
                     onChange={handleInputChange}
                     value={value}
-                    tabIndex={NEGATIVE_TAB_IDX}
+                    tabIndex={NC.NEGATIVE_TAB_IDX}
                     password={password}
                 />
             </label>
@@ -263,7 +264,7 @@ export const ListItemSelect: FC<ListItemSelectProps> = ({
                 onClose={handleClose}
                 onOpen={handleOpen}
                 onKeyDown={handleSelectKeyDown}
-                tabIndex={NEGATIVE_TAB_IDX}
+                tabIndex={NC.NEGATIVE_TAB_IDX}
                 variant="outlined"
             >
                 <MenuItem value={"default"}>По умолчанию</MenuItem>
@@ -388,7 +389,7 @@ export const ListItemButton: FC<ListItemButtonProps> = ({
                 <Button
                     className="list-item-button"
                     onClick={onBtnClick}
-                    tabIndex={NEGATIVE_TAB_IDX}
+                    tabIndex={NC.NEGATIVE_TAB_IDX}
                     ref={btnRef}
                 >
                     {btnLabel}

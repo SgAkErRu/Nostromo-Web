@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState, ChangeEventHandler } from 'react';
+import { Button } from '@mui/material';
+import React, { ChangeEventHandler, useEffect, useRef, useState } from 'react';
 import { ImAttachment } from 'react-icons/im';
 import { MdSend } from 'react-icons/md';
+import { NumericConstants as NC } from "../../../utils/NumericConstants";
+import { ReactDispatch, isEmptyString } from "../../../utils/Utils";
+import { Tooltip } from '../../Tooltip';
 import "./Chat.css";
 import { Message } from './Message/Message';
-import { Tooltip } from '../../Tooltip';
-import { Button } from '@mui/material';
 import { ChatFileInfo, LoadFileInfo, UploadingFilesQueue } from './UploadingFilesQueue';
-import { ReactDispatch, ZERO_IDX, isEmptyString } from "../../../Utils";
 
 /** Информация о сообщении в чате. */
 interface ChatMessage
@@ -88,7 +89,7 @@ export const Chat: React.FC<ChatProps> = ({
                 content: newMessage
             };
             // FIXME: возможно concat не самый лучший способ в React так объединять старое и новое состояние.
-            // Это просто пока заглушка, но когда будет настоящий код, 
+            // Это просто пока заглушка, но когда будет настоящий код,
             // следует подобрать наилучший метод для этого действия.
             setMessages((prev) => prev.concat(message));
 
@@ -99,7 +100,7 @@ export const Chat: React.FC<ChatProps> = ({
             setShowPlaceholder(true);
         }
 
-        setIsFileUploading(uploadingFilesQueue.length > ZERO_IDX);
+        setIsFileUploading(uploadingFilesQueue.length > NC.ZERO_IDX);
     };
 
     /* Иммитация загрузки файла на сервер
@@ -145,7 +146,7 @@ export const Chat: React.FC<ChatProps> = ({
         }
 
         const filesToUpload = inputFileRef.current.files;
-        if (filesToUpload && filesToUpload.length > ZERO_IDX)
+        if (filesToUpload && filesToUpload.length > NC.ZERO_IDX)
         {
             const newFiles: LoadFileInfo[] = uploadingFilesQueue.slice();
             let count = 0;

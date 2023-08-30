@@ -3,7 +3,7 @@ import "./Select.css";
 
 import { FormControl, Select as MuiSelect, SelectProps as MuiSelectProps } from "@mui/material";
 import { ReactNode, forwardRef } from "react";
-import { ZERO_TAB_IDX } from "../../Utils";
+import { NumericConstants as NC } from "../../utils/NumericConstants";
 
 interface SelectProps<T = unknown>
 {
@@ -33,7 +33,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps<string>>(({
     variant = "standard",
     autoFocus = false,
     onKeyDown,
-    tabIndex = ZERO_TAB_IDX
+    tabIndex = NC.ZERO_TAB_IDX
 }, ref) =>
 {
     const selectDisplayProps: React.HTMLAttributes<HTMLDivElement> =

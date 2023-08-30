@@ -7,7 +7,7 @@ import "./AccountMenu.css";
 import { EditUsernameDialog } from "./EditUsernameDialog";
 import { Tooltip } from "./Tooltip";
 import { MenuItemWithIcon } from "./Menu/MenuItems";
-import { doNotHandleEvent } from "../Utils";
+import { doNotHandleEvent } from "../utils/Utils";
 import { SetShowSettingsContext } from "../App";
 
 export const AccountMenu: React.FC = () =>

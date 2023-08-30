@@ -1,7 +1,8 @@
 import { FC, KeyboardEventHandler, MouseEventHandler, memo, useCallback, useEffect, useRef, useState } from "react";
 import { ElementSize, Video, VideoCard, VideoList, calculateVideoCardSize } from "./VideoCard";
 import "./VideoRibbonLayoutContent.css";
-import { IDX_STEP, NOT_FOUND_IDX, ZERO_IDX, isEmptyString } from "../../Utils";
+import { isEmptyString } from "../../utils/Utils";
+import { NumericConstants as NC } from "../../utils/NumericConstants";
 import { useResizeDetector } from "react-resize-detector";
 import { MdNavigateNext } from "react-icons/md";
 import { Button } from "@mui/material";
@@ -73,7 +74,7 @@ const VideoRibbonLayoutContent: FC<VideoRibbonLayoutContentProps> = ({ videoList
             const maxPageCnt = Math.ceil(videoList.length / videoCardCnt);
             if (ribbonPage >= maxPageCnt)
             {
-                setRibbonPage(Math.max(maxPageCnt - IDX_STEP, ZERO_IDX));
+                setRibbonPage(Math.max(maxPageCnt - NC.IDX_STEP, NC.ZERO_IDX));
             }
 
             const activeVideoSize = calculateVideoCardSize(DIMENSIONS_COUNT, DIMENSIONS_COUNT, layoutWidth, layoutHeight);
@@ -87,22 +88,24 @@ const VideoRibbonLayoutContent: FC<VideoRibbonLayoutContentProps> = ({ videoList
 
     let activeCard: JSX.Element = <></>;
     const activeCardIdx: number = videoList.findIndex(f => f.id === activeVideoID);
-    if (activeCardIdx !== NOT_FOUND_IDX)
+    if (activeCardIdx !== NC.NOT_FOUND_IDX)
     {
         activeCard = <VideoCard style={{
             width: videoItemSize.width,
-            height: videoItemSize.height}}
-        > 
-            {videoList[activeCardIdx].name} 
+            height: videoItemSize.height
+        }}
+        >
+            {videoList[activeCardIdx].name}
         </VideoCard>;
     }
     else if (videoList.length)
     {
         activeCard = <VideoCard style={{
             width: videoItemSize.width,
-            height: videoItemSize.height}}
+            height: videoItemSize.height
+        }}
         >
-            {videoList[ZERO_IDX].name} 
+            {videoList[NC.ZERO_IDX].name}
         </VideoCard>;
     }
 
@@ -125,15 +128,15 @@ const VideoRibbonLayoutContent: FC<VideoRibbonLayoutContentProps> = ({ videoList
             <ListItem key={video.id} onKeyDown={handleKeyDown} showSeparator={false} className="video-ribbon-card-list-item">
                 <VideoCard
                     className="video-ribbon-card"
-                    onClick={handleClick} 
-                    ref={idx === ZERO_IDX ? firstItemRef : idx === videoCardCnt - IDX_STEP ? lastItemRef : undefined}
+                    onClick={handleClick}
+                    ref={idx === NC.ZERO_IDX ? firstItemRef : idx === videoCardCnt - NC.IDX_STEP ? lastItemRef : undefined}
                 >
-                    {(video.id === activeVideoID) || (isEmptyString(activeVideoID) && idx === ZERO_IDX)? 
+                    {(video.id === activeVideoID) || (isEmptyString(activeVideoID) && idx === NC.ZERO_IDX) ?
                         <div className="video-ribbon-card-child">
-                            <AiOutlineVideoCamera className="active-ribbon-card-icon"/>
+                            <AiOutlineVideoCamera className="active-ribbon-card-icon" />
                             {video.name}
                         </div>
-                    : video.name
+                        : video.name
                     }
                 </VideoCard>
             </ListItem>
@@ -158,17 +161,17 @@ const VideoRibbonLayoutContent: FC<VideoRibbonLayoutContentProps> = ({ videoList
 
     const handlePrevPageClick: MouseEventHandler = () =>
     {
-        if (ribbonPage > ZERO_IDX)
+        if (ribbonPage > NC.ZERO_IDX)
         {
-            setRibbonPage(ribbonPage - IDX_STEP);
+            setRibbonPage(ribbonPage - NC.IDX_STEP);
         }
     };
 
-    const handleNextPageClick: MouseEventHandler = ()  =>
+    const handleNextPageClick: MouseEventHandler = () =>
     {
-        if (ribbonPage + IDX_STEP < pagesCnt)
+        if (ribbonPage + NC.IDX_STEP < pagesCnt)
         {
-            setRibbonPage(ribbonPage + IDX_STEP);
+            setRibbonPage(ribbonPage + NC.IDX_STEP);
         }
     };
 
@@ -176,35 +179,35 @@ const VideoRibbonLayoutContent: FC<VideoRibbonLayoutContentProps> = ({ videoList
 
     useEffect(() =>
     {
-        if(ribbonFocusOnLastItem === true && lastItemRef.current !== null)
+        if (ribbonFocusOnLastItem === true && lastItemRef.current !== null)
         {
             lastItemRef.current.parentElement?.focus();
             setRibbonFocusOnLastItem(null);
         }
-    },[lastItemRef, ribbonFocusOnLastItem])
+    }, [lastItemRef, ribbonFocusOnLastItem]);
 
     useEffect(() =>
     {
-        if(ribbonFocusOnLastItem === false && firstItemRef.current !== null)
+        if (ribbonFocusOnLastItem === false && firstItemRef.current !== null)
         {
             firstItemRef.current.parentElement?.focus();
             setRibbonFocusOnLastItem(null);
         }
-    },[firstItemRef, ribbonFocusOnLastItem])
+    }, [firstItemRef, ribbonFocusOnLastItem]);
 
     const handlePreFirstSelected = (): void =>
     {
-        if (ribbonPage > ZERO_IDX)
+        if (ribbonPage > NC.ZERO_IDX)
         {
-            setRibbonPage(ribbonPage - IDX_STEP);
+            setRibbonPage(ribbonPage - NC.IDX_STEP);
             setRibbonFocusOnLastItem(true);
         }
     };
     const handlePostLastSelected = (): void =>
     {
-        if (ribbonPage + IDX_STEP < pagesCnt)
+        if (ribbonPage + NC.IDX_STEP < pagesCnt)
         {
-            setRibbonPage(ribbonPage + IDX_STEP);
+            setRibbonPage(ribbonPage + NC.IDX_STEP);
             setRibbonFocusOnLastItem(false);
         }
     };
@@ -213,7 +216,7 @@ const VideoRibbonLayoutContent: FC<VideoRibbonLayoutContentProps> = ({ videoList
             <div className="video-ribbon" ref={videoCardsRef} onWheel={window.innerHeight > window.innerWidth ? handleVideoCardsWheel : undefined}>
                 <div className="video-ribbon-button-container" onClick={handlePrevPageClick}>
                     {
-                        ribbonPage > ZERO_IDX ?
+                        ribbonPage > NC.ZERO_IDX ?
                             <>
                                 <Button className="video-ribbon-button">
                                     <MdNavigateNext className="video-ribbon-prev-page-icon" />
@@ -227,7 +230,7 @@ const VideoRibbonLayoutContent: FC<VideoRibbonLayoutContentProps> = ({ videoList
                 <List className="video-ribbon-list" isHorizontal={isHorizontal} preFirstSelectedEvent={handlePreFirstSelected} postLastSelectedEvent={handlePostLastSelected}>{videoList.slice(pageStartIdx, pageStartIdx + videoCardCnt).map(createRibbonCard)}</List>
                 <div className="video-ribbon-button-container" onClick={handleNextPageClick}>
                     {
-                        ribbonPage + IDX_STEP < pagesCnt ?
+                        ribbonPage + NC.IDX_STEP < pagesCnt ?
                             <>
                                 <div className="video-ribbon-button-label video-ribbon-next-button-label">{ribbonPage + NEXT_PAGE_DISPLACEMENT} / {pagesCnt}</div>
                                 <Button className="video-ribbon-button">

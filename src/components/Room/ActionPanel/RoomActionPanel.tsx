@@ -4,14 +4,14 @@ import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { MdMic, MdMicOff, MdScreenShare, MdStopScreenShare, MdVideocam, MdVideocamOff, MdVolumeOff, MdVolumeUp } from "react-icons/md";
 import { Tooltip } from "../../Tooltip";
 
-import { getToggleFunc } from "../../../Utils";
+import { getToggleFunc } from "../../../utils/Utils";
 import { DeviceListItem, MicState, SoundState } from "../../../pages/RoomPage";
 import { MicBtnMenu } from "./MicBtnMenu";
 import "./RoomActionPanel.css";
 import { CamBtnMenu } from "./CamBtnMenu";
 import { DisplayBtnMenu } from "./DisplayBtnMenu";
 
-import { ReactDispatch } from "../../../Utils";
+import { ReactDispatch } from "../../../utils/Utils";
 
 export interface ActionBtnInfo<S>
 {

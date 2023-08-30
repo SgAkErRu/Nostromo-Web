@@ -2,14 +2,14 @@ import React, { MouseEventHandler, useCallback, useEffect, useState } from 'reac
 
 import "./VideoLayout.css";
 
-import { useResizeDetector } from 'react-resize-detector';
-import { MemoizedVideoLayoutContent} from "./VideoLayoutContent";
 import { Button, useMediaQuery } from "@mui/material";
-import { IDX_STEP } from '../../Utils';
-import { ElementSize, Video, VideoList, calculateVideoCardSize } from './VideoCard';
-import { MemoizedVideoRibbonLayoutContent } from './VideoRibbonLayoutContent';
 import { LuLayoutGrid } from "react-icons/lu";
+import { useResizeDetector } from 'react-resize-detector';
+import { NumericConstants as NC } from "../../utils/NumericConstants";
 import { Tooltip } from '../Tooltip';
+import { ElementSize, Video, VideoList, calculateVideoCardSize } from './VideoCard';
+import { MemoizedVideoLayoutContent } from "./VideoLayoutContent";
+import { MemoizedVideoRibbonLayoutContent } from './VideoRibbonLayoutContent';
 
 export const VideoLayout: React.FC = () =>
 {
@@ -17,7 +17,7 @@ export const VideoLayout: React.FC = () =>
 
     const [viewRibbonLayout, setViewRibbonLayout] = useState<boolean>(false);
 
-    const [videoList, setVideoList] = useState<VideoList>([{id: '0', name: '1'}]);
+    const [videoList, setVideoList] = useState<VideoList>([{ id: '0', name: '1' }]);
 
     const verticalOrientation = useMediaQuery('(orientation: portrait)');
 
@@ -43,14 +43,14 @@ export const VideoLayout: React.FC = () =>
             const arr: Video[] = [];
             for (let i = 0; i < arr.length; ++i)
             {
-                arr.push({id: `${prev.length + i}`, name: `${prev.length + i+IDX_STEP}`});
+                arr.push({ id: `${prev.length + i}`, name: `${prev.length + i + NC.IDX_STEP}` });
             }
             return prev.concat(arr);
         });
 
         return () =>
         {
-            setVideoList([{id: '0', name: '1'}]);
+            setVideoList([{ id: '0', name: '1' }]);
         };
 
     }, []);
@@ -100,7 +100,7 @@ export const VideoLayout: React.FC = () =>
     const handleChangeLayout: MouseEventHandler = () =>
     {
         setViewRibbonLayout(!viewRibbonLayout);
-    }
+    };
 
     return (
         <div id="video-layout" ref={layoutRef}>
@@ -109,7 +109,7 @@ export const VideoLayout: React.FC = () =>
                     <LuLayoutGrid className="change-layout-icon" />
                 </Button>
             </Tooltip>
-            <button className="debug-btn" onClick={() => { setVideoList(prev => [...prev, {id: `${prev.length + IDX_STEP}`, name: "new"}]); }}>+1</button>
+            <button className="debug-btn" onClick={() => { setVideoList(prev => [...prev, { id: `${prev.length + NC.IDX_STEP}`, name: "new" }]); }}>+1</button>
             <button className="debug-btn-2" onClick={() =>
             {
                 setVideoList((prev) =>
@@ -118,16 +118,16 @@ export const VideoLayout: React.FC = () =>
                     const TEN = 10;
                     for (let i = 0; i < TEN; ++i)
                     {
-                        arr.push({id: `${prev.length + i}`, name: `${prev.length + i+IDX_STEP}`});
+                        arr.push({ id: `${prev.length + i}`, name: `${prev.length + i + NC.IDX_STEP}` });
                     }
                     return prev.concat(arr);
                 });
             }}>
                 +10
             </button>
-            {viewRibbonLayout?
+            {viewRibbonLayout ?
                 <MemoizedVideoRibbonLayoutContent videoList={videoList} />
-            :   <MemoizedVideoLayoutContent videoList={videoList} videoItemSize={videoItemSize} calcRowsAndColumns={calcRowsAndColumns} />
+                : <MemoizedVideoLayoutContent videoList={videoList} videoItemSize={videoItemSize} calcRowsAndColumns={calcRowsAndColumns} />
             }
         </div>
     );

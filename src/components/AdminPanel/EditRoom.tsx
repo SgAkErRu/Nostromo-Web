@@ -1,9 +1,10 @@
 import { HiUser } from "react-icons/hi";
 import { BiDotsHorizontalRounded, BiLink, BiEditAlt, BiLock, BiCommentX, BiTaskX, BiUserX, BiTrash } from "react-icons/bi";
-import { MOUSE_EVENT_NONE_BTN, NEGATIVE_TAB_IDX, NOT_FOUND_IDX, ReactDispatch, getToggleFunc } from "../../Utils";
+import { ReactDispatch, getToggleFunc } from "../../utils/Utils";
+import { NumericConstants as NC } from "../../utils/NumericConstants";
 import { List } from "../Base/List/List";
 import "./EditRoom.css";
-import { FC, MouseEventHandler,  useEffect, useRef, useState } from "react";
+import { FC, MouseEventHandler, useEffect, useRef, useState } from "react";
 import { Button, Divider, Tooltip } from "@mui/material";
 import { MenuItemCheckbox, MenuItemWithIcon } from "../Menu/MenuItems";
 import { AnchorPosition, Menu, MenuList } from "../Menu/Menu";
@@ -15,10 +16,10 @@ import { LoadedRoomList, PublicRoomInfo } from "../../services/RoomService";
 
 interface RoomCardProps
 {
-    room : PublicRoomInfo;
+    room: PublicRoomInfo;
     setIdRoom: ReactDispatch<string>;
 }
-const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
+const RoomCard: FC<RoomCardProps> = ({ room, setIdRoom }) =>
 {
     const focusBackRef = useRef<HTMLElement | null>(null);
     const btnRef = useRef<HTMLDivElement>(null);
@@ -30,83 +31,83 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
     const [editNameVisible, setEditNameVisible] = useState<boolean>(false);
     const [editPasswordVisible, setEditPasswordVisible] = useState<boolean>(false);
 
-    const handleClose = () : void =>
+    const handleClose = (): void =>
     {
         setOpen(false);
-    }
+    };
 
     /* Обработчики для смены названия комнаты */
-    const handleRoomNameEdit = () : void =>
+    const handleRoomNameEdit = (): void =>
     {
         setEditNameVisible(true);
         handleClose();
-    }
+    };
 
-    const handleNameChangeCancel = () : void =>
+    const handleNameChangeCancel = (): void =>
     {
         focusBackRef.current?.focus();
         setEditNameVisible(false);
-    }
+    };
 
-    const handleNameChangeConfirm = (val : string) : void =>
+    const handleNameChangeConfirm = (val: string): void =>
     {
         focusBackRef.current?.focus();
         setEditNameVisible(false);
-    }
+    };
 
     /* Обработчики для смены пароля комнаты */
     // TODO: в TextDialog по смене пароля, пароль принимает значения ID, так как
     //       пока что пароль нигде не хранится
-    const handleRoomPasswordEdit = () : void =>
+    const handleRoomPasswordEdit = (): void =>
     {
         setEditPasswordVisible(true);
         handleClose();
-    }
+    };
 
-    const handlePasswordChangeCancel = () : void =>
+    const handlePasswordChangeCancel = (): void =>
     {
         focusBackRef.current?.focus();
         setEditPasswordVisible(false);
-    }
+    };
 
-    const handlePasswordChangeConfirm = (val : string) : void =>
+    const handlePasswordChangeConfirm = (val: string): void =>
     {
         focusBackRef.current?.focus();
         setEditPasswordVisible(false);
-    }
+    };
 
     /* TODO: Реализовать тестовые обработчики для контекстного меню */
-    const handleCopyRoomLink = () : void =>
+    const handleCopyRoomLink = (): void =>
     {
         console.log("Ссылка комнаты: ", room.id);
-    }
+    };
 
-    const handleClearHistoryChat = () : void =>
+    const handleClearHistoryChat = (): void =>
     {
         console.log("Очистить историю комнаты: ", room.id);
-    }
+    };
 
-    const handleKickAllUsers = () : void =>
+    const handleKickAllUsers = (): void =>
     {
         console.log("Кикнуть всех пользователей из комнаты ", room.id);
-    }
+    };
 
-    const handleRemoveFiles = () : void =>
+    const handleRemoveFiles = (): void =>
     {
         console.log("Удалить все файлы из комнаты ", room.id);
-    }
+    };
 
-    const handleDeleteRoom = () : void =>
+    const handleDeleteRoom = (): void =>
     {
         console.log("Удалить комнату ", room.id);
-    }
+    };
     /*---------------*/
 
-    const handleContextMenuShow : MouseEventHandler = (ev) : void =>
+    const handleContextMenuShow: MouseEventHandler = (ev): void =>
     {
         ev.preventDefault();
         ev.stopPropagation();
-        if (ev.button === MOUSE_EVENT_NONE_BTN && btnRef.current)
+        if (ev.button === NC.MOUSE_EVENT_NONE_BTN && btnRef.current)
         {
             setMenuPosition(null);
         }
@@ -116,17 +117,17 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
         }
         focusBackRef.current = document.activeElement as HTMLElement;
         setOpen(true);
-    }
+    };
 
-    const handleRoomSelected = () : void =>
+    const handleRoomSelected = (): void =>
     {
         setIdRoom(room.id);
-    }
+    };
 
-    const renameRoomDescription = <>Введите новое имя для комнаты <strong>"{room.name}"</strong>.</>
-    const changePasswordRoomDescription = <>Введите новый пароль для комнаты <strong>"{room.name}"</strong>.</>
+    const renameRoomDescription = <>Введите новое имя для комнаты <strong>"{room.name}"</strong>.</>;
+    const changePasswordRoomDescription = <>Введите новый пароль для комнаты <strong>"{room.name}"</strong>.</>;
 
-    const usersButton = 
+    const usersButton =
         <Tooltip title="Список участников">
             <Button className="edit-room-button" aria-label="Users list" tabIndex={-1}
                 onClick={handleRoomSelected}>
@@ -141,9 +142,9 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
                 <BiDotsHorizontalRounded className="edit-room-list-item-icon" />
             </Button>
         </Tooltip>;
-    
+
     const editRoomButtons = <>{usersButton} {contextMenuButton}</>;
-    
+
     return (
         <>
             <RoomListItem
@@ -180,16 +181,16 @@ const RoomCard : FC<RoomCardProps> = ({room, setIdRoom }) =>
             <TextEditDialog isOpen={editNameVisible} label="Изменить имя комнаты" description={renameRoomDescription} value={room.name} onClose={handleNameChangeCancel} onValueConfirm={handleNameChangeConfirm} />
             <TextEditDialog isOpen={editPasswordVisible} label="Изменить пароль от комнаты" description={changePasswordRoomDescription} value={room.id} onClose={handlePasswordChangeCancel} onValueConfirm={handlePasswordChangeConfirm} />
         </>
-    )
-}
+    );
+};
 
 interface RoomListProps
 {
-    filter? : string;
+    filter?: string;
     setIdRoom: ReactDispatch<string>;
 }
 
-const RoomList : FC<RoomListProps> = ({ filter, setIdRoom }) =>
+const RoomList: FC<RoomListProps> = ({ filter, setIdRoom }) =>
 {
     const [roomsList, setRoomsList] = useState<PublicRoomInfo[]>([]);
 
@@ -198,45 +199,45 @@ const RoomList : FC<RoomListProps> = ({ filter, setIdRoom }) =>
         setRoomsList(LoadedRoomList);
     }, []);
 
-    const roomNameFilter = (room : PublicRoomInfo) : boolean =>
+    const roomNameFilter = (room: PublicRoomInfo): boolean =>
     {
         if (filter === undefined)
         {
             return true;
         }
-        return room.name.toLowerCase().indexOf(filter.toLowerCase()) > NOT_FOUND_IDX;
-    }
+        return room.name.toLowerCase().indexOf(filter.toLowerCase()) > NC.NOT_FOUND_IDX;
+    };
 
-    const createRoomCard = (room : PublicRoomInfo) : JSX.Element =>
+    const createRoomCard = (room: PublicRoomInfo): JSX.Element =>
     {
         return (
             <RoomCard setIdRoom={setIdRoom} key={room.id} room={room} />
-        )
-    }
+        );
+    };
 
     return (
-        <div className="edit-room-list non-selectable" tabIndex={NEGATIVE_TAB_IDX}>
+        <div className="edit-room-list non-selectable" tabIndex={NC.NEGATIVE_TAB_IDX}>
             <List>
                 {roomsList.filter(roomNameFilter).map(createRoomCard)}
             </List>
         </div>
-    )
-}
+    );
+};
 
-export const EditRoom : FC = () =>
+export const EditRoom: FC = () =>
 {
     const [filter, setFilter] = useState<string>("");
     const [idRoom, setIdRoom] = useState<string>("");
     return (
         <>
-        {idRoom !== ""? 
-            <EditUser roomID={idRoom} setIdRoom={setIdRoom} />
-        :
-            <div className="room-edit-container">
-                <SearchPanel filter={filter} setFilter={setFilter} />
-                <RoomList setIdRoom={setIdRoom} filter={filter} />
-            </div>
-        }
+            {idRoom !== "" ?
+                <EditUser roomID={idRoom} setIdRoom={setIdRoom} />
+                :
+                <div className="room-edit-container">
+                    <SearchPanel filter={filter} setFilter={setFilter} />
+                    <RoomList setIdRoom={setIdRoom} filter={filter} />
+                </div>
+            }
         </>
     );
-}
+};

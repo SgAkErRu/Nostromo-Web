@@ -2,7 +2,7 @@ import React, { forwardRef } from "react";
 import "./Switch.css";
 
 import { RiCheckboxCircleFill, RiCloseCircleFill } from "react-icons/ri";
-import { NEGATIVE_TAB_IDX } from "../../Utils";
+import { NumericConstants as NC } from "../../utils/NumericConstants";
 
 interface SwitchProps
 {
@@ -20,7 +20,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>((
                 type="checkbox"
                 onChange={onChange}
                 checked={checked}
-                tabIndex={NEGATIVE_TAB_IDX}
+                tabIndex={NC.NEGATIVE_TAB_IDX}
                 aria-label="controlled"
                 ref={ref}
             />

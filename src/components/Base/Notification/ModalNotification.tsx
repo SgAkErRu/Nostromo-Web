@@ -1,6 +1,6 @@
 import { Button, Tooltip } from "@mui/material";
 import React, { MouseEventHandler, useEffect, useRef } from "react";
-import { getTimestamp } from "../../../Utils";
+import { getTimestamp } from "../../../utils/Utils";
 import { Notification, NotificationSeverity } from "../../../services/NotificationsService";
 import { FocusTrap } from "../FocusTrap";
 import "./ModalNotification.css";
@@ -71,7 +71,7 @@ export const ModalNotification: React.FC<ModalNotificationProps> = ({
             <FocusTrap>
                 <div className={getPanelStyleBySeverity(notification.severity)}>
                     <div className="modal-notification-header-area">
-                        <div className="modal-notification-header-date">{getTimestamp(notification.date.milliseconds)}</div>
+                        <div className="modal-notification-header-date">{getTimestamp(notification.datetime)}</div>
                         <Button
                             className="notification-close-button"
                             onClick={handleCancelNotification}

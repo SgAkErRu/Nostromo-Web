@@ -1,10 +1,9 @@
-import { Divider, MenuItem, SelectChangeEvent } from "@mui/material";
+import { Divider, MenuItem } from "@mui/material";
 import React, { useState } from "react";
 
 import { Menu, MenuList } from "../../Menu/Menu";
-import { MenuItemRadio, MenuItemSelect, MenuSectionLabel } from "../../Menu/MenuItems";
+import { MenuItemSelect, MenuSectionLabel } from "../../Menu/MenuItems";
 import { Tooltip } from "../../Tooltip";
-import { Select } from "../../Base/Select";
 
 import "./DisplayBtnMenu.css";
 import { ResolutionObject } from "./RoomActionPanel";

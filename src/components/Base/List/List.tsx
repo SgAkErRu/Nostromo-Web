@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef } from "react";
 
-import { NEGATIVE_TAB_IDX, ZERO_TAB_IDX, moveFocus, moveFocusToListBoundary } from "../../../Utils";
+import { moveFocus, moveFocusToListBoundary } from "../../../utils/FocusUtils";
+import { NumericConstants as NC } from "../../../utils/NumericConstants";
 
 type DivKeyboardEventHandler = React.KeyboardEventHandler<HTMLDivElement>;
 
@@ -38,7 +39,7 @@ export const List: React.FC<ListProps> = ({ children, preFirstSelectedEvent, pos
 
         if (firstItem)
         {
-            (firstItem as HTMLElement).tabIndex = ZERO_TAB_IDX;
+            (firstItem as HTMLElement).tabIndex = NC.ZERO_TAB_IDX;
         }
     });
 
@@ -74,11 +75,11 @@ export const List: React.FC<ListProps> = ({ children, preFirstSelectedEvent, pos
             }
             else
             {
-                if(currentFocus?.nextElementSibling)
+                if (currentFocus?.nextElementSibling)
                 {
                     moveFocus(currentFocus, true);
                 }
-                else if(postLastSelectedEvent !== undefined)
+                else if (postLastSelectedEvent !== undefined)
                 {
                     postLastSelectedEvent();
                 }
@@ -93,11 +94,11 @@ export const List: React.FC<ListProps> = ({ children, preFirstSelectedEvent, pos
             }
             else
             {
-                if(currentFocus?.previousElementSibling)
+                if (currentFocus?.previousElementSibling)
                 {
                     moveFocus(currentFocus, false);
                 }
-                else if(preFirstSelectedEvent !== undefined)
+                else if (preFirstSelectedEvent !== undefined)
                 {
                     preFirstSelectedEvent();
                 }
@@ -117,7 +118,7 @@ export const List: React.FC<ListProps> = ({ children, preFirstSelectedEvent, pos
 
     return (
         <div
-            tabIndex={NEGATIVE_TAB_IDX}
+            tabIndex={NC.NEGATIVE_TAB_IDX}
             onKeyDown={handleListKeyDown}
             role="list"
             ref={listRef}

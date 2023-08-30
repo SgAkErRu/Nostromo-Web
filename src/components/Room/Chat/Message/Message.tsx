@@ -1,8 +1,9 @@
 import { FC } from "react";
+import { NumericConstants as NC } from "../../../../utils/NumericConstants";
+import { getTimestamp } from "../../../../utils/Utils";
+import { FileMessageContent } from "./FileMessageContent";
 import "./Message.css";
 import { StyledMessageContent } from "./StyledMessageContent";
-import { FileMessageContent } from "./FileMessageContent";
-import { ZERO_IDX, getTimestamp } from "../../../../Utils";
 
 /** Информация о файле в чате. */
 export interface ChatFileInfo
@@ -11,7 +12,7 @@ export interface ChatFileInfo
     name: string;
     size: number;
 }
-const USER_ID_PRESCISSION = 4;
+const USER_ID_PRECISION = 4;
 /** Информация о сообщении в чате. */
 interface ChatMessage
 {
@@ -60,7 +61,7 @@ export const Message: FC<MessageProps> = ({ message }) =>
                         {userName}
                     </span>
                     <span className='message-user-id' title={'#' + message.userId}>
-                        #{message.userId.substring(ZERO_IDX, USER_ID_PRESCISSION)}
+                        #{message.userId.substring(NC.ZERO_IDX, USER_ID_PRECISION)}
                     </span>
                 </span>
                 <div className='message-body'>

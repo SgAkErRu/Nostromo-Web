@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions } from "@mui/material";
 import React, { useState } from "react";
-import { isEmptyString } from "../Utils";
+import { isEmptyString } from "../utils/Utils";
 
 type ButtonMouseEventHandler = React.MouseEventHandler<HTMLButtonElement>;
 

@@ -6,7 +6,7 @@ import { RoomActionPanel, RoomActionPanelProps } from "../components/Room/Action
 import { VerticalLayout } from "../components/VerticalLayout";
 
 import { Link } from "@mui/material";
-import { getToggleFunc } from "../Utils";
+import { getToggleFunc } from "../utils/Utils";
 import { RoomAlert } from "../components/Room/RoomAlert";
 import { Chat } from "../components/Room/Chat/Chat";
 import { LoadFileInfo } from "../components/Room/Chat/UploadingFilesQueue";

@@ -3,7 +3,7 @@ import { GiFiles } from "react-icons/gi";
 
 import "./DropArea.css";
 import { LoadFileInfo } from "./UploadingFilesQueue";
-import { ReactDispatch } from "../../../Utils";
+import { ReactDispatch } from "../../../utils/Utils";
 
 type DivDragEventHandler = React.DragEventHandler<HTMLDivElement>;
 

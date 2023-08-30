@@ -64,7 +64,7 @@ module.exports = {
             },
             {
                 "selector": "classProperty",
-                "format": ["PascalCase"],
+                "format": ["camelCase"],
                 "prefix": ["m_"]
             },
             {

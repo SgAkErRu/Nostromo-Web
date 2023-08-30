@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import React, { MouseEventHandler, useCallback, useEffect, useRef, useState } from "react";
 import { MdClose } from "react-icons/md";
-import { getTimestamp } from "../../../Utils";
+import { getTimestamp } from "../../../utils/Utils";
 import { DO_NOT_STOP_AUTOCLOSE_TIMER, StopAutocloseTimerSemaphore } from "../../../pages/NotificationLayer";
 import { Notification, NotificationSeverity } from "../../../services/NotificationsService";
 import { ModalNotification } from "./ModalNotification";
@@ -103,7 +103,7 @@ export const PopupNotification: React.FC<PopupNotificationProps> = ({
                 <div className="popup-header-area">
                     {headerIcon !== undefined ? <div className="popup-header-icon">{headerIcon}</div> : <></>}
                     <div className="popup-header" onClick={handleModalOpen}>{notification.label}</div>
-                    <div className="popup-header-date">{getTimestamp(notification.date.milliseconds)}</div>
+                    <div className="popup-header-date">{getTimestamp(notification.datetime)}</div>
                     <Button
                         className="notification-close-button"
                         onClick={handleCancelNotification}

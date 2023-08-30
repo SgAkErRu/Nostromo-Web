@@ -4,8 +4,8 @@ import "./RoomHeaderToolbar.css";
 
 import { Button } from "@mui/material";
 import { BsChatTextFill, BsPeopleFill } from "react-icons/bs";
+import { ReactDispatch } from "../../utils/Utils";
 import { Tooltip } from "../Tooltip";
-import { ReactDispatch } from "../../Utils";
 
 export type ToggleUserListBtnInfo = {
     isUserListHidden: boolean,

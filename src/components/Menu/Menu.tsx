@@ -2,7 +2,7 @@ import { ClickAwayListener, Grow, MenuList as MuiMenuList, Paper, Popper } from 
 import React, { ReactNode, useEffect, useRef } from "react";
 import { PopperPlacementType } from "@mui/material";
 
-import { doNotHandleEvent } from "../../Utils";
+import { doNotHandleEvent } from "../../utils/Utils";
 import "./Menu.css";
 
 type DivKeyboardEventHandler = React.KeyboardEventHandler<HTMLDivElement>;

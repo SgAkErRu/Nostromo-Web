@@ -3,24 +3,24 @@ import { Tooltip } from "../Tooltip";
 import { Button } from "@mui/material";
 import { TfiMenu } from "react-icons/tfi";
 import { IoMdClose } from "react-icons/io";
-import { NEGATIVE_TAB_IDX } from "../../Utils";
+import { NumericConstants as NC } from "../../utils/NumericConstants";
 
 import "./SidebarView.css";
 
 interface SidebarViewMainAreaProps
 {
-    className? : string
+    className?: string;
     children?: ReactNode;
 }
 
-export const SidebarViewMainArea : FC<SidebarViewMainAreaProps> = ({children, className}) =>
+export const SidebarViewMainArea: FC<SidebarViewMainAreaProps> = ({ children, className }) =>
 {
     return (
         <div className={"sidebar-view-main sidebar-view-main-width " + (className !== undefined ? className : "")}>
             {children}
         </div>
     );
-}
+};
 
 interface SidebarViewProps
 {
@@ -77,7 +77,7 @@ export const SidebarView: FC<SidebarViewProps> = ({ sidebar, main, onClickBtnClo
                     <div className="horizontal-expander"></div>
                     {exitSidebarViewBtn}
                 </div>
-                <div className="sidebar-view-main-scrollable-area" tabIndex={NEGATIVE_TAB_IDX}>
+                <div className="sidebar-view-main-scrollable-area" tabIndex={NC.NEGATIVE_TAB_IDX}>
                     {main}
                 </div>
             </div>

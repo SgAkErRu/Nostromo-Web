@@ -5,7 +5,7 @@ import { createContext, useState } from "react";
 import { SettingsLayer } from "./pages/SettingsLayer";
 import { FocusTrap } from "./components/Base/FocusTrap";
 import { MainLayer } from "./pages/MainLayer";
-import { ReactDispatch } from "./Utils";
+import { ReactDispatch } from "./utils/Utils";
 import { AdminPanelLayer } from "./pages/AdminPanelLayer";
 import { NotificationLayer } from "./pages/NotificationLayer";
 
@@ -35,7 +35,8 @@ const App: React.FC = () =>
                             <SetShowSettingsContext.Provider value={setShowSettings}>
                                 <SetShowAdminPanelContext.Provider value={setShowAdminPanel}>
                                     <MainLayer />
-                                    {showSettings ? <SettingsLayer /> : showAdminPanel ? <AdminPanelLayer /> : <></>}
+                                    {showSettings ? <SettingsLayer /> : <></>}
+                                    {showAdminPanel ? <AdminPanelLayer /> : <></>}
                                     <NotificationLayer />
                                 </SetShowAdminPanelContext.Provider>
                             </SetShowSettingsContext.Provider>

@@ -8,7 +8,7 @@ import { SettingsCategoryList } from "../components/Settings/SettingsCategoryLis
 import { SettingsParametersList } from "../components/Settings/SettingsParametersList";
 import { SidebarView, SidebarViewMainArea } from "../components/Base/SidebarView";
 import { SettingsContext } from "../AppWrapper";
-import { ZERO_IDX } from "../Utils";
+import { NumericConstants as NC } from "../utils/NumericConstants";
 import { SetShowSettingsContext } from "../App";
 
 // TODO: настроить FocusTrap так, чтобы избежать создания лишних элементов-границ для навигации,
@@ -25,7 +25,7 @@ export const SettingsLayer: React.FC = () =>
     const categories = Object.keys(settings);
 
     const [selectedCategory, setSelectedCategory] = useState<string>(
-        categories.length ? categories[ZERO_IDX] : ""
+        categories.length ? categories[NC.ZERO_IDX] : ""
     );
 
     useEffect(() =>
