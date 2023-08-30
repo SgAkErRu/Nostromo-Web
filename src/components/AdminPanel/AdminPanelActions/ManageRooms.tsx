@@ -1,24 +1,27 @@
-import { HiUser } from "react-icons/hi";
-import { BiDotsHorizontalRounded, BiLink, BiEditAlt, BiLock, BiCommentX, BiTaskX, BiUserX, BiTrash } from "react-icons/bi";
-import { ReactDispatch, getToggleFunc } from "../../utils/Utils";
-import { NumericConstants as NC } from "../../utils/NumericConstants";
-import { List } from "../Base/List/List";
-import "./EditRoom.css";
 import { FC, MouseEventHandler, useEffect, useRef, useState } from "react";
+
 import { Button, Divider, Tooltip } from "@mui/material";
-import { MenuItemCheckbox, MenuItemWithIcon } from "../Menu/MenuItems";
-import { AnchorPosition, Menu, MenuList } from "../Menu/Menu";
-import { TextEditDialog } from "../Dialog/TextEditDialog";
-import { EditUser } from "./EditUser";
-import { SearchPanel } from "../Base/List/SearchPanel";
-import { RoomListItem } from "../Base/Room/RoomListItem";
-import { LoadedRoomList, PublicRoomInfo } from "../../services/RoomService";
+import { BiCommentX, BiDotsHorizontalRounded, BiEditAlt, BiLink, BiLock, BiTaskX, BiTrash, BiUserX } from "react-icons/bi";
+import { HiUser } from "react-icons/hi";
+import { LoadedRoomList, PublicRoomInfo } from "../../../services/RoomService";
+import { NumericConstants as NC } from "../../../utils/NumericConstants";
+import { ReactDispatch, getToggleFunc } from "../../../utils/Utils";
+import { List } from "../../Base/List/List";
+import { SearchPanel } from "../../Base/List/SearchPanel";
+import { RoomListItem } from "../../Base/Room/RoomListItem";
+import { TextEditDialog } from "../../Dialog/TextEditDialog";
+import { AnchorPosition, Menu, MenuList } from "../../Menu/Menu";
+import { MenuItemCheckbox, MenuItemWithIcon } from "../../Menu/MenuItems";
+import { ManageUsers } from "./ManageUsers";
+
+import "./ManageRooms.css";
 
 interface RoomCardProps
 {
     room: PublicRoomInfo;
     setIdRoom: ReactDispatch<string>;
 }
+
 const RoomCard: FC<RoomCardProps> = ({ room, setIdRoom }) =>
 {
     const focusBackRef = useRef<HTMLElement | null>(null);
@@ -224,14 +227,14 @@ const RoomList: FC<RoomListProps> = ({ filter, setIdRoom }) =>
     );
 };
 
-export const EditRoom: FC = () =>
+export const ManageRooms: React.FC = () =>
 {
     const [filter, setFilter] = useState<string>("");
     const [idRoom, setIdRoom] = useState<string>("");
     return (
         <>
             {idRoom !== "" ?
-                <EditUser roomID={idRoom} setIdRoom={setIdRoom} />
+                <ManageUsers roomID={idRoom} setIdRoom={setIdRoom} />
                 :
                 <div className="room-edit-container">
                     <SearchPanel filter={filter} setFilter={setFilter} />

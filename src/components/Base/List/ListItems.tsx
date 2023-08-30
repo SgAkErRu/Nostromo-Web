@@ -185,6 +185,7 @@ export const ListItemInput: FC<ListItemInputProps> = ({
 interface ListItemSelectProps extends ListItemWithValueProps<string>
 {
     options: string[];
+    hasDefaultValue?: boolean;
 }
 
 export const ListItemSelect: FC<ListItemSelectProps> = ({
@@ -192,6 +193,7 @@ export const ListItemSelect: FC<ListItemSelectProps> = ({
     value,
     onValueChange,
     options,
+    hasDefaultValue = false,
     ...props
 }) =>
 {
@@ -251,6 +253,11 @@ export const ListItemSelect: FC<ListItemSelectProps> = ({
         );
     };
 
+    const defaultValueElem = ([
+        <MenuItem value={"default"} key={"defaultOption"}>По умолчанию</MenuItem>,
+        <Divider className="menu-divider" key="divider" />
+    ]);
+
     return (
         <ListItem
             {...props}
@@ -267,8 +274,7 @@ export const ListItemSelect: FC<ListItemSelectProps> = ({
                 tabIndex={NC.NEGATIVE_TAB_IDX}
                 variant="outlined"
             >
-                <MenuItem value={"default"}>По умолчанию</MenuItem>
-                <Divider className="menu-divider" />
+                {hasDefaultValue ? defaultValueElem : undefined}
                 {options.map(selectOptionsItemsToMap)}
             </Select>
         </ListItem>

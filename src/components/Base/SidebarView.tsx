@@ -1,9 +1,10 @@
 import { FC, MouseEventHandler, ReactNode, useState } from "react";
-import { Tooltip } from "../Tooltip";
+
 import { Button } from "@mui/material";
-import { TfiMenu } from "react-icons/tfi";
 import { IoMdClose } from "react-icons/io";
+import { TfiMenu } from "react-icons/tfi";
 import { NumericConstants as NC } from "../../utils/NumericConstants";
+import { Tooltip } from "../Tooltip";
 
 import "./SidebarView.css";
 
@@ -13,10 +14,10 @@ interface SidebarViewMainAreaProps
     children?: ReactNode;
 }
 
-export const SidebarViewMainArea: FC<SidebarViewMainAreaProps> = ({ children, className }) =>
+export const SidebarViewMainArea: FC<SidebarViewMainAreaProps> = ({ children, className = "" }) =>
 {
     return (
-        <div className={"sidebar-view-main sidebar-view-main-width " + (className !== undefined ? className : "")}>
+        <div className={"sidebar-view-main sidebar-view-main-width " + className}>
             {children}
         </div>
     );

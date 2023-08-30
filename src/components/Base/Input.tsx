@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useState, KeyboardEventHandler, MouseEventHandler } from "react";
 import "./Input.css";
 import { Button } from "@mui/material";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
@@ -30,12 +30,17 @@ const InputWithPassword = forwardRef<HTMLInputElement, InputBaseProps>((
 {
     const [hiddenPassword, setHiddenPassword] = useState(true);
 
-    const handleClickButton: React.MouseEventHandler<HTMLButtonElement> = (ev) =>
+    const handleClickButton: MouseEventHandler<HTMLButtonElement> = (ev) =>
     {
         ev.preventDefault();
         ev.stopPropagation();
 
         setHiddenPassword(prev => !prev);
+    };
+
+    const handleKeyDownButton: KeyboardEventHandler<HTMLButtonElement> = (ev) =>
+    {
+        ev.stopPropagation();
     };
 
     return (
@@ -47,6 +52,7 @@ const InputWithPassword = forwardRef<HTMLInputElement, InputBaseProps>((
             <Button
                 className="input-hide-password-button"
                 onClick={handleClickButton}
+                onKeyDown={handleKeyDownButton}
                 disableRipple
             >
                 {hiddenPassword ? <IoMdEye /> : <IoMdEyeOff />}

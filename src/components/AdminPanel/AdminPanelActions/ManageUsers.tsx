@@ -1,20 +1,22 @@
-import { BiDotsHorizontalRounded, BiEditAlt, BiMicrophoneOff, BiBlock, BiVideoOff, BiUserX } from "react-icons/bi";
-import { MdOutlineStopScreenShare } from "react-icons/md";
-import { ReactDispatch, getToggleFunc } from "../../utils/Utils";
-import { NumericConstants as NC } from "../../utils/NumericConstants";
-import { List } from "../Base/List/List";
-import { ListItem } from "../Base/List/ListItems";
-import "./EditUser.css";
 import { FC, MouseEventHandler, useEffect, useRef, useState } from "react";
+
 import { Avatar, Button, Divider } from "@mui/material";
-import { MenuItemCheckbox, MenuItemWithIcon } from "../Menu/MenuItems";
-import { AnchorPosition, Menu, MenuList } from "../Menu/Menu";
-import { TextEditDialog } from "../Dialog/TextEditDialog";
 import { UserInfo } from "nostromo-shared/types/RoomTypes";
-import { Tooltip } from "../Tooltip";
+import { BiBlock, BiDotsHorizontalRounded, BiEditAlt, BiMicrophoneOff, BiUserX, BiVideoOff } from "react-icons/bi";
+import { MdOutlineStopScreenShare } from "react-icons/md";
 import { RiArrowGoBackLine } from "react-icons/ri";
-import { SearchPanel } from "../Base/List/SearchPanel";
-import { LoadedRoomList, PublicRoomInfo } from "../../services/RoomService";
+import { LoadedRoomList, PublicRoomInfo } from "../../../services/RoomService";
+import { NumericConstants as NC } from "../../../utils/NumericConstants";
+import { ReactDispatch, getToggleFunc } from "../../../utils/Utils";
+import { List } from "../../Base/List/List";
+import { ListItem } from "../../Base/List/ListItems";
+import { SearchPanel } from "../../Base/List/SearchPanel";
+import { TextEditDialog } from "../../Dialog/TextEditDialog";
+import { AnchorPosition, Menu, MenuList } from "../../Menu/Menu";
+import { MenuItemCheckbox, MenuItemWithIcon } from "../../Menu/MenuItems";
+import { Tooltip } from "../../Tooltip";
+
+import "./ManageUsers.css";
 
 interface UserCardProps
 {
@@ -201,7 +203,7 @@ interface EditUserProps
     roomID: string;
     setIdRoom: ReactDispatch<string>;
 }
-export const EditUser: FC<EditUserProps> = ({ roomID, setIdRoom }) =>
+export const ManageUsers: FC<EditUserProps> = ({ roomID, setIdRoom }) =>
 {
     // Тестовые данные о комнатах
     const [roomsList, setRoomsList] = useState<PublicRoomInfo[]>([]);

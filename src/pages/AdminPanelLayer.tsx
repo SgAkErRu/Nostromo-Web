@@ -1,32 +1,57 @@
 import { useContext, useState } from "react";
+
 import { SetShowAdminPanelContext } from "../App";
+import { AdminPanelActionArea } from "../components/AdminPanel/AdminPanelActionArea";
+import { AdminPanelCategoryList } from "../components/AdminPanel/AdminPanelCategoryList";
 import { FocusTrap } from "../components/Base/FocusTrap";
 import { SidebarView, SidebarViewMainArea } from "../components/Base/SidebarView";
-import { AdminPanelCategoryList } from "../components/AdminPanel/AdminPanelCategoryList";
-import { AdminPanelActionList, BLOCK_BY_IP_CATEGORY_ID, CONTROL_ROOMS_CATEGORY_ID, CREATE_ROOM_CATEGORY_ID } from "../components/AdminPanel/AdminPanelActionList";
+import { NumericConstants as NC } from "../utils/NumericConstants";
 
 import "./AdminPanelLayer.css";
-import { NumericConstants as NC } from "../utils/NumericConstants";
 
 export interface AdminPanelCategory
 {
     id: string;
     name: string;
+    innerScroll?: boolean;
+}
+
+export interface IAdminPanelCategories
+{
+    [key: string]: AdminPanelCategory;
+    manageRooms: AdminPanelCategory;
+    createRoom: AdminPanelCategory;
+    blockByIp: AdminPanelCategory;
 }
 
 export const AdminPanelLayer: React.FC = () =>
 {
-    const categories: AdminPanelCategory[] = [
-        { id: CREATE_ROOM_CATEGORY_ID, name: "Создание комнаты" },
-        { id: CONTROL_ROOMS_CATEGORY_ID, name: "Управление комнатами" },
-        { id: BLOCK_BY_IP_CATEGORY_ID, name: "Блокировка по IP" }
-    ];
-    const setShowAdminPanel = useContext(SetShowAdminPanelContext);
-    const [selectedCategory, setSelectedCategory] = useState<AdminPanelCategory>(
-        categories.length ? categories[NC.ZERO_IDX] : { id: "", name: "" }
-    );
+    /// Список категорий админской панели.
+    const categories: IAdminPanelCategories = {
+        manageRooms: {
+            id: "manage-rooms",
+            name: "Управление комнатами",
+            innerScroll: true
+        },
+        createRoom: { id: "create-room", name: "Создание комнаты" },
+        blockByIp: { id: "block-by-ip", name: "Блокировка по IP" }
+    } as const;
 
-    const handleCloseSettings = (): void =>
+    const setShowAdminPanel = useContext(SetShowAdminPanelContext);
+
+    const [selectedCategoryId, setSelectedCategoryId] = useState<string>(categories.manageRooms.id);
+
+    /**
+     * Имеет ли данная категория `categoryId` элемент с внутренним скроллом
+     * (например: компонент для поиска и внутренний список комнат).
+     */
+    const isCategoryHasInnerScroll = (categoryId: string): boolean =>
+    {
+        const category = Object.values(categories).find(c => c.id === categoryId);
+        return (category !== undefined && category.innerScroll === true);
+    };
+
+    const handleClosePanel = (): void =>
     {
         if (setShowAdminPanel !== null)
         {
@@ -36,29 +61,34 @@ export const AdminPanelLayer: React.FC = () =>
 
     const categoryList = (
         <AdminPanelCategoryList
-            setSelectedCategory={setSelectedCategory}
-            selectedCategory={selectedCategory}
+            selectedCategoryId={selectedCategoryId}
+            setSelectedCategoryId={setSelectedCategoryId}
             categories={categories}
         />
     );
-    const actionList = (
-        <SidebarViewMainArea className={selectedCategory.id === "controlRooms" ? "sidebar-main-without-global-scroll" : ""}>
-            <AdminPanelActionList
-                selectedCategoryID={selectedCategory.id}
+
+    const actionArea = (
+        <SidebarViewMainArea className={
+            isCategoryHasInnerScroll(selectedCategoryId)
+                ? "sidebar-main-with-inner-scroll" : ""
+        }>
+            <AdminPanelActionArea
+                selectedCategoryId={selectedCategoryId}
+                categories={categories}
             />
         </SidebarViewMainArea>
     );
 
     return (
-        <div id="layer-settings"
+        <div id="layer-admin-panel"
             className="layer"
-            tabIndex={-1}
+            tabIndex={NC.NEGATIVE_TAB_IDX}
         >
             <FocusTrap>
                 <SidebarView
                     sidebar={categoryList}
-                    main={actionList}
-                    onClickBtnClose={handleCloseSettings}
+                    main={actionArea}
+                    onClickBtnClose={handleClosePanel}
                 />
             </FocusTrap>
         </div>

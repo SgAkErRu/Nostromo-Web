@@ -1,6 +1,14 @@
-.sidebar-main-without-global-scroll
+.sidebar-main-with-inner-scroll
 {
     position: relative;
     height: 100%;
     max-height: 100%;
+}
+
+#layer-admin-panel
+{
+    background-color: #282f39;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
 }

@@ -52,6 +52,11 @@
     flex-direction: row;
 }
 
+.flex-auto
+{
+    flex: auto;
+}
+
 .inline
 {
     display: inline;

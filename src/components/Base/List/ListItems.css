@@ -14,9 +14,9 @@
 
 .list-item-description
 {
-    font-size: 12px;
+    font-size: 0.75rem;
     text-align: justify;
-    color: rgb(163, 163, 163);
+    color: var(--secondary-text-color);
     word-wrap: break-word;
 }
 
