@@ -54,7 +54,6 @@ export const CreateRoom: React.FC = () =>
                 value={roomPassword}
                 onValueChange={setRoomPassword}
                 password={true}
-                tabIndex={NC.ZERO_TAB_IDX}
             />
             <ListItemSelect
                 label="Видеокодек для комнаты"

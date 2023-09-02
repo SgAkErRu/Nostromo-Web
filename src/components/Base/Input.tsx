@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, KeyboardEventHandler, MouseEventHandler } from "react";
+import React, { forwardRef, useState, KeyboardEventHandler, MouseEventHandler, RefObject, HTMLInputTypeAttribute } from "react";
 import "./Input.css";
 import { Button } from "@mui/material";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
@@ -7,15 +7,16 @@ interface InputBaseProps extends React.HTMLAttributes<HTMLInputElement>
 {
     value: string;
     onChange: React.ChangeEventHandler<HTMLInputElement>;
-    password?: boolean;
+    type?: HTMLInputTypeAttribute;
 }
+
 const InputBase = forwardRef<HTMLInputElement, InputBaseProps>((
-    { value, onChange, password = false, ...props }, ref
+    { value, onChange, type, ...props }, ref
 ) =>
 {
     return (
         <input ref={ref}
-            type={password ? "password" : "text"}
+            type={type ?? "text"}
             className="input"
             value={value}
             onChange={onChange}
@@ -24,8 +25,8 @@ const InputBase = forwardRef<HTMLInputElement, InputBaseProps>((
     );
 });
 
-const InputWithPassword = forwardRef<HTMLInputElement, InputBaseProps>((
-    { ...props }, ref
+const InputWithPassword = forwardRef<HTMLInputElement, InputProps>((
+    { password = true, ...props }, ref
 ) =>
 {
     const [hiddenPassword, setHiddenPassword] = useState(true);
@@ -33,26 +34,42 @@ const InputWithPassword = forwardRef<HTMLInputElement, InputBaseProps>((
     const handleClickButton: MouseEventHandler<HTMLButtonElement> = (ev) =>
     {
         ev.preventDefault();
-        ev.stopPropagation();
 
         setHiddenPassword(prev => !prev);
+
+        if (typeof password !== "boolean" && password.onClick)
+        {
+            password.onClick(ev);
+        }
     };
 
     const handleKeyDownButton: KeyboardEventHandler<HTMLButtonElement> = (ev) =>
     {
-        if (ev.code === "Escape" || ev.code === "ArrowLeft")
+        if (typeof password !== "boolean" && password.onKeyDown)
         {
-            ev.preventDefault();
+            password.onKeyDown(ev);
+        }
+
+        if (ev.isDefaultPrevented())
+        {
             return;
         }
 
-        ev.stopPropagation();
+        if (ev.code === "Escape" || ev.code === "ArrowLeft")
+        {
+            ev.preventDefault();
+
+            if (ref !== null)
+            {
+                (ref as RefObject<HTMLInputElement>).current?.focus();
+            }
+        }
     };
 
     return (
         <div className="input-with-password-container">
             <InputBase ref={ref}
-                password={hiddenPassword}
+                type={hiddenPassword ? "password" : "text"}
                 {...props}
             />
             <Button
@@ -60,6 +77,7 @@ const InputWithPassword = forwardRef<HTMLInputElement, InputBaseProps>((
                 onClick={handleClickButton}
                 onKeyDown={handleKeyDownButton}
                 disableRipple
+                ref={(password as PasswordSlotOptions).btnRef ?? undefined}
             >
                 {hiddenPassword ? <IoMdEye /> : <IoMdEyeOff />}
             </Button>
@@ -67,13 +85,26 @@ const InputWithPassword = forwardRef<HTMLInputElement, InputBaseProps>((
     );
 });
 
-export const Input = forwardRef<HTMLInputElement, InputBaseProps>((
+export type PasswordSlotOptions = {
+    btnRef?: React.RefObject<HTMLButtonElement>;
+    onKeyDown?: React.KeyboardEventHandler<HTMLButtonElement>;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
+};
+
+interface InputProps extends InputBaseProps
+{
+    value: string;
+    onChange: React.ChangeEventHandler<HTMLInputElement>;
+    password?: PasswordSlotOptions | boolean;
+}
+
+export const Input = forwardRef<HTMLInputElement, InputProps>((
     { password = false, ...props }, ref
 ) =>
 {
     return (
-        password
-            ? <InputWithPassword ref={ref} {...props} />
-            : <InputBase ref={ref} {...props} />
+        password === false
+            ? <InputBase ref={ref} {...props} />
+            : <InputWithPassword password={password} ref={ref} {...props} />
     );
 });

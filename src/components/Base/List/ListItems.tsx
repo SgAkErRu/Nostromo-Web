@@ -2,7 +2,7 @@ import { Button, Divider, MenuItem, SelectChangeEvent, Slider } from "@mui/mater
 import { ChangeEventHandler, FC, FocusEventHandler, KeyboardEventHandler, ReactNode, useRef, useState } from "react";
 import { isEmptyString } from "../../../utils/Utils";
 import { NumericConstants as NC } from "../../../utils/NumericConstants";
-import { Input } from "../Input";
+import { Input, PasswordSlotOptions } from "../Input";
 import { Select } from "../Select";
 import { Switch } from "../Switch";
 import "./ListItems.css";
@@ -121,7 +121,7 @@ export const ListItemInput: FC<ListItemInputProps> = ({
     label,
     value,
     onValueChange,
-    password,
+    password = false,
     ...props
 }) =>
 {
@@ -163,6 +163,15 @@ export const ListItemInput: FC<ListItemInputProps> = ({
         }
     };
 
+    const handleHidePasswordBtnKeyDown: KeyboardEventHandler<HTMLButtonElement> = (ev) =>
+    {
+        ev.stopPropagation();
+    };
+
+    const passwordSlotOptions: PasswordSlotOptions | boolean = password
+        ? { onKeyDown: handleHidePasswordBtnKeyDown }
+        : false;
+
     return (
         <ListItem
             onFocus={handleItemFocus}
@@ -174,8 +183,8 @@ export const ListItemInput: FC<ListItemInputProps> = ({
                     onKeyDown={handleInputKeyDown}
                     onChange={handleInputChange}
                     value={value}
-                    tabIndex={NC.NEGATIVE_TAB_IDX}
-                    password={password}
+                    tabIndex={password ? NC.ZERO_TAB_IDX : NC.NEGATIVE_TAB_IDX}
+                    password={passwordSlotOptions}
                 />
             </label>
         </ListItem>
