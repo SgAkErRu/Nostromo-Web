@@ -1,12 +1,14 @@
+import React, { ChangeEventHandler, FocusEventHandler, KeyboardEventHandler, ReactNode, RefObject, forwardRef, useRef, useState } from "react";
+
 import { Button, Divider, MenuItem, SelectChangeEvent, Slider } from "@mui/material";
-import { ChangeEventHandler, FC, FocusEventHandler, KeyboardEventHandler, ReactNode, useRef, useState } from "react";
-import { isEmptyString } from "../../../utils/Utils";
+import { MdInfoOutline } from "react-icons/md";
 import { NumericConstants as NC } from "../../../utils/NumericConstants";
+import { isEmptyString } from "../../../utils/Utils";
 import { Input, PasswordSlotOptions } from "../Input";
 import { Select } from "../Select";
 import { Switch } from "../Switch";
+
 import "./ListItems.css";
-import { MdInfoOutline } from "react-icons/md";
 
 export interface ListItemProps extends React.HTMLAttributes<HTMLDivElement>
 {
@@ -16,21 +18,25 @@ export interface ListItemProps extends React.HTMLAttributes<HTMLDivElement>
     onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
 }
 
-export const ListItem: FC<ListItemProps> = ({
+export const ListItem = forwardRef<HTMLDivElement, ListItemProps>(({
     children,
     showSeparator = true,
     description,
     onKeyDown,
     className,
     ...props
-}) =>
+}, ref) =>
 {
-    const itemRef = useRef<HTMLDivElement | null>(null);
     const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (ev) =>
     {
-        if (onKeyDown !== undefined)
+        if (onKeyDown)
         {
             onKeyDown(ev);
+        }
+
+        if (ref === null)
+        {
+            return;
         }
 
         // Если явно не остановили распространение события
@@ -38,7 +44,7 @@ export const ListItem: FC<ListItemProps> = ({
         // тогда делаем фокус на элемент списка.
         if (!ev.isPropagationStopped())
         {
-            itemRef.current?.focus();
+            (ref as RefObject<HTMLDivElement>).current?.focus();
         }
     };
 
@@ -46,7 +52,7 @@ export const ListItem: FC<ListItemProps> = ({
 
     return (
         <div onKeyDown={handleKeyDown}
-            ref={itemRef}
+            ref={ref}
             tabIndex={NC.NEGATIVE_TAB_IDX}
             role="listitem"
             className={`list-item ${className ?? ""}`}
@@ -57,7 +63,7 @@ export const ListItem: FC<ListItemProps> = ({
             {showSeparator ? <hr className="list-item-separator"></hr> : <div className="list-item-without-separator"></div>}
         </div>
     );
-};
+});
 
 interface ListItemWithValueProps<T> extends ListItemProps
 {
@@ -68,7 +74,7 @@ interface ListItemWithValueProps<T> extends ListItemProps
 
 type ListItemSwitchProps = ListItemWithValueProps<boolean>;
 
-export const ListItemSwitch: FC<ListItemSwitchProps> = ({
+export const ListItemSwitch: React.FC<ListItemSwitchProps> = ({
     label,
     value,
     onValueChange,
@@ -117,7 +123,7 @@ interface ListItemInputProps extends ListItemWithValueProps<string>
     password?: boolean;
 }
 
-export const ListItemInput: FC<ListItemInputProps> = ({
+export const ListItemInput: React.FC<ListItemInputProps> = ({
     label,
     value,
     onValueChange,
@@ -197,7 +203,7 @@ interface ListItemSelectProps extends ListItemWithValueProps<string>
     hasDefaultValue?: boolean;
 }
 
-export const ListItemSelect: FC<ListItemSelectProps> = ({
+export const ListItemSelect: React.FC<ListItemSelectProps> = ({
     label,
     value,
     onValueChange,
@@ -292,7 +298,7 @@ export const ListItemSelect: FC<ListItemSelectProps> = ({
 
 type ListItemSliderProps = ListItemWithValueProps<number>;
 
-export const ListItemSlider: FC<ListItemSliderProps> = ({
+export const ListItemSlider: React.FC<ListItemSliderProps> = ({
     label,
     value,
     onValueChange,
@@ -375,7 +381,7 @@ interface ListItemButtonProps extends ListItemProps
     btnRef?: React.RefObject<HTMLButtonElement>;
     showSeparator?: boolean;
 }
-export const ListItemButton: FC<ListItemButtonProps> = ({
+export const ListItemButton: React.FC<ListItemButtonProps> = ({
     label,
     btnLabel,
     onBtnClick,

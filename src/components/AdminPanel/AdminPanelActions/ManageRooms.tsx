@@ -1,85 +1,85 @@
-import { FC, MouseEventHandler, useEffect, useRef, useState } from "react";
+import React, { MouseEventHandler, useRef, useState } from "react";
 
 import { Button, Divider, Tooltip } from "@mui/material";
 import { BiCommentX, BiDotsHorizontalRounded, BiEditAlt, BiLink, BiLock, BiTaskX, BiTrash, BiUserX } from "react-icons/bi";
 import { HiUser } from "react-icons/hi";
-import { LoadedRoomList, PublicRoomInfo } from "../../../services/RoomService";
+import { PublicRoomInfo } from "../../../services/RoomService";
 import { NumericConstants as NC } from "../../../utils/NumericConstants";
-import { ReactDispatch, getToggleFunc } from "../../../utils/Utils";
-import { List } from "../../Base/List/List";
-import { SearchPanel } from "../../Base/List/SearchPanel";
-import { RoomListItem } from "../../Base/Room/RoomListItem";
+import { getToggleFunc } from "../../../utils/Utils";
 import { TextEditDialog } from "../../Dialog/TextEditDialog";
 import { AnchorPosition, Menu, MenuList } from "../../Menu/Menu";
 import { MenuItemCheckbox, MenuItemWithIcon } from "../../Menu/MenuItems";
+import { RoomListItem } from "../../RoomList/RoomListItem";
 import { ManageUsers } from "./ManageUsers";
+import { RoomList } from "../../RoomList/RoomList";
 
 import "./ManageRooms.css";
 
-interface RoomCardProps
+interface ManageRoomsListItemProps
 {
     room: PublicRoomInfo;
-    setIdRoom: ReactDispatch<string>;
+    onRoomSelected: () => void;
 }
 
-const RoomCard: FC<RoomCardProps> = ({ room, setIdRoom }) =>
+const ManageRoomsListItem: React.FC<ManageRoomsListItemProps> = ({ room, onRoomSelected }) =>
 {
-    const focusBackRef = useRef<HTMLElement | null>(null);
+    const itemRef = useRef<HTMLDivElement>(null);
     const btnRef = useRef<HTMLDivElement>(null);
+
     const [menuPosition, setMenuPosition] = useState<AnchorPosition | null>(null);
     const [open, setOpen] = useState<boolean>(false);
+
     const [saveChat, setSaveChat] = useState<boolean>(false);
     const [symmetryMode, setSymmetryMode] = useState<boolean>(false);
-    const [speakerMode, setSpeakerMode] = useState<boolean>(false);
-    const [editNameVisible, setEditNameVisible] = useState<boolean>(false);
-    const [editPasswordVisible, setEditPasswordVisible] = useState<boolean>(false);
+
+    const [nameEditDialogOpen, setNameEditDialogOpen] = useState<boolean>(false);
+    const [passwordEditDialogOpen, setPasswordEditDialogOpen] = useState<boolean>(false);
 
     const handleClose = (): void =>
     {
         setOpen(false);
     };
 
-    /* Обработчики для смены названия комнаты */
-    const handleRoomNameEdit = (): void =>
+    /// Обработчики для диалога смены названия комнаты.
+    const handleNameEditDialogOpen = (): void =>
     {
-        setEditNameVisible(true);
+        setNameEditDialogOpen(true);
         handleClose();
     };
 
-    const handleNameChangeCancel = (): void =>
+    const handleNameEditDialogCancel = (): void =>
     {
-        focusBackRef.current?.focus();
-        setEditNameVisible(false);
+        itemRef.current?.focus();
+        setNameEditDialogOpen(false);
     };
 
-    const handleNameChangeConfirm = (val: string): void =>
+    const handleNameEditDialogConfirm = (val: string): void =>
     {
-        focusBackRef.current?.focus();
-        setEditNameVisible(false);
+        itemRef.current?.focus();
+        setNameEditDialogOpen(false);
     };
 
-    /* Обработчики для смены пароля комнаты */
-    // TODO: в TextDialog по смене пароля, пароль принимает значения ID, так как
-    //       пока что пароль нигде не хранится
-    const handleRoomPasswordEdit = (): void =>
+    /// Обработчики для диалога смены пароля комнаты.
+    const handlePasswordEditDialogOpen = (): void =>
     {
-        setEditPasswordVisible(true);
+        setPasswordEditDialogOpen(true);
         handleClose();
     };
 
-    const handlePasswordChangeCancel = (): void =>
+    const handlePasswordEditDialogCancel = (): void =>
     {
-        focusBackRef.current?.focus();
-        setEditPasswordVisible(false);
+        itemRef.current?.focus();
+        setPasswordEditDialogOpen(false);
     };
 
-    const handlePasswordChangeConfirm = (val: string): void =>
+    const handlePasswordEditDialogConfirm = (val: string): void =>
     {
-        focusBackRef.current?.focus();
-        setEditPasswordVisible(false);
+        itemRef.current?.focus();
+        setPasswordEditDialogOpen(false);
     };
 
-    /* TODO: Реализовать тестовые обработчики для контекстного меню */
+    /// TODO: Реализовать обработчики для контекстного меню.
+
     const handleCopyRoomLink = (): void =>
     {
         console.log("Ссылка комнаты: ", room.id);
@@ -104,12 +104,12 @@ const RoomCard: FC<RoomCardProps> = ({ room, setIdRoom }) =>
     {
         console.log("Удалить комнату ", room.id);
     };
-    /*---------------*/
 
-    const handleContextMenuShow: MouseEventHandler = (ev): void =>
+    const handleContextMenu: MouseEventHandler = (ev): void =>
     {
         ev.preventDefault();
         ev.stopPropagation();
+
         if (ev.button === NC.MOUSE_EVENT_NONE_BTN && btnRef.current)
         {
             setMenuPosition(null);
@@ -118,129 +118,158 @@ const RoomCard: FC<RoomCardProps> = ({ room, setIdRoom }) =>
         {
             setMenuPosition({ left: ev.clientX, top: ev.clientY });
         }
-        focusBackRef.current = document.activeElement as HTMLElement;
-        setOpen(true);
-    };
 
-    const handleRoomSelected = (): void =>
-    {
-        setIdRoom(room.id);
+        setOpen(true);
     };
 
     const renameRoomDescription = <>Введите новое имя для комнаты <strong>"{room.name}"</strong>.</>;
     const changePasswordRoomDescription = <>Введите новый пароль для комнаты <strong>"{room.name}"</strong>.</>;
 
-    const usersButton =
+    const usersButton = (
         <Tooltip title="Список участников">
-            <Button className="edit-room-button" aria-label="Users list" tabIndex={-1}
-                onClick={handleRoomSelected}>
-                <HiUser className="edit-room-list-item-icon" />
-            </Button>
-        </Tooltip>;
-
-    const contextMenuButton =
-        <Tooltip ref={btnRef} title="Контекстное меню">
-            <Button className="edit-room-button" aria-label="Room settings" tabIndex={-1}
-                onClick={handleContextMenuShow}>
-                <BiDotsHorizontalRounded className="edit-room-list-item-icon" />
-            </Button>
-        </Tooltip>;
-
-    const editRoomButtons = <>{usersButton} {contextMenuButton}</>;
-
-    return (
-        <>
-            <RoomListItem
-                onClick={handleRoomSelected}
-                room={room}
-                contextMenuHandler={handleContextMenuShow}
-                action={editRoomButtons}
-                activateHandler={handleRoomSelected}
-            />
-            <Menu
-                anchorPosition={menuPosition ?? undefined}
-                anchorRef={btnRef}
-                open={open}
-                onClose={handleClose}
-                transitionDuration={150}
-                popperPlacement="bottom"
+            <Button className="manage-rooms-button"
+                aria-label="Users list"
+                tabIndex={NC.NEGATIVE_TAB_IDX}
+                onClick={onRoomSelected}
             >
-                <MenuList open={open} >
-                    <MenuItemWithIcon onClick={handleCopyRoomLink} endIcon={true} icon={<BiLink />} text="Получить ссылку на комнату" />
-                    <MenuItemWithIcon onClick={handleRoomNameEdit} endIcon={true} icon={<BiEditAlt />} text="Изменить название" />
-                    <MenuItemWithIcon onClick={handleRoomPasswordEdit} endIcon={true} icon={<BiLock />} text="Изменить пароль" />
-                    <Divider className="menu-divider" />
-                    <MenuItemCheckbox text="Сохранение истории чата" onClick={getToggleFunc(setSaveChat)} isChecked={saveChat} />
-                    <MenuItemCheckbox text="Симметричный режим" onClick={getToggleFunc(setSymmetryMode)} isChecked={symmetryMode} />
-                    <MenuItemCheckbox text="Режим докладчика" onClick={getToggleFunc(setSpeakerMode)} isChecked={speakerMode} />
-                    <Divider className="menu-divider" />
-                    <MenuItemWithIcon onClick={handleClearHistoryChat} endIcon={true} icon={<BiCommentX />} text="Очистить историю чата" />
-                    <MenuItemWithIcon onClick={handleRemoveFiles} endIcon={true} icon={<BiTaskX />} text="Удалить все файлы комнаты" />
-                    <MenuItemWithIcon onClick={handleKickAllUsers} endIcon={true} icon={<BiUserX />} text="Кикнуть всех пользователей" />
-                    <Divider className="menu-divider" />
-                    <MenuItemWithIcon onClick={handleDeleteRoom} endIcon={true} icon={<BiTrash className="delete-room-btn" />} text="Удалить комнату" />
-                </MenuList>
-            </Menu>
-            <TextEditDialog isOpen={editNameVisible} label="Изменить имя комнаты" description={renameRoomDescription} value={room.name} onClose={handleNameChangeCancel} onValueConfirm={handleNameChangeConfirm} />
-            <TextEditDialog isOpen={editPasswordVisible} label="Изменить пароль от комнаты" description={changePasswordRoomDescription} value={room.id} onClose={handlePasswordChangeCancel} onValueConfirm={handlePasswordChangeConfirm} />
-        </>
+                <HiUser className="manage-rooms-list-item-icon" />
+            </Button>
+        </Tooltip>
     );
-};
 
-interface RoomListProps
-{
-    filter?: string;
-    setIdRoom: ReactDispatch<string>;
-}
-
-const RoomList: FC<RoomListProps> = ({ filter, setIdRoom }) =>
-{
-    const [roomsList, setRoomsList] = useState<PublicRoomInfo[]>([]);
-
-    useEffect(() =>
-    {
-        setRoomsList(LoadedRoomList);
-    }, []);
-
-    const roomNameFilter = (room: PublicRoomInfo): boolean =>
-    {
-        if (filter === undefined)
-        {
-            return true;
-        }
-        return room.name.toLowerCase().indexOf(filter.toLowerCase()) > NC.NOT_FOUND_IDX;
-    };
-
-    const createRoomCard = (room: PublicRoomInfo): JSX.Element =>
-    {
-        return (
-            <RoomCard setIdRoom={setIdRoom} key={room.id} room={room} />
-        );
-    };
-
-    return (
-        <div className="edit-room-list non-selectable" tabIndex={NC.NEGATIVE_TAB_IDX}>
-            <List>
-                {roomsList.filter(roomNameFilter).map(createRoomCard)}
-            </List>
-        </div>
+    const contextMenuButton = (
+        <Tooltip ref={btnRef} title="Контекстное меню">
+            <Button className="manage-rooms-button"
+                aria-label="Manage room menu"
+                tabIndex={NC.NEGATIVE_TAB_IDX}
+                onClick={handleContextMenu}
+            >
+                <BiDotsHorizontalRounded className="manage-rooms-list-item-icon" />
+            </Button>
+        </Tooltip>
     );
+
+    const actionsButtons = <>{usersButton} {contextMenuButton}</>;
+
+    // TODO: transitionDuration из контекста.
+
+    return (<>
+        <RoomListItem
+            room={room}
+            action={actionsButtons}
+            onActivate={onRoomSelected}
+            onContextMenu={handleContextMenu}
+            ref={itemRef}
+        />
+        <Menu
+            anchorPosition={menuPosition ?? undefined}
+            anchorRef={btnRef}
+            open={open}
+            onClose={handleClose}
+            transitionDuration={150}
+            popperPlacement="bottom"
+        >
+            <MenuList open={open} >
+                <MenuItemWithIcon
+                    text="Получить ссылку на комнату"
+                    icon={<BiLink />}
+                    endIcon
+                    onClick={handleCopyRoomLink}
+                />
+                <MenuItemWithIcon
+                    text="Изменить название"
+                    icon={<BiEditAlt />}
+                    endIcon
+                    onClick={handleNameEditDialogOpen}
+                />
+                <MenuItemWithIcon
+                    text="Изменить пароль"
+                    icon={<BiLock />}
+                    endIcon
+                    onClick={handlePasswordEditDialogOpen}
+                />
+                <Divider className="menu-divider" />
+                <MenuItemCheckbox
+                    text="Сохранение истории чата"
+                    onClick={getToggleFunc(setSaveChat)}
+                    isChecked={saveChat}
+                />
+                <MenuItemCheckbox
+                    text="Симметричный режим"
+                    onClick={getToggleFunc(setSymmetryMode)}
+                    isChecked={symmetryMode}
+                />
+                <Divider className="menu-divider" />
+                <MenuItemWithIcon
+                    text="Очистить историю чата"
+                    icon={<BiCommentX />}
+                    endIcon
+                    onClick={handleClearHistoryChat}
+                />
+                <MenuItemWithIcon
+                    text="Удалить все файлы комнаты"
+                    icon={<BiTaskX />}
+                    endIcon
+                    onClick={handleRemoveFiles}
+                />
+                <MenuItemWithIcon
+                    text="Кикнуть всех пользователей"
+                    icon={<BiUserX />}
+                    endIcon
+                    onClick={handleKickAllUsers}
+                />
+                <Divider className="menu-divider" />
+                <MenuItemWithIcon
+                    text="Удалить комнату"
+                    className="error-color"
+                    icon={<BiTrash />}
+                    endIcon
+                    onClick={handleDeleteRoom}
+                />
+            </MenuList>
+        </Menu>
+        <TextEditDialog
+            open={nameEditDialogOpen}
+            label="Изменить имя комнаты"
+            description={renameRoomDescription}
+            value={room.name}
+            onClose={handleNameEditDialogCancel}
+            onValueConfirm={handleNameEditDialogConfirm}
+        />
+        <TextEditDialog
+            open={passwordEditDialogOpen}
+            allowEmptyValue
+            label="Изменить пароль от комнаты"
+            description={changePasswordRoomDescription}
+            onClose={handlePasswordEditDialogCancel}
+            onValueConfirm={handlePasswordEditDialogConfirm}
+        />
+    </>);
 };
 
 export const ManageRooms: React.FC = () =>
 {
-    const [filter, setFilter] = useState<string>("");
-    const [idRoom, setIdRoom] = useState<string>("");
+    const [selectedRoomId, setSelectedRoomId] = useState<string>("");
+
+    const roomListToMap = (room: PublicRoomInfo): JSX.Element =>
+    {
+        const handleRoomSelected = (): void =>
+        {
+            setSelectedRoomId(room.id);
+        };
+
+        return (
+            <ManageRoomsListItem
+                key={room.id}
+                onRoomSelected={handleRoomSelected}
+                room={room}
+            />
+        );
+    };
+
     return (
-        <>
-            {idRoom !== "" ?
-                <ManageUsers roomID={idRoom} setIdRoom={setIdRoom} />
-                :
-                <div className="room-edit-container">
-                    <SearchPanel filter={filter} setFilter={setFilter} />
-                    <RoomList setIdRoom={setIdRoom} filter={filter} />
-                </div>
-            }
-        </>
+        selectedRoomId !== ""
+            ? <ManageUsers roomID={selectedRoomId} setIdRoom={setSelectedRoomId} />
+            : <RoomList roomListToMap={roomListToMap} />
     );
 };

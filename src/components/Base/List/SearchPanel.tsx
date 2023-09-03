@@ -1,19 +1,23 @@
-import { ChangeEventHandler, FC } from "react";
-import { ReactDispatch } from "../../../utils/Utils";
+import React, { ChangeEventHandler } from "react";
 import { Input } from "../Input";
 import "./SearchPanel.css";
 
 interface SearchPanelProps extends React.HTMLAttributes<HTMLDivElement>
 {
     filter: string;
-    setFilter: ReactDispatch<string>;
+    onFilterChange: (value: string) => void;
 }
 
-export const SearchPanel: FC<SearchPanelProps> = ({ filter, setFilter, className, ...props }) =>
+export const SearchPanel: React.FC<SearchPanelProps> = ({
+    filter,
+    onFilterChange,
+    className,
+    ...props
+}) =>
 {
     const handleFilterChange: ChangeEventHandler<HTMLInputElement> = (ev) =>
     {
-        setFilter(ev.target.value);
+        onFilterChange(ev.target.value);
     };
 
     return (
