@@ -267,9 +267,14 @@ export const ManageRooms: React.FC = () =>
         );
     };
 
+    const handleManageUsersClose = () : void => 
+    {
+        setSelectedRoomId("");
+    }
+
     return (
         selectedRoomId !== ""
-            ? <ManageUsers roomID={selectedRoomId} setIdRoom={setSelectedRoomId} />
+            ? <ManageUsers roomID={selectedRoomId} onClose={handleManageUsersClose} />
             : <RoomList roomListToMap={roomListToMap} />
     );
 };

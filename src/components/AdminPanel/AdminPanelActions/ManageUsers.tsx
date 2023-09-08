@@ -7,7 +7,7 @@ import { MdOutlineStopScreenShare } from "react-icons/md";
 import { RiArrowGoBackLine } from "react-icons/ri";
 import { LoadedRoomList, PublicRoomInfo } from "../../../services/RoomService";
 import { NumericConstants as NC } from "../../../utils/NumericConstants";
-import { ReactDispatch, getToggleFunc } from "../../../utils/Utils";
+import { getToggleFunc } from "../../../utils/Utils";
 import { List } from "../../Base/List/List";
 import { ListItem } from "../../Base/List/ListItems";
 import { SearchPanel } from "../../Base/List/SearchPanel";
@@ -18,19 +18,19 @@ import { Tooltip } from "../../Tooltip";
 
 import "./ManageUsers.css";
 
-interface UserCardProps
+interface ManageUsersListItemProps
 {
     user: UserInfo;
 }
-const UserCard: FC<UserCardProps> = ({ user }) =>
+const ManageUsersListItem: FC<ManageUsersListItemProps> = ({ user }) =>
 {
-    const focusBackRef = useRef<HTMLElement | null>(null);
+    const itemRef = useRef<HTMLDivElement>(null);
     const btnRef = useRef<HTMLButtonElement>(null);
 
     const [menuPosition, setMenuPosition] = useState<AnchorPosition | null>(null);
     const [open, setOpen] = useState<boolean>(false);
     const [allowPerform, setAllowPerform] = useState<boolean>(false);
-    const [editNameVisible, setEditNameVisible] = useState<boolean>(false);
+    const [nameEditDialogOpen, setNameEditDialogOpen] = useState<boolean>(false);
 
     const handleClose = (): void =>
     {
@@ -69,24 +69,23 @@ const UserCard: FC<UserCardProps> = ({ user }) =>
         {
             setMenuPosition({ left: ev.clientX, top: ev.clientY });
         }
-        focusBackRef.current = document.activeElement as HTMLElement;
         setOpen(true);
     };
     const handleUserNameEdit = (): void =>
     {
-        setEditNameVisible(true);
+        setNameEditDialogOpen(true);
         handleClose();
     };
     const handleNameChangeCancel = (): void =>
     {
-        focusBackRef.current?.focus();
-        setEditNameVisible(false);
+        itemRef.current?.focus();
+        setNameEditDialogOpen(false);
     };
 
     const handleNameChangeConfirm = (val: string): void =>
     {
-        focusBackRef.current?.focus();
-        setEditNameVisible(false);
+        itemRef.current?.focus();
+        setNameEditDialogOpen(false);
     };
 
     const renameUserDescription = <>Введите новый ник пользователя <label className="bold">"{user.name}"</label>.</>;
@@ -107,12 +106,21 @@ const UserCard: FC<UserCardProps> = ({ user }) =>
         </>;
     return (
         <>
-            <ListItem onContextMenu={handleContextMenuShow} showSeparator={true} className="edit-user-list-item">
+            <ListItem
+                onContextMenu={handleContextMenuShow}
+                showSeparator={true}
+                className="edit-user-list-item"
+                ref={itemRef}
+            >
                 <div className="edit-user-area">
                     {usersInfo}
                     <div className="horizontal-expander" />
-                    <Button aria-label="User settings" className="edit-user-button" ref={btnRef} tabIndex={-1}
-                        onClick={handleContextMenuShow}>
+                    <Button className="edit-user-button"
+                        aria-label="User settings"
+                        ref={btnRef}
+                        tabIndex={-1}
+                        onClick={handleContextMenuShow}
+                    >
                         <BiDotsHorizontalRounded className="edit-user-list-item-icon" />
                     </Button>
                 </div>
@@ -126,19 +134,60 @@ const UserCard: FC<UserCardProps> = ({ user }) =>
                 popperPlacement="bottom"
             >
                 <MenuList open={open} >
-                    <MenuItemWithIcon onClick={handleKickUser} endIcon={true} icon={<BiUserX />} text="Кикнуть пользователя" />
-                    <MenuItemWithIcon onClick={handleBanUser} endIcon={true} icon={<BiBlock />} text="Забанить пользователя" />
+                    <MenuItemWithIcon
+                        text="Кикнуть пользователя"
+                        icon={<BiUserX />}
+                        endIcon={true}
+                        onClick={handleKickUser}
+                    />
+                    <MenuItemWithIcon
+                        text="Забанить пользователя"
+                        icon={<BiBlock />}
+                        endIcon={true}
+                        onClick={handleBanUser}
+                    />
                     <Divider className="menu-divider" />
-                    <MenuItemCheckbox text="Разрешить выступать" onClick={getToggleFunc(setAllowPerform)} isChecked={allowPerform} />
+                    <MenuItemCheckbox
+                        text="Разрешить выступать"
+                        onClick={getToggleFunc(setAllowPerform)}
+                        isChecked={allowPerform}
+                    />
                     <Divider className="menu-divider" />
-                    <MenuItemWithIcon onClick={handleStopDemo} endIcon={true} icon={<MdOutlineStopScreenShare />} text="Прекратить демонстрацию экрана пользователя" />
-                    <MenuItemWithIcon onClick={handleOffVideo} endIcon={true} icon={<BiVideoOff />} text="Оключить веб-камеры пользователя" />
-                    <MenuItemWithIcon onClick={handleOffAudio} endIcon={true} icon={<BiMicrophoneOff />} text="Оключить аудио пользователя" />
+                    <MenuItemWithIcon
+                        text="Прекратить демонстрацию экрана пользователя"
+                        icon={<MdOutlineStopScreenShare />}
+                        endIcon={true}
+                        onClick={handleStopDemo}
+                    />
+                    <MenuItemWithIcon
+                        text="Оключить веб-камеры пользователя"
+                        icon={<BiVideoOff />}
+                        endIcon={true}
+                        onClick={handleOffVideo}
+                    />
+                    <MenuItemWithIcon
+                        text="Оключить аудио пользователя"
+                        icon={<BiMicrophoneOff />}
+                        endIcon={true}
+                        onClick={handleOffAudio}
+                    />
                     <Divider className="menu-divider" />
-                    <MenuItemWithIcon onClick={handleUserNameEdit} endIcon={true} icon={<BiEditAlt />} text="Изменить ник пользователя" />
+                    <MenuItemWithIcon
+                        text="Изменить ник пользователя"
+                        icon={<BiEditAlt />}
+                        endIcon={true}
+                        onClick={handleUserNameEdit}
+                    />
                 </MenuList>
             </Menu>
-            <TextEditDialog isOpen={editNameVisible} label="Изменить ник пользователя" description={renameUserDescription} value={user.name} onClose={handleNameChangeCancel} onValueConfirm={handleNameChangeConfirm} />
+            <TextEditDialog
+                open={nameEditDialogOpen}
+                label="Изменить ник пользователя"
+                description={renameUserDescription}
+                value={user.name}
+                onClose={handleNameChangeCancel}
+                onValueConfirm={handleNameChangeConfirm}
+            />
         </>
     );
 };
@@ -182,28 +231,28 @@ const UserList: FC<UserListProps> = ({ filter, roomID }) =>
         return user.name.toLowerCase().indexOf(filter.toLowerCase()) > NC.NOT_FOUND_IDX;
     };
 
-    const createUserCard = (user: UserInfo): JSX.Element =>
+    const createUserItem = (user: UserInfo): JSX.Element =>
     {
         return (
-            <UserCard key={user.id} user={user} />
+            <ManageUsersListItem key={user.id} user={user} />
         );
     };
 
     return (
         <div className="edit-user-list non-selectable" tabIndex={NC.NEGATIVE_TAB_IDX}>
             <List>
-                {usersList.filter(userNameFilter).map(createUserCard)}
+                {usersList.filter(userNameFilter).map(createUserItem)}
             </List>
         </div>
     );
 };
 
-interface EditUserProps
+interface ManageUsersProps
 {
     roomID: string;
-    setIdRoom: ReactDispatch<string>;
+    onClose: () => void;
 }
-export const ManageUsers: FC<EditUserProps> = ({ roomID, setIdRoom }) =>
+export const ManageUsers: FC<ManageUsersProps> = ({ roomID, onClose }) =>
 {
     // Тестовые данные о комнатах
     const [roomsList, setRoomsList] = useState<PublicRoomInfo[]>([]);
@@ -215,20 +264,29 @@ export const ManageUsers: FC<EditUserProps> = ({ roomID, setIdRoom }) =>
 
     const handleBackToRoomListClick: MouseEventHandler = () =>
     {
-        setIdRoom("");
+        onClose();
     };
 
     const [filter, setFilter] = useState<string>("");
     const nameRoomArea = (
         <div className="edit-user-header-area">
-            <Button className="edit-user-exit-button" onClick={handleBackToRoomListClick}><RiArrowGoBackLine /></Button>
-            <p className="edit-user-name-room">Управление участниками комнаты - <label className="bold">{roomsList.find(f => f.id === roomID)?.name}</label></p>
+            <Button className="edit-user-exit-button" onClick={handleBackToRoomListClick}>
+                <RiArrowGoBackLine />
+            </Button>
+            <p className="edit-user-name-room">
+                Управление участниками комнаты - <label className="bold">{roomsList.find(f => f.id === roomID)?.name}</label>
+            </p>
         </div>
     );
+    
     return (
         <div className="edit-user-container">
             {nameRoomArea}
-            <SearchPanel className="margin-top" filter={filter} setFilter={setFilter} />
+            <SearchPanel
+                className="margin-top"
+                filter={filter}
+                onFilterChange={setFilter}
+            />
             <UserList roomID={roomID} filter={filter} />
         </div>
     );
