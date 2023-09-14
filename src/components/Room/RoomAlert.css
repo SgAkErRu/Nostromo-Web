@@ -1,5 +1,6 @@
 .room-alert
 {
+    min-height: 36px;
     padding: 2px 16px;
     text-align: justify;
 }
