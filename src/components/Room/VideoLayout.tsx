@@ -1,37 +1,20 @@
-import React, { MouseEventHandler, useCallback, useEffect, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 
 import "./VideoLayout.css";
 
-import { Button, useMediaQuery } from "@mui/material";
+import { Button } from "@mui/material";
 import { LuLayoutGrid } from "react-icons/lu";
-import { useResizeDetector } from 'react-resize-detector';
 import { NumericConstants as NC } from "../../utils/NumericConstants";
 import { Tooltip } from '../Tooltip';
-import { ElementSize, Video, VideoList, calculateVideoCardSize } from './VideoCard';
+import { Video, VideoList } from './VideoCard';
 import { MemoizedVideoLayoutContent } from "./VideoLayoutContent";
 import { MemoizedVideoRibbonLayoutContent } from './VideoRibbonLayoutContent';
 
 export const VideoLayout: React.FC = () =>
 {
-    const [videoItemSize, setVideoItemSize] = useState<ElementSize>({ width: 0, height: 0 });
-
     const [viewRibbonLayout, setViewRibbonLayout] = useState<boolean>(false);
 
     const [videoList, setVideoList] = useState<VideoList>([{ id: '0', name: '1' }]);
-
-    const verticalOrientation = useMediaQuery('(orientation: portrait)');
-
-    const {
-        width: layoutWidth,
-        height: layoutHeight,
-        ref: layoutRef
-    } = useResizeDetector<HTMLDivElement>({
-        onResize: () =>
-        {
-            //console.debug("[VideoLayout] video-layout size: ", layoutWidth, layoutHeight);
-            recalculateVideoItemSize();
-        }
-    });
 
     // Типо загрузили список с сервера.
     useEffect(() =>
@@ -55,55 +38,13 @@ export const VideoLayout: React.FC = () =>
 
     }, []);
 
-    const calcRowsAndColumns = useCallback(() =>
-    {
-        //console.debug("[VideoLayout] Calculating rows and columns.");
-
-        let rows = 1;
-        let col = 1;
-
-        while (rows * col < videoList.length)
-        {
-            if ((rows === col && !verticalOrientation) ||
-                (rows !== col && verticalOrientation))
-            {
-                ++col;
-            }
-            else
-            {
-                ++rows;
-            }
-        }
-        return { rows, col };
-    }, [videoList, verticalOrientation]);
-
-    const recalculateVideoItemSize = useCallback(() =>
-    {
-        if ((layoutWidth != null) && (layoutHeight != null))
-        {
-            const { rows, col } = calcRowsAndColumns();
-
-            const newSize = calculateVideoCardSize(rows, col, layoutWidth, layoutHeight);
-
-            if (newSize.width !== videoItemSize.width || newSize.height !== videoItemSize.height)
-            {
-                setVideoItemSize(newSize);
-            }
-        }
-    }, [layoutWidth, layoutHeight, calcRowsAndColumns, videoItemSize.height, videoItemSize.width]);
-
-    useEffect(() =>
-    {
-        recalculateVideoItemSize();
-    }, [videoList, recalculateVideoItemSize]);
-
     const handleChangeLayout: MouseEventHandler = () =>
     {
         setViewRibbonLayout(!viewRibbonLayout);
     };
 
     return (
-        <div id="video-layout" ref={layoutRef}>
+        <div id="video-layout">
             <Tooltip title="Сменить раскладку" placement="top">
                 <Button className="change-layout-button" onClick={handleChangeLayout}>
                     <LuLayoutGrid className="change-layout-icon" />
@@ -127,7 +68,7 @@ export const VideoLayout: React.FC = () =>
             </button>
             {viewRibbonLayout ?
                 <MemoizedVideoRibbonLayoutContent videoList={videoList} />
-                : <MemoizedVideoLayoutContent videoList={videoList} videoItemSize={videoItemSize} calcRowsAndColumns={calcRowsAndColumns} />
+                : <MemoizedVideoLayoutContent videoList={videoList} />
             }
         </div>
     );

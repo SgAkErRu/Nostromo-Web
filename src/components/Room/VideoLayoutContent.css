@@ -1,0 +1,45 @@
+.video-layout-wrapper
+{
+    flex: auto;
+    display: flex;
+    overflow: hidden;
+}
+
+.video-layout-content
+{
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.video-layout-nav-area-size
+{
+    width: 32px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.video-layout-nav-area
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 275ms;
+}
+
+.video-layout-nav-area:hover
+{
+    background-color: #00000030;
+    user-select: none;
+}
+
+.video-layout-nav-next-button
+{
+    width: 32px;
+    height: 32px;
+}
