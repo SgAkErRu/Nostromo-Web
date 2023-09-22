@@ -93,20 +93,18 @@ const VideoLayoutMatrix: FC<VideoLayoutContentProps> = ({ videoList }) =>
     const updateMatrixState = useCallback(() => {
         if (layoutWidth !== undefined && layoutHeight !== undefined)
         {
-            const newItemCnt = calculateVideoCardsCount(layoutWidth, layoutHeight);
-            if (newItemCnt > ZERO_CNT)
+            const newItemCnt = Math.max(calculateVideoCardsCount(layoutWidth, layoutHeight), MIN_CARD_CNT);
+            const newPageCnt = calculatePageCount(videoList.length, newItemCnt);
+            const newPage = matrixState.page < newPageCnt ? matrixState.page : Math.max(newPageCnt, NC.ZERO_IDX);
+            const newItemSize = calculateVideoItemSize(layoutWidth, layoutHeight, getPageItemCnt(newPage), isHorizontal);
+
+            if (
+                newItemCnt !== matrixState.itemCnt
+                || newPageCnt <= matrixState.page
+                || newItemSize.width !== matrixState.videoItemSize.width
+                || newItemSize.height !== matrixState.videoItemSize.height)
             {
-                const newPageCnt = calculatePageCount(videoList.length, newItemCnt);
-                const newPage = matrixState.page < newPageCnt ? matrixState.page : Math.max(newPageCnt, NC.ZERO_IDX);
-                const newItemSize = calculateVideoItemSize(layoutWidth, layoutHeight, getPageItemCnt(newPage), isHorizontal);
-                if (
-                    newItemCnt !== matrixState.itemCnt
-                    || newPageCnt <= matrixState.page
-                    || newItemSize.width !== matrixState.videoItemSize.width
-                    || newItemSize.height !== matrixState.videoItemSize.height)
-                {
-                    setMatrixState({itemCnt: newItemCnt, page: newPage, videoItemSize: newItemSize});
-                }
+                setMatrixState({itemCnt: newItemCnt, page: newPage, videoItemSize: newItemSize});
             }
         }
     }, [getPageItemCnt, isHorizontal, layoutHeight, layoutWidth, matrixState.itemCnt, matrixState.page, matrixState.videoItemSize.height, matrixState.videoItemSize.width, videoList.length]);
@@ -122,8 +120,7 @@ const VideoLayoutMatrix: FC<VideoLayoutContentProps> = ({ videoList }) =>
     }
 
     const { col } = calculateMatrixSize(Math.min(videoList.length - (matrixState.page * matrixState.itemCnt), matrixState.itemCnt), isHorizontal);
-    console.log("page: ", matrixState.page);
-
+    
     //console.debug("[VideoLayout] Render videos", videoItemSize.width, videoItemSize.height);
 
     const matrix = [];
